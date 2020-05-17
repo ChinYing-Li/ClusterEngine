@@ -21,6 +21,7 @@ public:
     std::shared_ptr<ShaderProgram> retrieve_shader(const std::string name);
     */
 private:
+    void write_error_log(const std::string resourcename);
     std::map<std::string, std::shared_ptr<Texture>> m_texmap;
     /*std::map<std::string, std::shared_ptr<ShaderProgram>> m_shadermap;*/
 };

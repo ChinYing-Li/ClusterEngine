@@ -8,12 +8,16 @@ class GameData
 {
 public:
     GameData();
-    GameData(bool glcontext_created);
+    //GameData(bool glcontext_created);
     ~GameData() = default;
-    std::unique_ptr<ResourceManager> resmanager_ptr;
+    std::unique_ptr<ResourceManager> resmanager_ptr = nullptr;
+    void init();
 };
 
-GameData _data;
+#ifndef _DATA
+#define _DATA
+extern GameData _data;
+#endif
 
 class VAO
 {
@@ -64,12 +68,12 @@ public:
     VAO_texture();
     VAO_texture(GLenum primitive_mode, int numVertices, const GLfloat *vertex_buffer_data, const std::string texname, GameData& gamedata); // only lookup names at resourcemanager
     ~VAO_texture() = default;
-    GLuint texture_buffer;
     
     void draw(GLuint shaderID) override;
 private:
     std::vector<std::string> m_texpath;
-    void init(const GLfloat *vertex_buffer_data);
+    void init(const GLfloat *vertex_buffer_data, GameData& gamedata);
+    
     std::shared_ptr<Texture> m_texptr = nullptr;
     std::string m_texname;
     void load_texture();

@@ -3,13 +3,15 @@
 
 #include <iostream>
 
-GameData::GameData():
-resmanager_ptr(nullptr)
+GameData::GameData()
 {}
 
-GameData::GameData(bool glcontext_created):
-resmanager_ptr(new ResourceManager)
-{}
+void GameData::init()
+{
+    resmanager_ptr = std::make_unique<ResourceManager>();
+    std::cout << "DataManager initialized\n" << std::endl;
+    return;
+}
 
 void VAO::init(GLenum primitive_mode, int numVertices)
 {
@@ -154,14 +156,13 @@ VAO(),
 m_texname(texname)
 {
     VAO::init(primitive_mode, numVertices);
-    init(vertex_buffer_data);
-    m_texptr = gamedata.resmanager_ptr->retrieve_texture(m_texname);
+    init(vertex_buffer_data, gamedata);
 }
 
 void VAO_texture::draw(GLuint shaderID) {
     // Change the Fill Mode for this object
     //glPolygonMode (GL_FRONT_AND_BACK, m_fillmode);
-
+    
     // Bind the VAO to use
     glBindVertexArray (m_vertexarrayID);
 
@@ -172,43 +173,27 @@ void VAO_texture::draw(GLuint shaderID) {
     glEnableVertexAttribArray(1);
     // Enable Vertex Attribute 1 - Color
     
-    glUniform1i(glGetUniformLocation(shaderID, "texture1"), 0);
-    glBindTexture(GL_TEXTURE_2D, m_texptr->m_ID);
+    glBindTexture(m_texptr->m_format, m_texptr->m_ID);
     // Draw the geometry !
     glDrawArrays(m_primitivemode, 0, m_numvert);
     glBindVertexArray(0);
     return;
 }
 
-void VAO_texture::init(const GLfloat *vertex_buffer_data)
+void VAO_texture::init(const GLfloat *vertex_buffer_data, GameData& gamedata)
 {
     glGenVertexArrays(1, &(m_vertexarrayID)); // VAO
     glGenBuffers (1, &(m_vertexbuffer)); // VBO - vertices
 
     glBindVertexArray (m_vertexarrayID); // Bind the VAO
     glBindBuffer (GL_ARRAY_BUFFER, m_vertexbuffer); // Bind the VBO vertices
-    glBufferData (GL_ARRAY_BUFFER, 5*m_numvert*sizeof(GLfloat), vertex_buffer_data, GL_STATIC_DRAW); // Copy the vertices into VBO
     
-    glVertexAttribPointer
-    (
-        0,                            // attribute 0. Vertices
-        3,                            // size (x,y,z)
-        GL_FLOAT,                     // type
-        GL_FALSE,                     // normalized?
-        5*sizeof(GLfloat),                            // stride
-        (void *) 0                      // array buffer offset
-     );
-    glVertexAttribPointer
-    (
-        1,                            // attribute 0. Vertices
-        2,                            // size (s, t)
-        GL_FLOAT,                     // type
-        GL_FALSE,                     // normalized?
-        5*sizeof(GLfloat),                            // stride
-        (void *) (3 *sizeof(GLfloat))                    // array buffer offset
-     );
-    
+    m_texptr = gamedata.resmanager_ptr->retrieve_texture(m_texname);
+    if(m_texptr == nullptr) std::cout << "m_texptr points to NULL" <<  std::endl;
+    glBufferData (GL_ARRAY_BUFFER, m_texptr->m_vertexsize*m_numvert*sizeof(GLfloat), vertex_buffer_data, GL_STATIC_DRAW); // Copy the vertices into VBO
+    m_texptr->set_vertexattrib();
     glBindVertexArray(0);
+    
     return;
 }
 

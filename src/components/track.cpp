@@ -47,8 +47,8 @@ void Track::create_straight_parts()
         m_center.x + m_squarewidth/2 + m_trackwidth, m_center.y - m_squarelength/2, m_center.z,
         m_center.x + m_squarewidth/2, m_center.y - m_squarelength/2, m_center.z
     };
-    std::vector<std::string> brick_tex = {"bricks2.jpg"};
-    straight_part1 = VAO_monotone(GL_TRIANGLES, 6, straightpart1_vertbuf_data, m_color, GL_FILL);
+    
+    straight_part1 = VAO_texture(GL_TRIANGLES, 6, straightpart1_vertbuf_data, "brick", _data);
     straight_part2 = VAO_monotone(GL_TRIANGLES, 6, straightpart2_vertbuf_data, m_color, GL_FILL);
     return;
 }

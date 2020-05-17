@@ -2,16 +2,18 @@
 #include "components/Icomponents.h"
 #include "utilities/timer.h"
 #include "utilities/camera.h"
-
+#include "foundation/model.h"
 #include "gltypes.h"
 
 GLuint monotone_programID;
 GLuint skybox_programID;
 GLuint tex_programID;
+GLuint model_programID;
 
 GLMatrices monotone_mat;
 GLMatrices skybox_mat;
 GLMatrices tex_mat;
+GLMatrices model_mat;
 
 GLFWwindow *window;
 bool drag = false;
@@ -22,14 +24,15 @@ double cxpos, pxpos, cypos, pypos;
 glm::vec3 helcamEye = glm::vec3(0,-1.0, 9.0f);
 glm::vec3 helcamTarget = glm::vec3(0, 1.0f, 0.0f);
 
-FreeCam cam(0.0f, 0.0f, 0.5f);
+FreeCam cam(0.5f, 0.5f, 0.01f);
 Skybox sky;
 Car car;
 Coin coin;
-//Track track;
+Track track;
 Terrain ter;
+Model model;
 
-
+GameData _data;
 
 int flag2 = 0;
 int flag1 = 1;
@@ -37,7 +40,9 @@ float screen_zoom = 1, screen_center_x = 0, screen_center_y = 0;
 
 int camera = 1;
 int yes = 0;
-Timer t60(1.0 / 60);
+float delta_t = 1.0f/60.0f;
+Timer t60(delta_t);
+Timer t1(1.0f);
 
 void displayGLinfo();
 void dispScore();
@@ -45,7 +50,7 @@ void endGame();
 
 void draw(GLMatrices& mat) {
     glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    //glUseProgram(monotone_programID);
+    
     if(camera == 1)
     {
         //*cos(obstacle.rotation*M_PI/180)
@@ -70,7 +75,7 @@ void print_mat4(glm::mat4& m)
         {
             std::cout << m[i][j] << " ";
         }
-        std::cout << std::endl;
+        std::cout << "\n\n" << std::endl;
     }
     return;
 }
@@ -78,25 +83,51 @@ void print_mat4(glm::mat4& m)
 void draw_cam(int width, int height)
 {
     glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    //glUseProgram(monotone_programID);
 
     //*cos(obstacle.rotation*M_PI/180)
     cam.update_matrices(monotone_mat);
     cam.update_matrices(skybox_mat);
     cam.update_matrices(tex_mat);
+    cam.update_matrices(model_mat);
     
-    monotone_mat.projection = glm::perspective(glm::radians(35.0f), (float)width / (float)height, 0.1f, 100.0f);
-    skybox_mat.projection = glm::perspective(glm::radians(35.0f), (float)width / (float)height, 0.1f, 100.0f);
-    tex_mat.projection = glm::perspective(glm::radians(35.0f), (float)width / (float)height, 0.1f, 100.0f);
+    monotone_mat.projection = glm::perspective(glm::radians(55.0f), (float)width / (float)height, 0.1f, 100.0f);
+    skybox_mat.projection = glm::perspective(glm::radians(55.0f), (float)width / (float)height, 0.1f, 100.0f);
+    tex_mat.projection = glm::perspective(glm::radians(55.0f), (float)width / (float)height, 0.1f, 100.0f);
+    model_mat.projection = glm::perspective(glm::radians(55.0f), (float)width / (float)height, 0.1f, 100.0f);
+    
     glm::mat4 VP = monotone_mat.projection * monotone_mat.view;
     
-    //track.draw(VP, monotone_programID, tex_programID,monotone_mat, tex_mat);
     car.draw(VP, monotone_programID, monotone_mat);
     coin.draw(VP, monotone_programID, monotone_mat);
-    ter.draw(VP, monotone_programID, monotone_mat);
+    //ter.draw(VP, monotone_programID, monotone_mat);
+    track.draw(VP, monotone_programID, tex_programID, monotone_mat, tex_mat);
+    model.draw(VP, model_programID, model_mat);
     sky.draw(VP, skybox_programID, skybox_mat);
     return;
 }
+
+void draw_carcam(int width, int height)
+{
+    glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    //*cos(obstacle.rotation*M_PI/180)
+    car.m_cam.update_matrices(monotone_mat);
+    car.m_cam.update_matrices(skybox_mat);
+    car.m_cam.update_matrices(tex_mat);
+    //print_mat4(monotone_mat.view);
+    monotone_mat.projection = glm::perspective(glm::radians(15.0f), (float)width / (float)height, 0.1f, 100.0f);
+    skybox_mat.projection = glm::perspective(glm::radians(15.0f), (float)width / (float)height, 0.1f, 100.0f);
+    tex_mat.projection = glm::perspective(glm::radians(15.0f), (float)width / (float)height, 0.1f, 100.0f);
+    glm::mat4 VP = monotone_mat.projection * monotone_mat.view;
+    
+    car.draw(VP, monotone_programID, monotone_mat);
+    coin.draw(VP, monotone_programID, monotone_mat);
+    ter.draw(VP, monotone_programID, monotone_mat);
+    track.draw(VP, monotone_programID, tex_programID, monotone_mat, tex_mat);
+    sky.draw(VP, skybox_programID, skybox_mat);
+    return;
+}
+
 void tick_elements() {
     coin.update();
     return;
@@ -105,31 +136,25 @@ void tick_elements() {
 void initGL(GLFWwindow *window, int width, int height) {
     const float x1 = 0.0f;
     const float x2 = 0.0f;
-    //obstacle = Obstacle(x1,x2,0,1);
-    std::vector<std::string> skybox_files = {
-        "right.jpg", "left.jpg",
-        "bottom.jpg", "top.jpg",
-        "front.jpg", "back.jpg"
-    };
     
     glEnable(GL_DEPTH_TEST);
-    extern GameData _data(false);
+    _data.init();
     monotone_programID = LoadShaders("monotone.vert", "monotone.frag");
     skybox_programID = LoadShaders("skybox.vert", "skybox.frag");
     tex_programID = LoadShaders("singletex.vert", "singletex.frag");
+    model_programID = LoadShaders("model.vert", "model.frag");
     
-    std::cout << monotone_programID << "ID Comp" << skybox_programID << std::endl;
     monotone_mat.MatrixID = glGetUniformLocation(monotone_programID, "MVP");
     monotone_mat.Tr = glGetUniformLocation(monotone_programID, "T");
     skybox_mat.MatrixID = glGetUniformLocation(skybox_programID, "MVP");
     tex_mat.MatrixID = glGetUniformLocation(tex_programID, "MVP");
-    
-    //track = Track(x1, x2, 0, 1.0f, 1.0f, 0.1f);
+    model_mat.MatrixID = glGetUniformLocation(model_programID, "MVP");
+    track = Track(x1, x2, 0, 1.0f, 1.0f, 0.1f);
     car = Car(x1, x2);
     coin = Coin(0.2f, 0.2f, 0.2f, 0.05f, 0.01f);
     ter = Terrain(-0.01f, 0.1f, 1.4f);
     sky = Skybox("skybox");
-    
+    model = Model("cyborg.obj");
     
     reshapeWindow (window, width, height);
 
@@ -153,14 +178,17 @@ void step_input(GLFWwindow *window) {
     if(rearview)
     {
         camera = 1;
+        return;
     }
     if(frontview)
     {
         camera = 2;
+        return;
     }
     if(right)
     {
         cam.update_cam(turn_cw);
+        return;
     }
     if(left)
     {
@@ -176,9 +204,50 @@ void step_input(GLFWwindow *window) {
     
     return;
 }
+
+void car_input(GLFWwindow *window) {
+    int forward  = glfwGetKey(window, GLFW_KEY_UP);
+    int right = glfwGetKey(window, GLFW_KEY_RIGHT);
+    int left = glfwGetKey(window, GLFW_KEY_LEFT);
+    int car_break = glfwGetKey(window, GLFW_KEY_SPACE);
+    
+    int camforward = glfwGetKey(window, GLFW_KEY_2);
+    int camright = glfwGetKey(window,GLFW_KEY_3);
+    int camleft = glfwGetKey(window,GLFW_KEY_1);
+    if(right)
+    {
+        car.receive_input(car_turn_cw, _data, delta_t);
+        return;
+    }
+    if(left)
+    {
+        car.receive_input(car_turn_ccw, _data, delta_t);
+        return;
+    }
+    if(forward)
+    {
+        car.receive_input(forward_accelerate, _data, delta_t);
+        std::cout << "forward" << std::endl;
+        return;
+    }
+    if(camforward)
+    {
+        cam.update_cam(move_forward);
+    }
+    if(camleft)
+    {
+        cam.update_cam(turn_ccw);
+    }
+    if(camright)
+    {
+        cam.update_cam(turn_cw);
+    }
+    car.receive_input(car_not_accelerating, _data, delta_t);
+    return;
+}
+
 void tick_input(GLFWwindow *window)
 {
-    
     return;
 }
 
@@ -187,13 +256,60 @@ int main(int argc, char **argv) {
     srand(time(0));
     int width  = 800;
     int height = 800;
-    
     window = initGLFW(width, height);
     
     initGL (window, width, height);
+    GLfloat test[] =
+    {
+        0.0, 0.0 ,0.0, 0.5, 0.5, 0.5,
+        0.2, 0.2, 0.2, 0.5, 0.5, 1.0,
+        0.0, 0.3, 0.2, 0.0, 0.5, 1.0
+    };
+    GLuint ind []={
+        0, 1, 2
+    };
+    
+    GLuint VAO;
+    GLuint VBO;
+    GLuint EBO;
+    glGenVertexArrays(1, &VAO);
+    glBindVertexArray(VAO);
+    glGenBuffers(1, &VBO);
+    glGenBuffers(1, &EBO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, 6*3*sizeof(float), test, GL_STATIC_DRAW);
+    
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 3*sizeof(unsigned int), ind, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(
+                          0,
+                          3,
+                          GL_FLOAT,
+                          GL_FALSE,
+                          6*sizeof(float),
+                          (void*)0);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(
+    1,
+    3,
+    GL_FLOAT,
+    GL_FALSE,
+    6*sizeof(float),
+    (void*)(3*sizeof(float)));
+    glBindVertexArray(0);
+    glm::mat4 testmvp(1.0f);
     while (!glfwWindowShouldClose(window))
     {
+        
         if (t60.processTick()) {
+            glUseProgram(monotone_programID);
+            
+            glBindVertexArray(VAO);
+            
+            glUniformMatrix4fv(monotone_mat.MatrixID, 1, GL_FALSE, &testmvp[0][0]);
+            glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, ind);
+            car.update(delta_t);
             draw_cam(width, height);
             glfwSwapBuffers(window);
             tick_elements();
