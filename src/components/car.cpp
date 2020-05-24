@@ -1,26 +1,30 @@
 
 #include <algorithm>
 #include <cassert>
+#include <vector>
 
 #include "car.h"
 
 const float deg_per_rad = M_PI / 180.0f;
 
 Car::Car():
-m_position(0.0f),
+Hitable(),
 m_height(1.0f*m_to_km),
 m_length(2.5f*m_to_km),
 m_width(2.0f*m_to_km),
 m_cam(0.0, 0.0, 0.3f),
-theta_zero(0.0, 1.0, 0.0),
-m_aabb(m_position - glm::vec3(m_width/2, m_length/2, 0), m_position + glm::vec3(m_width/2, m_length/2, m_height))
+theta_zero(0.0, 1.0, 0.0)
 {}
-
+/*
+ m_height(2.0f),
+ m_length(2.5f),
+ m_width(2.0f),
+ */
 Car::Car(const float x, const float y):
-m_position(0.35, 0.5, 0.0f),
-m_height(2.0f*m_to_km),
-m_length(2.5f*m_to_km),
-m_width(2.0f*m_to_km),
+Hitable(x, y, 2.0f*m_to_km),
+m_height(0.005f),
+m_length(0.01f),
+m_width(0.008f),
 m_cam(x, y, m_to_km/2),
 m_angle(0.0f),
 m_velocity(0.0f),
@@ -28,22 +32,29 @@ m_direction(0.0f, 1.0f, 0.0f),
 theta_zero(0.0, 1.0, 0.0),
 m_ccw_mat(glm::rotate(-m_rotate_ang, glm::vec3(0.0, 0.0, 1.0f))),
 m_cw_mat(glm::rotate(m_rotate_ang, glm::vec3(0.0, 0.0, 1.0f))),
-m_rotatemat(glm::rotate(m_angle, glm::vec3(0.0, 0.0, 1.0f))),
-m_aabb(m_position - glm::vec3(m_width/2, m_length/2, 0), m_position + glm::vec3(m_width/2, m_length/2, m_height))
+m_rotatemat(glm::rotate(m_angle, glm::vec3(0.0, 0.0, 1.0f)))
 {
     m_front_color = {0, 123, 123};
     m_back_color = {200, 120, 0};
     m_cam.set_eye(glm::vec3(-5.0f*m_to_km*m_direction.x, -5.0f*m_to_km*m_direction.y, m_height/1.5f));
     m_cam.set_direction(m_direction);
+    
     glm::vec3 top_vertex(0.0f,0.0f, m_height+m_aboveground);
     glm::vec3 front_vertex(0.0f, m_length, m_aboveground);
     glm::vec3 left_vertex(-m_width/2, -0.05f*m_to_km, m_aboveground);
     glm::vec3 right_vertex(m_width/2, -0.05f*m_to_km, m_aboveground);
+    
     create_front(top_vertex, front_vertex, left_vertex, right_vertex);
     create_rear(top_vertex, left_vertex, right_vertex);
     GLfloat camerapoint [] = {
         -5.0f*m_to_km*m_direction.x, -5.0f*m_to_km*m_direction.y, m_height/1.5f
     };
+    std::vector<glm::vec3> vert(4, glm::vec3(0));
+    vert[0] = top_vertex;
+    vert[1] = right_vertex;
+    vert[2] = left_vertex;
+    vert[3] = front_vertex;
+    collision_shape = Shape(vert);
     
     m_camera = VAO_monotone(GL_POINTS, 1, camerapoint, m_front_color, GL_FILL);
     return;
@@ -51,8 +62,10 @@ m_aabb(m_position - glm::vec3(m_width/2, m_length/2, 0), m_position + glm::vec3(
 
 void Car::update(float delta_t) // called based on timers's frequency
 {
+    collision_shape.model_RS = m_rotatemat;
+    collision_shape.displacement = m_position;
+    std::cout << collision_shape.displacement[0] << collision_shape.displacement[1] << std::endl;
     m_velocity = std::min(m_velocity, max_velocity);
-    
     m_velocity -= m_decceleration*delta_t;
     m_velocity = std::max(m_velocity, 0.0f);
     m_position += m_velocity*delta_t*m_direction;
@@ -98,10 +111,7 @@ void Car::create_rear(const glm::vec3& top_vertex,
 void Car::draw(glm::mat4& VP, GLuint& shaderID, GLMatrices& mat)
 {
     mat.model = glm::mat4(1.0f);
-    glm::mat4 translate = glm::translate (m_position);    // glTranslatef
-    // need to update this as well
-    //glm::mat4 rotate    = glm::rotate((float) (0 * M_PI / 180.0f), glm::vec3(0, 0,1 ));
-   
+    glm::mat4 translate = glm::translate (m_position);    // 
     mat.model *= (translate * m_rotatemat);
     glm::mat4 MVP = VP * mat.model; // ???
     glUseProgram(shaderID);
@@ -114,11 +124,13 @@ void Car::draw(glm::mat4& VP, GLuint& shaderID, GLMatrices& mat)
     return;
 }
 
-void Car::set_position(const float x, const float y, const float z)
+void Car::resolve_collision()
 {
-    m_position = glm::vec3(x, y, z);
+    m_direction = -m_direction;
+    m_velocity = -0.1f;
     return;
 }
+
 
 void Car::set_velocity(const float new_v)
 {
@@ -193,9 +205,19 @@ void Car::receive_input(const carMovement input, GameData& gamedata, float delta
     return;
 };
 
+void Car::set_up_collision_shape()
+{
+    return;
+}
+
 void Car::cam_update()
 {
     m_cam.set_eye(glm::vec3(m_position.x - 100.0f*m_to_km*m_direction.x, m_position.y - 100.0f*m_to_km*m_direction.y, m_aboveground+m_height*0.5f));
     m_cam.set_direction(m_direction);
+    return;
+}
+
+void Car::update_shape()
+{
     return;
 }

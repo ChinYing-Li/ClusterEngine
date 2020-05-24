@@ -2,8 +2,8 @@
 
 #include "gltypes.h"
 #include "../../includes/gl_headers.h"
-#include "../foundation/aabb.h"
 #include "../utilities/camera.h"
+#include "hitable.h"
 
 enum carMovement
 {
@@ -20,7 +20,7 @@ const float m_to_km = 0.001f;
 //in seconds
 const float timer_interval = 1.0f/60.0f;
 
-class Car
+class Car: public Hitable
 {
 public:
     Car();
@@ -28,14 +28,15 @@ public:
     ~Car() = default;
     
     // update carcam
-    void update(float delta_t);
-    void draw(glm::mat4& VP, GLuint& shaderID, GLMatrices& mat);
+    void update(float delta_t) override;
+    void update_shape() override;
+    void draw(glm::mat4& VP, GLuint& shaderID, GLMatrices& mat) override;
+    void resolve_collision() override;
     
     void set_position(const float x, const float y, const float z);
     void set_velocity(const float new_v);
     void receive_input(const carMovement input, GameData& gamedata, float delta_t);
     
-    glm::vec3 m_position;
     glm::vec3 m_direction; // the tip of the car is pointed
     
     float m_velocity; // the z component is always 0
@@ -43,6 +44,9 @@ public:
     color_t m_front_color;
     color_t m_back_color;
     CarCam m_cam;
+    
+protected:
+    void set_up_collision_shape() override;
     
 private:
     // in meters
@@ -55,17 +59,17 @@ private:
     float m_rotate_ang = 1.0f;
     
     // length unit in meter, time unit in second
-    float max_velocity = 100.0f/36.0f;
-    float m_acceleration = 4.0f;
+    float max_velocity = 50.0f/36.0f;
+    float m_acceleration = 2.0f;
     float m_break_decc = 3.4f;
 
-    float m_decceleration = 2.0f;
+    float m_decceleration = 1.0f;
     
     glm::vec3 theta_zero;
     glm::mat4 m_cw_mat;
     glm::mat4 m_ccw_mat;
     glm::mat4 m_rotatemat;
-    AABB m_aabb; // how to update aabb?
+   
     
     void create_front(const glm::vec3& top_vertex,
                       const glm::vec3& front_vertex,

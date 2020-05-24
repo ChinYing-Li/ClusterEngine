@@ -4,7 +4,7 @@
 #include <string>
 
 // forward declaration
-class ShaderProgram;
+class Shader;
 class Texture;
 
 class ResourceManager
@@ -15,13 +15,16 @@ public:
     
     bool texture_exists(const std::string name);
     std::shared_ptr<Texture> retrieve_texture(const std::string name); // might return nullptr
-    //void load_texture(const std::string path_to_file);
-    /*
+
+    
     bool shader_exists(const std::string name);
-    std::shared_ptr<ShaderProgram> retrieve_shader(const std::string name);
-    */
+    std::shared_ptr<Shader> retrieve_shader(const std::string name);
+    
 private:
     void write_error_log(const std::string resourcename);
+    void init_texture();
+    void init_shader();
+    
     std::map<std::string, std::shared_ptr<Texture>> m_texmap;
-    /*std::map<std::string, std::shared_ptr<ShaderProgram>> m_shadermap;*/
+    std::map<std::string, std::shared_ptr<Shader>> m_shadermap;
 };

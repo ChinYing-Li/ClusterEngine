@@ -48,7 +48,7 @@ Texture2D()
 
 bool Texture2D::init_from_file(const std::vector<std::string>& file_path)
 {
-    assert(file_path.size() == 1);
+    //assert(file_path.size() == 1);
     glGenTextures(1, &(this->m_ID));
     glBindTexture(this->m_format, this->m_ID);
     set_texparam();

@@ -10,7 +10,7 @@ public:
     void turn_off();
     void turn_on();
     void set_color(const color_t new_color);
-    void set_shader(GLuint shaderID);
+    void virtual set_shader(int index, GLuint shaderID);
 protected:
     bool on_state = true;
     color_t m_color;
@@ -25,7 +25,7 @@ public:
     ~SpotLight();
     
     void set_color(const color_t new_color);
-    void set_shader(GLuint shaderID);
+    void set_shader(int index, GLuint shaderID);
 protected:
     glm::vec3 m_position;
     glm::vec3 m_conedirection;
@@ -41,7 +41,7 @@ public:
     ~PointLight();
     
     void set_color(const color_t new_color);
-    void set_shader(GLuint shaderID);
+    void set_shader(int index, GLuint shaderID);
 protected:
     glm::vec3 m_position;
 };
@@ -54,7 +54,7 @@ public:
     ~DirectionalLight();
     
     void set_color(const color_t new_color);
-    void set_shader(GLuint shaderID);
+    void set_shader(int index, GLuint shaderID);
 protected:
     glm::vec3 m_halfvec;
     

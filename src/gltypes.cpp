@@ -9,6 +9,7 @@ GameData::GameData()
 void GameData::init()
 {
     resmanager_ptr = std::make_unique<ResourceManager>();
+    inputmanager_ptr = std::make_unique<InputManager>();
     std::cout << "DataManager initialized\n" << std::endl;
     return;
 }
@@ -202,6 +203,58 @@ void VAO_texture::load_texture()
     
     return;
 }
+
+VAO_material::VAO_material():
+VAO()
+{}
+
+VAO_material::VAO_material(GLenum primitive_mode, int num_vertices, const GLfloat* vertex_position, const GLfloat* vertex_normal, GameData& gamedata):
+VAO()
+{
+    VAO::init(primitive_mode, num_vertices);
+    init(vertex_position, vertex_normal, gamedata);
+}
+
+void VAO_material::init(const GLfloat *vertex_buffer_data, const GLfloat* vertex_normal, GameData& gamedata)
+{
+    glGenVertexArrays(1, &(m_vertexarrayID));
+    glGenBuffers (1, &(m_vertexbuffer));
+
+    glBindVertexArray (m_vertexarrayID);
+    glBindBuffer (GL_ARRAY_BUFFER, m_vertexbuffer);
+    glBufferSubData (GL_ARRAY_BUFFER, 0, 3*(m_numvert)*sizeof(GLfloat), vertex_buffer_data); // Copy the vertices into VBO
+    glBufferSubData (GL_ARRAY_BUFFER, 3*(m_numvert)*sizeof(GLfloat), 3*(m_numvert)*sizeof(GLfloat), vertex_normal);
+    glVertexAttribPointer(
+        0,                            // attribute 0. Vertices
+        3,                            // size (x,y,z)
+        GL_FLOAT,                     // type
+        GL_FALSE,                     // normalized?
+        0,                            // stride
+        (void *) 0                      // array buffer offset
+    );
+    glVertexAttribPointer(
+        1,                            // attribute 1. Normal
+        3,                            // size (r,g,b)
+        GL_FLOAT,                     // type
+        GL_FALSE,                     // normalized?
+        0,                            // stride
+        (void *)(3*(m_numvert)*sizeof(GLfloat))// array buffer offset
+    );
+    glBindVertexArray(0);
+}
+
+void VAO_material::draw(GLuint shaderID)
+{
+    glBindVertexArray (m_vertexarrayID);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vertexbuffer);
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    glDrawArrays(m_primitivemode, 0, m_numvert);
+    glBindVertexArray(0);
+    return;
+}
+
+
 /*
 VAO_cubemap::VAO_cubemap():
 VAO()

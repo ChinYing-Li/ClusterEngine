@@ -11,7 +11,20 @@ struct Material
     vec3 diffuse;
     vec3 specular;
     //vec3 emission;
+    bool use_map_Ka;
+    bool use_map_Kd;
+    bool use_map_Ks;
+    bool use_map_Ns;
+    bool use_map_d;
+    bool use_map_bump;
 };
+
+layout(binding = 0) uniform sampler2D map_Ka;
+layout(binding = 1) uniform sampler2D map_Kd;
+layout(binding = 2) uniform sampler2D map_Ks;
+layout(binding = 3) uniform sampler2D map_Ns;
+layout(binding = 4) uniform sampler2D map_d;
+layout(binding = 5) uniform sampler2D map_bump;
 
 // to avoid switching shaders
 struct Light

@@ -45,14 +45,11 @@ GLuint     LoadShaders(const char *vertex_file_path, const char *fragment_file_p
 void keyboard(GLFWwindow *window, int key, int scancode, int action, int mods);
 void keyboardChar(GLFWwindow *window, unsigned int key);
 //void mouseButton(GLFWwindow *window, int button, int action, int mods);
-void scroll_callback(GLFWwindow *window, double xoffset, double yoffset);
 
 // other_handlers.cpp
 void error_callback(int error, const char *description);
 void quit(GLFWwindow *window);
 void reshapeWindow(GLFWwindow *window, int width, int height);
-
-bool detect_collision(bounding_box_t a, bounding_box_t b);
 
 extern float screen_zoom, screen_center_x, screen_center_y;
 void reset_screen();

@@ -20,7 +20,7 @@ private:
     void create_straight_parts();
     void create_turning_parts();
     VAO_texture straight_part1;
-    VAO_monotone straight_part2;
+    VAO_texture straight_part2;
     VAO_monotone turning_yplus;
     VAO_monotone turning_yminus;
 };

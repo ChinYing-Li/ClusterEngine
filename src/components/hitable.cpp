@@ -1,13 +1,11 @@
 #include "hitable.h"
 
 Hitable::Hitable():
-m_position(0, 0, 0),
-m_orientation(0)
+m_position(0, 0, 0)
 {}
 
 Hitable::Hitable(const float x, const float y, const float z):
-m_position(x, y, z),
-m_orientation(0)
+m_position(x, y, z)
 {}
 
 void Hitable::set_position(const float x, const float y, const float z)

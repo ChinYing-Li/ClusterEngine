@@ -2,6 +2,7 @@
 #include <memory>
 #include <string>
 #include "foundation/texture.h"
+#include "gamestate/state.h"
 #include "utilities/managers/Imanagers.h"
 
 class GameData
@@ -11,7 +12,10 @@ public:
     //GameData(bool glcontext_created);
     ~GameData() = default;
     std::unique_ptr<ResourceManager> resmanager_ptr = nullptr;
+    std::unique_ptr<InputManager> inputmanager_ptr = nullptr;
+    GLFWwindow* m_windowptr;
     void init();
+    gameState gstate;
 };
 
 #ifndef _DATA
@@ -78,6 +82,19 @@ private:
     std::string m_texname;
     void load_texture();
 };
+
+class VAO_material: public VAO
+{
+public:
+    VAO_material();
+    VAO_material(GLenum primitive_mode, int num_vertices, const GLfloat* vertex_position, const GLfloat* vertex_normal, GameData& gamedata);
+    ~VAO_material();
+    void draw(GLuint shaderID);
+private:
+    void init(const GLfloat *vertex_buffer_data, const GLfloat* vertex_normal, GameData& gamedata);
+};
+
+
 /*
 class VAO_cubemap: public VAO
 {

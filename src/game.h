@@ -1,10 +1,14 @@
 #pragma once
+#include "utilities/managers/resourcemanager.h"
+#include "utilities/managers/inputmanager.h"
+#include "utilities/timer.h"
+#include "../includes/gl_headers.h"
 
 enum gameState
 {
-    GAME_RACING;
-    GAME_PAUSED;
-    GAME_POSTRACING;
+    GAME_RACING,
+    GAME_PAUSED,
+    GAME_POSTRACING
 };
 
 class Game
@@ -12,15 +16,17 @@ class Game
 public:
     Game();
     ~Game();
-    void render();
+    void run();
+    
+    
 private:
     const float delta_t = 1.0f / 60.0f;
-    gameState gstate;
+    
     Timer m_timer;
-    ShaderManager m_shadermanager;
-    TextureManager m_texmanager;
-    InputManager m_inputmanager;
+    
     
     void init();
-    void run();
-}
+    void render();
+    
+    static GLFWwindow* initGLFW(const int width, const int height);
+};

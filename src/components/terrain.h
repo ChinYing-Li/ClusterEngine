@@ -12,7 +12,7 @@ public:
     Terrain();
     Terrain(const float altitute, const float steepness, const float central_rad);
     ~Terrain() = default;
-    void draw(glm::mat4& VP, GLuint& shaderID, GLMatrices& mat);
+    void draw(glm::mat4& VP, GLuint& shaderID, GLMatrices& mat, GLuint& texture_shader, GLMatrices& tex_mat);
 private:
     float m_altitute;
     float m_extensionstep = 0.5f;
@@ -28,7 +28,7 @@ private:
     void create_surroundings();
     void create_test();
     
-    VAO_monotone m_central;
+    VAO_texture m_central;
     std::vector<VAO_monotone> m_surroundings;
     VAO_monotone m_test;
     VAO_monotone m_position;

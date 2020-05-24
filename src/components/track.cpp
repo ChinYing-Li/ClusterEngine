@@ -37,19 +37,24 @@ void Track::create_straight_parts()
     };
     
     // a rectangle
+    tex_scale +=10.0f;
     GLfloat straightpart2_vertbuf_data[] =
     {
-        m_center.x + m_squarewidth/2, m_center.y - m_squarelength/2, m_center.z,
-        m_center.x + m_squarewidth/2, m_center.y + m_squarelength/2, m_center.z,
-        m_center.x + m_squarewidth/2 + m_trackwidth, m_center.y + m_squarelength/2, m_center.z,
+        m_center.x + m_squarewidth/2, m_center.y - m_squarelength/2, m_center.z, (m_center.x + m_squarewidth/2)*tex_scale, (m_center.y - m_squarelength/2)*tex_scale,
         
-        m_center.x + m_squarewidth/2 + m_trackwidth, m_center.y + m_squarelength/2, m_center.z,
-        m_center.x + m_squarewidth/2 + m_trackwidth, m_center.y - m_squarelength/2, m_center.z,
-        m_center.x + m_squarewidth/2, m_center.y - m_squarelength/2, m_center.z
+        m_center.x + m_squarewidth/2, m_center.y + m_squarelength/2, m_center.z, (m_center.x + m_squarewidth/2)*tex_scale, (m_center.y + m_squarelength/2)*tex_scale,
+        
+        m_center.x + m_squarewidth/2 + m_trackwidth, m_center.y + m_squarelength/2, m_center.z, (m_center.x + m_squarewidth/2 + m_trackwidth)*tex_scale, (m_center.y + m_squarelength/2)*tex_scale,
+        
+        m_center.x + m_squarewidth/2 + m_trackwidth, m_center.y + m_squarelength/2, m_center.z, (m_center.x + m_squarewidth/2 + m_trackwidth)*tex_scale, (m_center.y + m_squarelength/2)*tex_scale,
+        
+        m_center.x + m_squarewidth/2 + m_trackwidth, m_center.y - m_squarelength/2, m_center.z, (m_center.x + m_squarewidth/2 + m_trackwidth)*tex_scale, (m_center.y - m_squarelength/2)*tex_scale,
+        
+        m_center.x + m_squarewidth/2, m_center.y - m_squarelength/2, m_center.z, (m_center.x + m_squarewidth/2)*tex_scale, (m_center.y - m_squarelength/2)*tex_scale
     };
     
-    straight_part1 = VAO_texture(GL_TRIANGLES, 6, straightpart1_vertbuf_data, "brick", _data);
-    straight_part2 = VAO_monotone(GL_TRIANGLES, 6, straightpart2_vertbuf_data, m_color, GL_FILL);
+    straight_part1 = VAO_texture(GL_TRIANGLES, 6, straightpart1_vertbuf_data, "bricks2.jpg", _data);
+    straight_part2 = VAO_texture(GL_TRIANGLES, 6, straightpart2_vertbuf_data, "rock_road.jpg", _data);
     return;
 }
 void Track::create_turning_parts()
@@ -158,7 +163,7 @@ void Track::draw(glm::mat4& VP, GLuint& shaderID1, GLuint& shaderID2, GLMatrices
     mat1.model *= (translate * rotate);
     glm::mat4 MVP = VP * mat1.model; // ???
     glUniformMatrix4fv(mat1.MatrixID, 1, GL_FALSE, &MVP[0][0]);
-    straight_part2.draw(shaderID1);
+    
     turning_yplus.draw(shaderID1);
     turning_yminus.draw(shaderID1);
     
@@ -166,6 +171,7 @@ void Track::draw(glm::mat4& VP, GLuint& shaderID1, GLuint& shaderID2, GLMatrices
     glUniformMatrix4fv(mat2.MatrixID, 1, GL_FALSE, &MVP[0][0]);
     glUniform1i(glGetUniformLocation(shaderID2, "texture1"), 0);
     straight_part1.draw(shaderID2);
+    straight_part2.draw(shaderID2);
     
     return;
 }

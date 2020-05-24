@@ -22,21 +22,29 @@ m_surroundings(m_nextension, VAO_monotone())
 
 void Terrain::create_central()
 {
-    GLfloat central_vertbuf_data[3*(N_SIDES+2)];
+    GLfloat central_vertbuf_data[5*(N_SIDES+2)];
+    float tex_scale = 50.0f;
     central_vertbuf_data[0] = m_center.x;
     central_vertbuf_data[1] = m_center.y;
     central_vertbuf_data[2] = m_center.z;
+    central_vertbuf_data[3] = m_center.x*tex_scale;
+    central_vertbuf_data[4] = m_center.y*tex_scale;
     
     for(int i = 1; i < N_SIDES+1; ++i)
     {
-        central_vertbuf_data[3*i] = m_center.x + m_central_rad*cos(twopi*float(i-1)/N_SIDES);
-        central_vertbuf_data[3*i+1] = m_center.y + m_central_rad*sin(twopi*float(i-1)/N_SIDES);
-        central_vertbuf_data[3*i+2] = m_center.z ;
+        central_vertbuf_data[5*i] = m_center.x + m_central_rad*cos(twopi*float(i-1)/N_SIDES);
+        central_vertbuf_data[5*i+1] = m_center.y + m_central_rad*sin(twopi*float(i-1)/N_SIDES);
+        central_vertbuf_data[5*i+2] = m_center.z ;
+        central_vertbuf_data[5*i+3] = central_vertbuf_data[5*i]*tex_scale;
+        central_vertbuf_data[5*i+4] = central_vertbuf_data[5*i+1]*tex_scale;
     }
-    central_vertbuf_data[3*(N_SIDES+1)] = m_center.x + m_central_rad*cos(0);
-    central_vertbuf_data[3*(N_SIDES+1)+1] = m_center.y + m_central_rad*sin(0);
-    central_vertbuf_data[3*(N_SIDES+1)+2] = m_center.z;
-    m_central = VAO_monotone(GL_TRIANGLE_FAN, N_SIDES+2, central_vertbuf_data, m_color, GL_FILL);
+    central_vertbuf_data[5*(N_SIDES+1)] = m_center.x + m_central_rad*cos(0);
+    central_vertbuf_data[5*(N_SIDES+1)+1] = m_center.y + m_central_rad*sin(0);
+    central_vertbuf_data[5*(N_SIDES+1)+2] = m_center.z;
+    central_vertbuf_data[5*(N_SIDES+1)+3] = central_vertbuf_data[5*(N_SIDES+1)]*tex_scale;
+    central_vertbuf_data[5*(N_SIDES+1)+4] = central_vertbuf_data[5*(N_SIDES+1)+1]*tex_scale;
+    
+    m_central = VAO_texture(GL_TRIANGLE_FAN, N_SIDES+2, central_vertbuf_data, "grass2.jpg", _data);
     return;
 }
 
@@ -111,22 +119,25 @@ void Terrain::create_test()
     return;
 }
 
-void Terrain::draw(glm::mat4& VP, GLuint& shaderID, GLMatrices& mat)
+void Terrain::draw(glm::mat4& VP, GLuint& monotone_shader, GLMatrices& mat, GLuint& texture_shader, GLMatrices& tex_mat)
 {
     mat.model = glm::mat4(1.0f);
     glm::mat4 translate = glm::translate (m_center);    // glTranslatef
     
-    glUseProgram(shaderID);
+    
     mat.model *= translate;
     glm::mat4 MVP = VP * mat.model; // ???
     glUniformMatrix4fv(mat.MatrixID, 1, GL_FALSE, &MVP[0][0]);
+    glUniformMatrix4fv(tex_mat.MatrixID, 1, GL_FALSE, &MVP[0][0]);
     
-    m_central.draw(shaderID);
+    glUseProgram(texture_shader);
+    m_central.draw(texture_shader);
+    glUseProgram(monotone_shader);
     for(auto it = m_surroundings.begin(); it != m_surroundings.end(); ++it)
     {
-        it->draw(shaderID);
+        it->draw(monotone_shader);
     }
-    m_test.draw(shaderID);
+    m_test.draw(monotone_shader);
     //m_position.draw(shaderID);
     return;
 }
