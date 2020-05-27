@@ -8,12 +8,16 @@
 #include "foundation/shader.h"
 #include "gltypes.h"
 #include "physics/collisiondetector.h"
+#include "foundation/objobject.h"
+#include "foundation/objloader.h"
+
 std::shared_ptr<Shader> monotone_shader_ptr;
 std::shared_ptr<Shader> skybox_shader_ptr;
 std::shared_ptr<Shader> tex_shader_ptr;
 std::shared_ptr<Shader> model_shader_ptr;
 std::shared_ptr<Shader> lighting_shader_ptr;
 
+objl::Loader objloader;
 GLMatrices monotone_mat;
 GLMatrices skybox_mat;
 GLMatrices tex_mat;
@@ -30,7 +34,7 @@ Car car;
 Coin coin;
 Track track;
 Terrain ter;
-//Model model;
+objobject cyborg;
 
 GameData _data;
 
@@ -99,9 +103,10 @@ void draw_cam(int width, int height)
     
     car.draw(VP, monotone_shader_ptr->ID, monotone_mat);
     coin.draw(VP, monotone_shader_ptr->ID, monotone_mat);
-    ter.draw(VP, monotone_shader_ptr->ID, monotone_mat, tex_shader_ptr->ID, tex_mat);
-    track.draw(VP, monotone_shader_ptr->ID, tex_shader_ptr->ID, monotone_mat, tex_mat);
+    //ter.draw(VP, monotone_shader_ptr->ID, monotone_mat, tex_shader_ptr->ID, tex_mat);
+    //track.draw(VP, monotone_shader_ptr->ID, tex_shader_ptr->ID, monotone_mat, tex_mat);
     //model.draw(VP, model_shader_ptr->ID, model_mat);
+    cyborg.draw(model_shader_ptr->ID, monotone_mat.view, monotone_mat.projection);
     sky.draw(VP, skybox_shader_ptr->ID, skybox_mat);
     return;
 }
@@ -143,7 +148,6 @@ void initGL(GLFWwindow *window, int width, int height) {
     skybox_shader_ptr = _data.resmanager_ptr->retrieve_shader("skybox");
     tex_shader_ptr = _data.resmanager_ptr->retrieve_shader("texture");
     model_shader_ptr = _data.resmanager_ptr->retrieve_shader("model");
-    //lighting_shader_ptr = _data.resmanager_ptr->retrieve_shader("lighting");
     
     monotone_mat.MatrixID = glGetUniformLocation(monotone_shader_ptr->ID, "MVP");
     monotone_mat.Tr = glGetUniformLocation(monotone_shader_ptr->ID, "T");
@@ -156,6 +160,10 @@ void initGL(GLFWwindow *window, int width, int height) {
     coin = Coin(0.2f, 0.2f, 0.0f, 0.01f, 0.01f);
     ter = Terrain(-0.01f, 0.1f, 1.4f);
     sky = Skybox("skybox");
+    
+    cyborg = objobject(objloader, "cyborg.obj", _data);
+    cyborg.m_scale = glm::vec3(0.3f);
+    cyborg.m_position = glm::vec3(0.0f, 0.0f, 0.0f);
     //model = Model("cyborg.obj");
     
     reshapeWindow (window, width, height);

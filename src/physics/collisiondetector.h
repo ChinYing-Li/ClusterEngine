@@ -1,5 +1,5 @@
 #pragma once
-#include "../../includes/gl_headers.h"
+#include "includes/gl_headers.h"
 
 class Shape;
 class CollisionDetector

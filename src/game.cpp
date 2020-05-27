@@ -1,9 +1,8 @@
 #include <iostream>
-#include "game.h"
+#include "src/game.h"
 const int default_width = 800;
 const int default_height = 600;
-Game::Game():
-m_windowptr(nullptr)
+Game::Game()
 {
     init();
 }
@@ -13,7 +12,7 @@ Game::~Game()
 
 void Game::init()
 {
-    m_windowptr = initGLFW(800, 600);
+    //m_windowptr = initGLFW(800, 600);
     
 }
 GLFWwindow* Game::initGLFW(const int width, const int height) {

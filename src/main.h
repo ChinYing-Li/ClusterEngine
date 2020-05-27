@@ -5,7 +5,7 @@
 #include <fstream>
 #include <vector>
 
-#include "../includes/gl_headers.h"
+#include "includes/gl_headers.h"
 
 #include "color.h"
 

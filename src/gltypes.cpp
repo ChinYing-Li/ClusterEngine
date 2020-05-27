@@ -1,4 +1,4 @@
-#include "gltypes.h"
+#include "src/gltypes.h"
 
 
 #include <iostream>

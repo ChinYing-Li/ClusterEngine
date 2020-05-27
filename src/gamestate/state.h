@@ -10,4 +10,4 @@ public:
     void virtual render() = 0;
 private:
     
-}
+};

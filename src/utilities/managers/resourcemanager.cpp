@@ -1,6 +1,6 @@
-#include "../../foundation/texture.h"
-#include "../../foundation/shader.h"
-#include "resourcemanager.h"
+#include "src/foundation/texture.h"
+#include "src/foundation/shader.h"
+#include "src/utilities/managers/resourcemanager.h"
 
 #include <iostream>
 ResourceManager::ResourceManager()

@@ -2,7 +2,7 @@
 #include "utilities/managers/resourcemanager.h"
 #include "utilities/managers/inputmanager.h"
 #include "utilities/timer.h"
-#include "../includes/gl_headers.h"
+#include "includes/gl_headers.h"
 
 enum gameState
 {

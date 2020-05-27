@@ -1,5 +1,5 @@
 
-#include "timer.h"
+#include "src/utilities/timer.h"
 #include <GLFW/glfw3.h>
 
 Timer::Timer():

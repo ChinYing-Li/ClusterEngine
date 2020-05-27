@@ -1,7 +1,7 @@
 
 #include <math.h>
 
-#include "camera.h"
+#include "src/utilities/camera.h"
 
 Camera::Camera():
 m_eye(0.0f, 0.0f, 0.5f),

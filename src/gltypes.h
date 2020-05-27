@@ -15,7 +15,7 @@ public:
     std::unique_ptr<InputManager> inputmanager_ptr = nullptr;
     GLFWwindow* m_windowptr;
     void init();
-    gameState gstate;
+    //State gstate;
 };
 
 #ifndef _DATA

@@ -4,10 +4,15 @@
 #include <string.h>
 #include <map>
 #include <memory>
-#include "gl_headers.h"
-#include "gltypes.h"
-#include "texture.h"
-#include "objloader.h"
+#include "includes/gl_headers.h"
+#include "src/gltypes.h"
+#include "src/foundation/texture.h"
+namespace objl
+{
+class Loader;
+class Material;
+class Mesh;
+}
 
 class Shader;
 
@@ -16,16 +21,19 @@ class VAO_mesh
 public:
     VAO_mesh(objl::Mesh& mesh, GameData& gamedata);
     ~VAO_mesh() = default;
-    void draw(Shader& shader);
+    void draw(GLuint& shaderID);
     std::string name;
 private:
     GLuint VAO, VBO, EBO;
     int m_numindices;
     void init(objl::Mesh& mesh);
-    void enable_textures();
-    objl::Material m_material;
-    std::map<int, std::shared_ptr<Texture>> map_ptrs;
-    vector<bool> use_maps;
+    
+    void draw_textures(GLuint shaderID);
+    void set_material_uniform(GLuint& shaderID);
+    
+    objl::Material* m_material_ptr = nullptr;
+    std::map<std::string, std::shared_ptr<Texture>> map_ptrs;
+    std::vector<bool> use_maps;
     
     /*map_Ka_ptr -->GL_TEXTURE0
     map_Kd_ptr = nullptr; GL_TEXTURE1
@@ -38,17 +46,19 @@ private:
 class objobject
 {
 public:
-    objobject() = delete;
+    objobject() = default;
     objobject(objl::Loader& loader, const std::string name, GameData& gamedata);
     ~objobject();
-    void virtual draw(Shader& shaderprogram, glm::mat4& view, glm::mat4& project);
+    void virtual draw(GLuint& shaderID, glm::mat4& view, glm::mat4& project);
     std::string m_name;
     glm::mat4 m_model;
+    glm::mat4 m_project;
+    glm::mat4 m_view;
     glm::vec3 m_position;
     glm::vec3 m_scale;
     
 protected:
     std::vector<VAO_mesh> vao_meshes;
-    void virtual set_model_mat();
-    void set_matrices(Shader& shaderprogram, glm::mat4& view, glm::mat4& project);
+    void virtual calc_model_mat();
+    void set_matrices(GLuint& shaderID, glm::mat4& view, glm::mat4& project);
 };

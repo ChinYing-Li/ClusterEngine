@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include "material.h"
+#include "src/foundation/material.h"
 
 Material::Material():
 m_ambient(0.5f),

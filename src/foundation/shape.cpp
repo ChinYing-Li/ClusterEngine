@@ -1,5 +1,5 @@
 #include <iostream>
-#include "shape.h"
+#include "src/foundation/shape.h"
 
 Shape::Shape(std::vector<glm::vec3> vertices):
 m_vertices(vertices)

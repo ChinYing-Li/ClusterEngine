@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include "shader.h"
+#include "src/foundation/shader.h"
 
 Shader::Shader(const std::string path_vert, const std::string path_frag, const std::string path_geo = "", const std::string name = ""):
 m_name(name)
