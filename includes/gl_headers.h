@@ -33,5 +33,5 @@ public:
     glm::mat4 model;
     glm::mat4 view;
     GLuint    MatrixID;
-    GLuint      Tr;
+    GLuint    Tr;
 };

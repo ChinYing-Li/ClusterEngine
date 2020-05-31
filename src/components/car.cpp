@@ -54,7 +54,7 @@ m_rotatemat(glm::rotate(m_angle, glm::vec3(0.0, 0.0, 1.0f)))
     vert[1] = right_vertex;
     vert[2] = left_vertex;
     vert[3] = front_vertex;
-    collision_shape = Shape(vert);
+    collision_shape = ConvexHull(vert);
     
     m_camera = VAO_monotone(GL_POINTS, 1, camerapoint, m_front_color, GL_FILL);
     return;
@@ -217,7 +217,7 @@ void Car::cam_update()
     return;
 }
 
-void Car::update_shape()
+void Car::update_convexhull()
 {
     return;
 }

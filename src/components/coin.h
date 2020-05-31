@@ -2,7 +2,6 @@
 
 #include "hitable.h"
 #include "gltypes.h"
-#include "../foundation/aabb.h"
 
 class Coin: public Hitable
 {
@@ -12,7 +11,7 @@ public:
     ~Coin() = default;
     void draw(glm::mat4& VP, GLuint& shaderID, GLMatrices& mat) override;
     void update(float delta_t) override;
-    void update_shape() override;
+    void update_convexhull() override;
     void resolve_collision() override;
     
 protected:

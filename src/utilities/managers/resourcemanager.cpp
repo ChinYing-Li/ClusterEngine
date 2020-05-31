@@ -88,3 +88,4 @@ void ResourceManager::init_shader()
     }
     return;
 }
+

@@ -5,24 +5,6 @@
 #include "gamestate/state.h"
 #include "utilities/managers/Imanagers.h"
 
-class GameData
-{
-public:
-    GameData();
-    //GameData(bool glcontext_created);
-    ~GameData() = default;
-    std::unique_ptr<ResourceManager> resmanager_ptr = nullptr;
-    std::unique_ptr<InputManager> inputmanager_ptr = nullptr;
-    GLFWwindow* m_windowptr;
-    void init();
-    //State gstate;
-};
-
-#ifndef _DATA
-#define _DATA
-extern GameData _data;
-#endif
-
 class VAO
 {
 public:
@@ -30,7 +12,7 @@ public:
     //VAO(GLuint& vertArrID);
     ~VAO() = default;
     
-    GLuint m_vertexarrayID;
+    GLuint m_vertexarray;
     GLuint m_vertexbuffer;
     GLuint color_buffer;
     GLuint m_indicebuffer; // EBO
@@ -39,10 +21,46 @@ public:
     GLenum m_fillmode;
     int    m_numvert;
     int m_numindices;
-    void virtual draw(GLuint shaderID) = 0;
+    void virtual draw(GLuint& shaderID) = 0;
     void init(GLenum primitive_mode, int numVertices);
 protected:
     bool useEBO = false;
+};
+
+namespace objl
+{
+class Loader;
+class Material;
+class Mesh;
+}
+
+class GameData;
+
+class VAO_mesh: public VAO
+{
+public:
+    VAO_mesh(objl::Mesh& mesh, std::shared_ptr<GameData> data_ptr);
+    ~VAO_mesh() = default;
+    void draw(GLuint& shaderID) override;
+    std::string name;
+private:
+    //GLuint VAO, VBO, EBO;
+    //int m_numindices;
+    void init(objl::Mesh& mesh);
+    
+    void draw_textures(GLuint shaderID);
+    void set_material_uniform(GLuint& shaderID);
+    
+    objl::Material* m_material_ptr = nullptr;
+    std::map<std::string, std::shared_ptr<Texture>> map_ptrs;
+    std::vector<bool> use_maps;
+    
+    /*map_Ka_ptr -->GL_TEXTURE0
+    map_Kd_ptr = nullptr; GL_TEXTURE1
+    map_Ks_ptr = nullptr; GL_TEXTURE2
+    map_Ns_ptr = nullptr;GL_TEXTURE3
+    map_d_ptr = nullptr; GL_TEXTURE4
+    map_bump_ptr = nullptr; GL_TEXTURE5*/
 };
 
 class VAO_monotone: public VAO
@@ -54,7 +72,7 @@ public:
     VAO_monotone(GLenum primitive_mode, int numVertices, const GLfloat *vertex_buffer_data, int numindices,const GLuint *indices, const color_t color, GLenum fill_mode);
     
     ~VAO_monotone() = default;
-    void draw(GLuint shaderID) override;
+    void draw(GLuint& shaderID) override;
 private:
     
     void init(const GLfloat *vertex_buffer_data, const GLfloat *color_buffer_data);
@@ -73,7 +91,7 @@ public:
     VAO_texture(GLenum primitive_mode, int numVertices, const GLfloat *vertex_buffer_data, const std::string texname, GameData& gamedata); // only lookup names at resourcemanager
     ~VAO_texture() = default;
     
-    void draw(GLuint shaderID) override;
+    void draw(GLuint& shaderID) override;
 private:
     std::vector<std::string> m_texpath;
     void init(const GLfloat *vertex_buffer_data, GameData& gamedata);
@@ -89,7 +107,7 @@ public:
     VAO_material();
     VAO_material(GLenum primitive_mode, int num_vertices, const GLfloat* vertex_position, const GLfloat* vertex_normal, GameData& gamedata);
     ~VAO_material();
-    void draw(GLuint shaderID);
+    void draw(GLuint& shaderID);
 private:
     void init(const GLfloat *vertex_buffer_data, const GLfloat* vertex_normal, GameData& gamedata);
 };

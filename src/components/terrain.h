@@ -2,9 +2,8 @@
 
 #include <vector>
 
-#include "../../includes/gl_headers.h"
-#include "gltypes.h"
-#include "math.h"
+#include "includes/gl_headers.h"
+#include "src/gltypes.h"
 
 class Terrain
 {

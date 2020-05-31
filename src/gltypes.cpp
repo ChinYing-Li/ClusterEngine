@@ -1,18 +1,8 @@
 #include "src/gltypes.h"
-
-
+#include "src/foundation/objloader.h"
+#include "src/game.h"
 #include <iostream>
 
-GameData::GameData()
-{}
-
-void GameData::init()
-{
-    resmanager_ptr = std::make_unique<ResourceManager>();
-    inputmanager_ptr = std::make_unique<InputManager>();
-    std::cout << "DataManager initialized\n" << std::endl;
-    return;
-}
 
 void VAO::init(GLenum primitive_mode, int numVertices)
 {
@@ -20,6 +10,138 @@ void VAO::init(GLenum primitive_mode, int numVertices)
     m_numvert   = numVertices;
     return;
 }
+
+VAO_mesh::VAO_mesh(objl::Mesh& mesh, std::shared_ptr<GameData> data_ptr):
+VAO(),
+name(mesh.MeshName),
+use_maps(6, false)
+{
+    useEBO = true;
+    VAO::init(GL_TRIANGLES, 0);
+    init(mesh);
+    
+    m_material_ptr = new objl::Material;
+    *m_material_ptr = mesh.MeshMaterial;
+    std::cout << m_material_ptr->illum << std::endl;
+    m_numindices = mesh.Indices.size();
+    if(m_material_ptr->map_Ka.size())
+    {
+        map_ptrs["map_Ka"] = data_ptr->resmanager_ptr->retrieve_texture(m_material_ptr->map_Ka);
+        use_maps[0] = (map_ptrs["map_Ka"] != nullptr);
+    }
+    if(m_material_ptr->map_Kd.size())
+    {
+        map_ptrs["map_Kd"] = data_ptr->resmanager_ptr->retrieve_texture(m_material_ptr->map_Kd);
+        use_maps[1] = (map_ptrs["map_Kd"] != nullptr);
+    }
+    if(m_material_ptr->map_Ks.size())
+    {
+        map_ptrs["map_Ks"] = data_ptr->resmanager_ptr->retrieve_texture(m_material_ptr->map_Ks);
+        use_maps[2] = (map_ptrs["map_Ks"] != nullptr);
+    }
+    if(m_material_ptr->map_Ka.size())
+    {
+        map_ptrs["map_Ns"] = data_ptr->resmanager_ptr->retrieve_texture(m_material_ptr->map_Ns);
+        use_maps[3] = (map_ptrs["map_Ns"] != nullptr);
+    }
+    if(m_material_ptr->map_Ka.size())
+    {
+        map_ptrs["map_d"] = data_ptr->resmanager_ptr->retrieve_texture(m_material_ptr->map_d);
+        use_maps[4] = (map_ptrs["map_d"] != nullptr);
+    }
+    if(m_material_ptr->map_bump.size())
+    {
+        map_ptrs["map_bump"] = data_ptr->resmanager_ptr->retrieve_texture(m_material_ptr->map_bump);
+        use_maps[5] = (map_ptrs["map_bump"] != nullptr);
+    }
+    return;
+}
+
+void VAO_mesh::init(objl::Mesh& mesh)
+{
+    glGenVertexArrays(1, &m_vertexarray);
+    glGenBuffers (1, &m_vertexbuffer);
+    glGenBuffers(1, &m_indicebuffer);
+    glBindVertexArray (m_vertexarray);
+    glBindBuffer (GL_ARRAY_BUFFER, m_vertexbuffer);
+    glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, m_indicebuffer);
+    
+    glBufferData (GL_ARRAY_BUFFER, mesh.Vertices.size()*sizeof(objl::Vertex), &mesh.Vertices[0], GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(
+        0,                            // attribute 0. Vertices
+        3,                            // size (x,y,z)
+        GL_FLOAT,                     // type
+        GL_FALSE,                     // normalized?
+        8*sizeof(float),                            // stride
+        (void *) 0                      // array buffer offset
+    );
+    glVertexAttribPointer(
+        1,      // attribute 1. Normal
+        3,
+        GL_FLOAT,          // type
+        GL_FALSE,                     // normalized?
+        8*sizeof(float),                            // stride
+        (void *)(3*sizeof(GLfloat))// array buffer offset
+    );
+    glVertexAttribPointer(
+        2,      // attribute 1. texture
+        2,
+        GL_FLOAT,          // type
+        GL_FALSE,    // normalized?
+        8*sizeof(float),                            // stride
+        (void *)(6*sizeof(GLfloat))// array buffer offset
+    );
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh.Indices.size()*sizeof(unsigned int), &mesh.Indices[0], GL_STATIC_DRAW);
+    glBindVertexArray(0);
+}
+
+void VAO_mesh::draw(GLuint& shaderID)
+{
+    glBindVertexArray (m_vertexarray);
+    glBindBuffer(GL_ARRAY_BUFFER, m_vertexbuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indicebuffer);
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(2);
+    set_material_uniform(shaderID);
+    draw_textures(shaderID);
+    glDrawElements(GL_TRIANGLES, m_numindices, GL_UNSIGNED_INT, nullptr);
+    glBindVertexArray(0);
+    return;
+}
+
+void VAO_mesh::draw_textures(GLuint shaderID)
+{
+    std::cout << map_ptrs.size() << std::endl;
+    auto map_it = map_ptrs.begin();
+    int count = 0;
+    for(auto it = use_maps.begin(); it!=use_maps.end(); ++it)
+    {
+        std::cout << map_it->first << std::endl;
+        if(*it)
+        {
+            glActiveTexture(GL_TEXTURE0+count);
+            glBindTexture(map_it->second->m_format, map_it->second->m_ID);
+            glUniform1i(glGetUniformLocation(shaderID, (map_it->first).c_str()), count);
+            ++map_it;
+        }
+        ++count;
+    }
+    return;
+}
+
+void VAO_mesh::set_material_uniform(GLuint& shaderID)
+{
+    glUniform3f(glGetUniformLocation(shaderID, "material.ambient"), m_material_ptr->Ka.X, m_material_ptr->Ka.Y, m_material_ptr->Ka.Z);
+    glUniform3f(glGetUniformLocation(shaderID, "material.diffuse"), m_material_ptr->Kd.X, m_material_ptr->Kd.Y, m_material_ptr->Kd.Z);
+    glUniform3f(glGetUniformLocation(shaderID, "material.specular"), m_material_ptr->Ks.X, m_material_ptr->Ks.Y, m_material_ptr->Ks.Z);
+    glUniform1f(glGetUniformLocation(shaderID, "material.shininess"), m_material_ptr->Ns);
+    
+}
+
 
 VAO_monotone::VAO_monotone():
 VAO()
@@ -57,11 +179,11 @@ void VAO_monotone::init(const GLfloat *vertex_buffer_data, const GLfloat *color_
 {
     // Create Vertex Array Object
     // Should be done after CreateWindow and before any other GL calls
-    glGenVertexArrays(1, &m_vertexarrayID); // VAO
+    glGenVertexArrays(1, &m_vertexarray); // VAO
     glGenBuffers (1, &m_vertexbuffer); // VBO - vertices
     glGenBuffers (1, &color_buffer); // VBO - colors
 
-    glBindVertexArray (m_vertexarrayID); // Bind the VAO
+    glBindVertexArray (m_vertexarray); // Bind the VAO
     glBindBuffer (GL_ARRAY_BUFFER, m_vertexbuffer); // Bind the VBO vertices
     glBufferData (GL_ARRAY_BUFFER, 3*(m_numvert)*sizeof(GLfloat), vertex_buffer_data, GL_STATIC_DRAW); // Copy the vertices into VBO
     glVertexAttribPointer(
@@ -101,12 +223,12 @@ void VAO_monotone::init(const GLfloat *vertex_buffer_data, const GLuint *indices
 
 
 /* Render the VBOs handled by VAO */
-void VAO_monotone::draw(GLuint shaderID) {
+void VAO_monotone::draw(GLuint& shaderID) {
     // Change the Fill Mode for this object
     glPolygonMode (GL_FRONT_AND_BACK, m_fillmode);
 
     // Bind the VAO to use
-    glBindVertexArray (m_vertexarrayID);
+    glBindVertexArray (m_vertexarray);
     // Enable Vertex Attribute 0 - 3d Vertices
     glEnableVertexAttribArray(0);
     // Bind the VBO to use
@@ -160,12 +282,12 @@ m_texname(texname)
     init(vertex_buffer_data, gamedata);
 }
 
-void VAO_texture::draw(GLuint shaderID) {
+void VAO_texture::draw(GLuint& shaderID) {
     // Change the Fill Mode for this object
     //glPolygonMode (GL_FRONT_AND_BACK, m_fillmode);
     
     // Bind the VAO to use
-    glBindVertexArray (m_vertexarrayID);
+    glBindVertexArray (m_vertexarray);
 
     // Enable Vertex Attribute 0 - 3d (x, y, z)
     // Bind the VBO to use
@@ -183,10 +305,10 @@ void VAO_texture::draw(GLuint shaderID) {
 
 void VAO_texture::init(const GLfloat *vertex_buffer_data, GameData& gamedata)
 {
-    glGenVertexArrays(1, &(m_vertexarrayID)); // VAO
+    glGenVertexArrays(1, &(m_vertexarray)); // VAO
     glGenBuffers (1, &(m_vertexbuffer)); // VBO - vertices
 
-    glBindVertexArray (m_vertexarrayID); // Bind the VAO
+    glBindVertexArray (m_vertexarray); // Bind the VAO
     glBindBuffer (GL_ARRAY_BUFFER, m_vertexbuffer); // Bind the VBO vertices
     
     m_texptr = gamedata.resmanager_ptr->retrieve_texture(m_texname);
@@ -217,10 +339,10 @@ VAO()
 
 void VAO_material::init(const GLfloat *vertex_buffer_data, const GLfloat* vertex_normal, GameData& gamedata)
 {
-    glGenVertexArrays(1, &(m_vertexarrayID));
+    glGenVertexArrays(1, &(m_vertexarray));
     glGenBuffers (1, &(m_vertexbuffer));
 
-    glBindVertexArray (m_vertexarrayID);
+    glBindVertexArray (m_vertexarray);
     glBindBuffer (GL_ARRAY_BUFFER, m_vertexbuffer);
     glBufferSubData (GL_ARRAY_BUFFER, 0, 3*(m_numvert)*sizeof(GLfloat), vertex_buffer_data); // Copy the vertices into VBO
     glBufferSubData (GL_ARRAY_BUFFER, 3*(m_numvert)*sizeof(GLfloat), 3*(m_numvert)*sizeof(GLfloat), vertex_normal);
@@ -243,9 +365,9 @@ void VAO_material::init(const GLfloat *vertex_buffer_data, const GLfloat* vertex
     glBindVertexArray(0);
 }
 
-void VAO_material::draw(GLuint shaderID)
+void VAO_material::draw(GLuint& shaderID)
 {
-    glBindVertexArray (m_vertexarrayID);
+    glBindVertexArray (m_vertexarray);
     glBindBuffer(GL_ARRAY_BUFFER, m_vertexbuffer);
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);

@@ -1,5 +1,4 @@
 
-#include <math.h>
 
 #include "src/utilities/camera.h"
 
@@ -85,16 +84,6 @@ m_stepsize(0.01f, 0.01f, 0.0f)
 
 void FreeCam::update_cam(const int user_input)
 {
-    if(user_input == frontview)
-    {
-        return;
-    }
-    
-    if(user_input == rearview)
-    {
-        return;
-    }
-    
     if(user_input == move_forward)
     {
         m_eye += m_stepsize * m_direction;

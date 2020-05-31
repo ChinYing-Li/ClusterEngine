@@ -1,5 +1,6 @@
 #include <math.h>
 #include <vector>
+#include <iostream>
 #include "coin.h"
 #include "../foundation/math/constants.h"
 
@@ -94,11 +95,11 @@ void Coin::set_up_collision_shape()
     {
         vertices.push_back(vertices[i] + glm::vec3(0.0f, m_thickness, 0.0f));
     }
-    collision_shape = Shape(vertices);
+    collision_shape = ConvexHull(vertices);
     return;
 }
 
-void Coin::update_shape()
+void Coin::update_convexhull()
 {
     return;
 }

@@ -1,6 +1,7 @@
 #include <random>
 #include <iostream>
-#include "terrain.h"
+#include "src/game.h"
+#include "src/components/terrain.h"
 
 #define N_SIDES 20
 

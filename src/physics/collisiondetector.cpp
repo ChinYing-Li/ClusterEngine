@@ -1,12 +1,12 @@
 #include <iostream>
 #include "collisiondetector.h"
-#include "shape.h"
+#include "src/foundation/convexhull.h"
 
 GJK::GJK():
 CollisionDetector()
 {}
 
-bool GJK::intersected(const Shape &lhs, const Shape &rhs)
+bool GJK::intersected(const ConvexHull &lhs, const ConvexHull &rhs)
 {
     // an arbitray direction
     glm::vec3 direction(lhs.displacement - rhs.displacement);
@@ -118,7 +118,7 @@ bool GJK::update_3simplex(glm::vec3& direction)
     return true;
 }
 
-const glm::vec3 GJK::calc_support(const Shape &lhs, const Shape &rhs, const glm::vec3 dir)
+const glm::vec3 GJK::calc_support(const ConvexHull &lhs, const ConvexHull &rhs, const glm::vec3 dir)
 {
     return lhs.get_farthest(dir) - rhs.get_farthest(-dir);
 }

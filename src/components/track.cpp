@@ -1,15 +1,17 @@
 #include <math.h>
 #include <iostream>
 
-#include "track.h"
-
-const color_t BLACK = {0,0,0 };
-const color_t PINK = {  255, 0, 255};
+#include "src/components/track.h"
+#include "game.h"
 #define TURNING_BLOCK_NUM 180
+
+Track::Track():
+Drawable()
+{}
 
 Track::Track(const float x, const float y, const float z,\
              const float squarelength, const float squarewidth, const float trackwidth):
-m_center(glm::vec3(x, y, z)),
+Drawable(x, y, z),
 m_squarelength(squarelength),
 m_squarewidth(squarewidth),
 m_trackwidth(trackwidth)
@@ -25,32 +27,32 @@ void Track::create_straight_parts()
     float tex_scale = 20.0f;
     GLfloat straightpart1_vertbuf_data[] =
     {
-        m_center.x - m_squarewidth/2, m_center.y - m_squarelength/2, m_center.z, m_center.x - m_squarewidth/2*tex_scale, m_center.y - m_squarelength/2*tex_scale,
+        m_position.x - m_squarewidth/2, m_position.y - m_squarelength/2, m_position.z, m_position.x - m_squarewidth/2*tex_scale, m_position.y - m_squarelength/2*tex_scale,
     
-        m_center.x - m_squarewidth/2, m_center.y + m_squarelength/2, m_center.z, (m_center.x - m_squarewidth/2)*tex_scale, (m_center.y + m_squarelength/2)*tex_scale,
+        m_position.x - m_squarewidth/2, m_position.y + m_squarelength/2, m_position.z, (m_position.x - m_squarewidth/2)*tex_scale, (m_position.y + m_squarelength/2)*tex_scale,
     
-        m_center.x - m_squarewidth/2 - m_trackwidth, m_center.y + m_squarelength/2, m_center.z, (m_center.x - m_squarewidth/2 - m_trackwidth)*tex_scale, (m_center.y + m_squarelength/2)*tex_scale,
+        m_position.x - m_squarewidth/2 - m_trackwidth, m_position.y + m_squarelength/2, m_position.z, (m_position.x - m_squarewidth/2 - m_trackwidth)*tex_scale, (m_position.y + m_squarelength/2)*tex_scale,
         
-        m_center.x - m_squarewidth/2 - m_trackwidth, m_center.y + m_squarelength/2, m_center.z, (m_center.x - m_squarewidth/2 - m_trackwidth)*tex_scale, (m_center.y + m_squarelength/2)*tex_scale,
-        m_center.x - m_squarewidth/2 - m_trackwidth, m_center.y - m_squarelength/2, m_center.z, (m_center.x - m_squarewidth/2 - m_trackwidth)*tex_scale, (m_center.y - m_squarelength/2)*tex_scale,
-        m_center.x - m_squarewidth/2, m_center.y - m_squarelength/2, m_center.z, (m_center.x - m_squarewidth/2)*tex_scale, (m_center.y - m_squarelength/2)*tex_scale
+        m_position.x - m_squarewidth/2 - m_trackwidth, m_position.y + m_squarelength/2, m_position.z, (m_position.x - m_squarewidth/2 - m_trackwidth)*tex_scale, (m_position.y + m_squarelength/2)*tex_scale,
+        m_position.x - m_squarewidth/2 - m_trackwidth, m_position.y - m_squarelength/2, m_position.z, (m_position.x - m_squarewidth/2 - m_trackwidth)*tex_scale, (m_position.y - m_squarelength/2)*tex_scale,
+        m_position.x - m_squarewidth/2, m_position.y - m_squarelength/2, m_position.z, (m_position.x - m_squarewidth/2)*tex_scale, (m_position.y - m_squarelength/2)*tex_scale
     };
     
     // a rectangle
     tex_scale +=10.0f;
     GLfloat straightpart2_vertbuf_data[] =
     {
-        m_center.x + m_squarewidth/2, m_center.y - m_squarelength/2, m_center.z, (m_center.x + m_squarewidth/2)*tex_scale, (m_center.y - m_squarelength/2)*tex_scale,
+        m_position.x + m_squarewidth/2, m_position.y - m_squarelength/2, m_position.z, (m_position.x + m_squarewidth/2)*tex_scale, (m_position.y - m_squarelength/2)*tex_scale,
         
-        m_center.x + m_squarewidth/2, m_center.y + m_squarelength/2, m_center.z, (m_center.x + m_squarewidth/2)*tex_scale, (m_center.y + m_squarelength/2)*tex_scale,
+        m_position.x + m_squarewidth/2, m_position.y + m_squarelength/2, m_position.z, (m_position.x + m_squarewidth/2)*tex_scale, (m_position.y + m_squarelength/2)*tex_scale,
         
-        m_center.x + m_squarewidth/2 + m_trackwidth, m_center.y + m_squarelength/2, m_center.z, (m_center.x + m_squarewidth/2 + m_trackwidth)*tex_scale, (m_center.y + m_squarelength/2)*tex_scale,
+        m_position.x + m_squarewidth/2 + m_trackwidth, m_position.y + m_squarelength/2, m_position.z, (m_position.x + m_squarewidth/2 + m_trackwidth)*tex_scale, (m_position.y + m_squarelength/2)*tex_scale,
         
-        m_center.x + m_squarewidth/2 + m_trackwidth, m_center.y + m_squarelength/2, m_center.z, (m_center.x + m_squarewidth/2 + m_trackwidth)*tex_scale, (m_center.y + m_squarelength/2)*tex_scale,
+        m_position.x + m_squarewidth/2 + m_trackwidth, m_position.y + m_squarelength/2, m_position.z, (m_position.x + m_squarewidth/2 + m_trackwidth)*tex_scale, (m_position.y + m_squarelength/2)*tex_scale,
         
-        m_center.x + m_squarewidth/2 + m_trackwidth, m_center.y - m_squarelength/2, m_center.z, (m_center.x + m_squarewidth/2 + m_trackwidth)*tex_scale, (m_center.y - m_squarelength/2)*tex_scale,
+        m_position.x + m_squarewidth/2 + m_trackwidth, m_position.y - m_squarelength/2, m_position.z, (m_position.x + m_squarewidth/2 + m_trackwidth)*tex_scale, (m_position.y - m_squarelength/2)*tex_scale,
         
-        m_center.x + m_squarewidth/2, m_center.y - m_squarelength/2, m_center.z, (m_center.x + m_squarewidth/2)*tex_scale, (m_center.y - m_squarelength/2)*tex_scale
+        m_position.x + m_squarewidth/2, m_position.y - m_squarelength/2, m_position.z, (m_position.x + m_squarewidth/2)*tex_scale, (m_position.y - m_squarelength/2)*tex_scale
     };
     
     straight_part1 = VAO_texture(GL_TRIANGLES, 6, straightpart1_vertbuf_data, "bricks2.jpg", _data);
@@ -63,7 +65,7 @@ void Track::create_turning_parts()
     const float outer_radius = inner_radius + m_trackwidth;
     
     GLfloat turningyplus_vertbuf_data[3*TURNING_BLOCK_NUM*6];
-    glm::vec3 turningyplus_center = m_center + glm::vec3(0, m_squarelength/2, 0);
+    glm::vec3 turningyplus_center = m_position + glm::vec3(0, m_squarelength/2, 0);
     std::cout << turningyplus_center.x << " " << turningyplus_center.y << std::endl;
     
     float turning_block_inv = 1.0f / TURNING_BLOCK_NUM;
@@ -105,7 +107,7 @@ void Track::create_turning_parts()
     }
     
     GLfloat turningyminus_vertbuf_data[3*TURNING_BLOCK_NUM*6];
-    glm::vec3 turningyminus_center(m_center.x, m_center.y - m_squarelength/2, m_center.z);
+    glm::vec3 turningyminus_center(m_position.x, m_position.y - m_squarelength/2, m_position.z);
     for(int i = 0; i < TURNING_BLOCK_NUM; ++i)
     {
         float scalar = float(i)*turning_block_inv;
@@ -147,15 +149,10 @@ void Track::create_turning_parts()
     return;
 }
 
-void Track::set_position(const float x, const float y, const float z)
-{
-    m_center = glm::vec3(x, y, z);
-}
-
 void Track::draw(glm::mat4& VP, GLuint& shaderID1, GLuint& shaderID2, GLMatrices& mat1, GLMatrices& mat2)
 {
     mat1.model = glm::mat4(1.0f);
-    glm::mat4 translate = glm::translate (m_center);    // glTranslatef
+    glm::mat4 translate = glm::translate (m_position);    // glTranslatef
     glm::mat4 rotate    = glm::rotate((float) (0 * M_PI / 180.0f), glm::vec3(0, 0,1 ));
     // No need as coords centered at 0, 0, 0 of cube arouund which we waant to rotate
     // rotate          = rotate * glm::translate(glm::vec3(0, -0.6, 0));
@@ -173,5 +170,10 @@ void Track::draw(glm::mat4& VP, GLuint& shaderID1, GLuint& shaderID2, GLMatrices
     straight_part1.draw(shaderID2);
     straight_part2.draw(shaderID2);
     
+    return;
+}
+
+void Track::update(float delta_t)
+{
     return;
 }

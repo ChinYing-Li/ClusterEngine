@@ -1,5 +1,5 @@
-#include "skybox.h"
-#include "gltypes.h"
+#include "src/components/skybox.h"
+#include "src/game.h"
 Skybox::Skybox()
 {}
 

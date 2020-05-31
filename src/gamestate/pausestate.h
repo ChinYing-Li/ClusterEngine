@@ -1,13 +1,15 @@
-//
-//  pausestate.h
-//  Normal_Game
-//
-//  Created by 李沁縈 on 23/5/2020.
-//  Copyright © 2020 Chin-Ying Li. All rights reserved.
-//
+#pragma once
 
-#ifndef pausestate_h
-#define pausestate_h
+#include "src/gamestate/state.h"
 
-
-#endif /* pausestate_h */
+// when the user paused during RacingState
+class PauseState: public State
+{
+public:
+    PauseState();
+    ~PauseState();
+    
+    void virtual init() = 0;
+    void virtual update() = 0;
+    void virtual render() = 0;
+}

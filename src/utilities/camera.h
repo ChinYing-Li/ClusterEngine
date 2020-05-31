@@ -2,8 +2,14 @@
 
 #include <math.h>
 #include <iostream>
-
-#include "main.h"
+#include "includes/gl_headers.h"
+enum camMove
+{
+    move_forward  = 3,
+    move_backward = 4,
+    turn_cw       = 5,
+    turn_ccw      = 6
+};
 
 class Camera
 {

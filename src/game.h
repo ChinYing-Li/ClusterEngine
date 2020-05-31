@@ -1,16 +1,16 @@
 #pragma once
-#include "utilities/managers/resourcemanager.h"
-#include "utilities/managers/inputmanager.h"
-#include "utilities/timer.h"
-#include "includes/gl_headers.h"
+#include <memory>
 
-enum gameState
-{
-    GAME_RACING,
-    GAME_PAUSED,
-    GAME_POSTRACING
-};
+#include "src/gamedata.h"
+#include "src/utilities/managers/inputmanager.h"
+#include "src/utilities/timer.h"
 
+/*
+#ifndef _DATA
+#define _DATA
+extern GameData _data;
+#endif
+*/
 class Game
 {
 public:
@@ -18,15 +18,11 @@ public:
     ~Game();
     void run();
     
-    
 private:
+    std::shared_ptr<GameData> data;
     const float delta_t = 1.0f / 60.0f;
-    
     Timer m_timer;
+    float prev_time;
+    float cur_time;
     
-    
-    void init();
-    void render();
-    
-    static GLFWwindow* initGLFW(const int width, const int height);
 };

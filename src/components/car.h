@@ -29,11 +29,10 @@ public:
     
     // update carcam
     void update(float delta_t) override;
-    void update_shape() override;
+    void update_convexhull() override;
     void draw(glm::mat4& VP, GLuint& shaderID, GLMatrices& mat) override;
     void resolve_collision() override;
     
-    void set_position(const float x, const float y, const float z);
     void set_velocity(const float new_v);
     void receive_input(const carMovement input, GameData& gamedata, float delta_t);
     

@@ -1,58 +1,42 @@
 #include <iostream>
 #include "src/game.h"
-const int default_width = 800;
-const int default_height = 600;
+#include "src/gamestate/Istate.h"
+
+
 Game::Game()
 {
-    init();
+    glfwSetErrorCallback(InputManager::error_callback);
+    if(!glfwInit())
+    {
+        std::cout << "failed to initialize GLFW library" << std::endl;
+    }
+    data = std::make_shared<GameData>();
+    data->init();
+    data->machine.add_state(std::make_unique<RacingState>(data), false);
+    std::cout << "game init" << std::endl;
+    run();
 }
 
 Game::~Game()
 {}
 
-void Game::init()
+void Game::run()
 {
-    //m_windowptr = initGLFW(800, 600);
-    
-}
-GLFWwindow* Game::initGLFW(const int width, const int height) {
-    GLFWwindow *window;
-    glfwSetErrorCallback(InputManager::error_callback);
-    if (!glfwInit()) {
-        // exit(EXIT_FAILURE);
+    int count = 0;
+    while(!glfwWindowShouldClose(data->inputmanager_ptr->window_ptr))
+    {
+        
+        if (m_timer.processTick())
+        {
+            std::cout << count << std::endl;
+            ++count;
+            data->machine.update_statestack();
+            glfwSwapBuffers(data->inputmanager_ptr->window_ptr);
+            data->machine.retrieve_active_state()->handle_input(data->inputmanager_ptr->window_ptr);
+            data->machine.retrieve_active_state()->render();
+            
+        }
+        glfwPollEvents();
     }
-
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR,                 3);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR,                 3);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT,           GL_TRUE);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-    window = glfwCreateWindow(width, height, "Sample OpenGL 3.3 Application", NULL, NULL);
-
-    if (!window) glfwTerminate();
-    glfwMakeContextCurrent(window);
-    glewExperimental = GL_TRUE;
-    GLenum err = glewInit();
-    if (err != GLEW_OK) {
-        std::cout << "Error: Failed to initialise GLEW : " << glewGetErrorString(err) << std::endl;
-        exit (1);
-    }
-    glfwSwapInterval(1);
-
-    // should be handled by input manager??
-    /* Register function to handle window resizes */
-    /* With Retina display on Mac OS X GLFW's FramebufferSize
-       is different from WindowSize */
-    glfwSetFramebufferSizeCallback(window, InputManager::reshapeWindow);
-    glfwSetWindowSizeCallback(window, InputManager::reshapeWindow);
-
-    /* Register function to handle window close */
-    glfwSetWindowCloseCallback(window, InputManager::quit);
-
-    /* Register function to handle keyboard input */
-    glfwSetKeyCallback(window, InputManager::keyboard_callback);  // general keyboard input
-    glfwSetCharCallback(window, InputManager::keyboard_char); // simpler specific character handling
-    return window;
+    return;
 }
-
-
