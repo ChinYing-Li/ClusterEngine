@@ -19,4 +19,5 @@ private:
     std::string read_code(const std::string path_to_shader);
     void compile_shader(GLuint shaderID, const std::string& shader_code);
     void compile_check(GLuint shaderID);
+    void link_check(GLuint& programID);
 };

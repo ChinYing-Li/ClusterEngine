@@ -3,7 +3,7 @@
 #include "src/gamestate/state.h"
 #include "src/components/Icomponents.h"
 #include "src/foundation/objobject.h"
-
+#include "src/utilities/light.h"
 // during car racing
 class RacingState: public State
 {
@@ -24,9 +24,12 @@ public:
 private:
     FreeCam cam;
     objobject cyborg;
-    Coin coin;
+    objobject cyborg2;
+    DirectionalLight dirlight;
+    //Coin coin;
     std::shared_ptr<Shader> model_shader_ptr;
     std::shared_ptr<Shader> monotone_shader_ptr;
+    std::shared_ptr<Shader> lighting_shader_ptr;
     GLuint test_VAO;
     GLuint test_VBO;
     

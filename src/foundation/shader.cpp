@@ -29,7 +29,7 @@ m_name(name)
     if(path_geo.size()>0)
         glAttachShader(ID, m_geom_ID);
     glLinkProgram(ID);
-    
+    link_check(ID);
     glDeleteShader(m_vert_ID);
     glDeleteShader(m_frag_ID);
     if(path_geo.size()>0)
@@ -66,13 +66,30 @@ void Shader::compile_shader(GLuint shaderID, const std::string& shader_code)
         }
         
 void Shader::compile_check(GLuint shaderID)
-        {
-        GLint Result = GL_FALSE;
-        int   InfoLogLength;
-            glGetShaderiv(shaderID,  GL_COMPILE_STATUS, &Result);
-            glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
+{
+    GLint Result = GL_FALSE;
+    int   InfoLogLength;
+    glGetShaderiv(shaderID,  GL_COMPILE_STATUS, &Result);
+        glGetShaderiv(shaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
             std::vector<char> ShaderErrorMessage(InfoLogLength);
             glGetShaderInfoLog(shaderID, InfoLogLength, NULL, &ShaderErrorMessage[0]);
             fprintf(stdout, "%s\n", &ShaderErrorMessage[0]);
 return;
         }
+
+
+void Shader::link_check(GLuint& programID)
+{
+    GLint isLinked = 0;
+    glGetProgramiv(programID, GL_LINK_STATUS, &isLinked);
+    if (isLinked == GL_FALSE)
+    {
+        GLint maxLength = 0;
+        glGetProgramiv(programID, GL_INFO_LOG_LENGTH, &maxLength);
+
+        std::vector<GLchar> infoLog(maxLength);
+        glGetProgramInfoLog(programID, maxLength, &maxLength, &infoLog[0]);
+
+        return;
+    }
+}

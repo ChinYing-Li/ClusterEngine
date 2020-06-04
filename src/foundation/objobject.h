@@ -23,7 +23,8 @@ public:
     objobject() = default;
     objobject(const std::string name, std::shared_ptr<GameData> data_ptr);
     ~objobject();
-    void virtual draw(GLuint& shaderID, glm::mat4& view, glm::mat4& project);
+    void draw(GLuint& shaderID, glm::mat4& view, glm::mat4& project);
+    void draw(GLuint& shaderID, glm::mat4& model, glm::mat4& view, glm::mat4& project);
     std::string m_name;
     glm::mat4 m_model;
     glm::mat4 m_project;
@@ -32,7 +33,13 @@ public:
     glm::vec3 m_scale;
     
 protected:
+    GLuint m_umodel;
+    GLuint m_uproject;
+    GLuint m_uview;
+    
     std::vector<VAO_mesh> vao_meshes;
     void virtual calc_model_mat();
+    void get_matrices_ID(GLuint& shaderID);
     void set_matrices(GLuint& shaderID, glm::mat4& view, glm::mat4& project);
+    void set_matrices(GLuint& shaderID, glm::mat4& model, glm::mat4& view, glm::mat4& project);
 };

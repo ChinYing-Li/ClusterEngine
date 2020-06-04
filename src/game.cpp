@@ -31,12 +31,13 @@ void Game::run()
             std::cout << count << std::endl;
             ++count;
             data->machine.update_statestack();
-            glfwSwapBuffers(data->inputmanager_ptr->window_ptr);
+            
             data->machine.retrieve_active_state()->handle_input(data->inputmanager_ptr->window_ptr);
             data->machine.retrieve_active_state()->render();
-            
+            glfwSwapBuffers(data->inputmanager_ptr->window_ptr);
+            glfwPollEvents();
         }
-        glfwPollEvents();
+        
     }
     return;
 }

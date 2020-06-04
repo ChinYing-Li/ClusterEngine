@@ -76,7 +76,7 @@ void ResourceManager::init_shader()
         {"skybox.vert", "skybox.frag", ""},
         {"singletex.vert", "singletex.frag", ""},
         {"model.vert", "model.frag", "" },
-        {"monotone_lighting.vert", "monotone_lighting.frag", ""}
+        {"multiple_lighting.vert", "multiple_lighting.frag", ""}
     };
     std::vector<std::string> name = {
         "monotone", "skybox", "texture", "model", "lighting"

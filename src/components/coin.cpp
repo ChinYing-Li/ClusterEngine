@@ -16,18 +16,17 @@ Coin::Coin(const float x, const float y, const float z, const float radius, cons
 Hitable(x, y, z),
 m_radius(radius),
 m_thickness(thickness)
+m_coin_obj()
 {
-    create_head_tail();
-    create_side();
-    set_up_collision_shape();
-    //m_mat.m_ambient = glm::vec3(0.8, 0.6, 0.0);
-    //m_mat.m_diffuse = glm::vec3(0.8,0.6,0.0);
-    //m_mat.m_specular = glm::vec3(0.0);
+    //create_head_tail();
+    //create_side();
+    //set_up_collision_shape();
+    
 }
-
+/*
 void Coin::create_head_tail()
 {
-    //GL_TRIANGLE_FAN;
+    
     GLfloat head_vertbuf_data[3*(1+CIRCLE_POINTS)];
     // center
     head_vertbuf_data[0] = 0.0f;
@@ -54,32 +53,23 @@ void Coin::create_side()
 {
     return;
 }
-
-void Coin::draw(glm::mat4& VP, GLuint& shaderID, GLMatrices& mat)
+*/
+void Coin::draw(GLuint& shaderID, glm::mat4& view, glm::mat4& project)
 {
-    //m_mat.set_properties_in_shader(shaderID);
-    mat.model = glm::mat4(1.0f);
-    glm::mat4 translate = glm::translate (m_position);    // glTranslatef
-    
-    // No need as coords centered at 0, 0, 0 of cube arouund which we waant to rotate
-    // rotate          = rotate * glm::translate(glm::vec3(0, -0.6, 0));
-    glUseProgram(shaderID);
-    mat.model *= (translate * collision_shape.model_RS);
-    glm::mat4 MVP = VP * mat.model; // ???
-    glUniformMatrix4fv(mat.MatrixID, 1, GL_FALSE, &MVP[0][0]);
-    
-    m_head.draw(shaderID);
-    m_tail.draw(shaderID);
+    glm::mat4 model = glm::mat4(1.0f);
+    glm::mat4 translate = glm::translate(m_position);
+    model *= (translate * collision_shape.model_RS);
+    m_coin_obj.draw(shaderID, model, view, project);
     
     return;
 }
+ 
 
 void Coin::update(float delta_t)
 {
     m_orientation += 1.0f;
     collision_shape.model_RS = glm::rotate((float) (m_orientation * M_PI / 180.0f), glm::vec3(0, 0, 1));
     collision_shape.displacement = m_position;
-    std::cout << collision_shape.displacement[0] << collision_shape.displacement[1] << std::endl;
     return;
 }
 
@@ -109,3 +99,7 @@ void Coin::resolve_collision()
     return;
 }
 
+void Coin::set_instanced_models()
+{
+    return;
+}

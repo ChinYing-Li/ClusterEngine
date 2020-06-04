@@ -32,12 +32,22 @@ objobject::~objobject()
 
 void objobject::draw(GLuint& shaderID, glm::mat4& view, glm::mat4& project)
 {
+    //std::cout << "shaderID" << shaderID << std::endl;
     glUseProgram(shaderID);
     calc_model_mat();
-    m_view = view;
-    m_project = project;
     set_matrices(shaderID, view, project);
     
+    for(VAO_mesh m: vao_meshes)
+    {
+        m.draw(shaderID);
+    }
+    return;
+}
+
+void objobject::draw(GLuint& shaderID, glm::mat4& model, glm::mat4& view, glm::mat4& project)
+{
+    glUseProgram(shaderID);
+    set_matrices(shaderID, model, view, project);
     for(VAO_mesh m: vao_meshes)
     {
         m.draw(shaderID);
@@ -62,14 +72,30 @@ void objobject::calc_model_mat()
     return;
 }
 
+void objobject::get_matrices_ID(GLuint &shaderID)
+{
+    m_umodel = glGetUniformLocation(shaderID, "model");
+    m_uproject = glGetUniformLocation(shaderID, "project");
+    m_uview = glGetUniformLocation(shaderID, "view");
+    
+    return;
+}
+
 void objobject::set_matrices(GLuint& shaderID, glm::mat4& view, glm::mat4& project)
 {
-    GLuint umodel = glGetUniformLocation(shaderID, "model");
-    
-    GLuint uproject = glGetUniformLocation(shaderID, "project");
-    GLuint uview = glGetUniformLocation(shaderID, "view");
-    glUniformMatrix4fv(umodel, 1, GL_FALSE, &m_model[0][0]);
-    glUniformMatrix4fv(uproject, 1, GL_FALSE, &m_project[0][0]);
-    glUniformMatrix4fv(uview, 1, GL_FALSE, &m_view[0][0]);
+    get_matrices_ID(shaderID);
+    calc_model_mat();
+    glUniformMatrix4fv(m_umodel, 1, GL_FALSE, &m_model[0][0]);
+    glUniformMatrix4fv(m_uproject, 1, GL_FALSE, &project[0][0]);
+    glUniformMatrix4fv(m_uview, 1, GL_FALSE, &view[0][0]);
+    return;
+}
+
+void objobject::set_matrices(GLuint& shaderID, glm::mat4& model, glm::mat4& view, glm::mat4& project)
+{
+    get_matrices_ID(shaderID);
+    glUniformMatrix4fv(m_umodel, 1, GL_FALSE, &model[0][0]);
+    glUniformMatrix4fv(m_uproject, 1, GL_FALSE, &project[0][0]);
+    glUniformMatrix4fv(m_uview, 1, GL_FALSE, &view[0][0]);
     return;
 }

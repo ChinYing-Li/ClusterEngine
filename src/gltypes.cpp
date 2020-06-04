@@ -115,26 +115,30 @@ void VAO_mesh::draw(GLuint& shaderID)
 
 void VAO_mesh::draw_textures(GLuint shaderID)
 {
-    std::cout << map_ptrs.size() << std::endl;
     auto map_it = map_ptrs.begin();
     int count = 0;
+    std::string prefix = "material.use_";
     for(auto it = use_maps.begin(); it!=use_maps.end(); ++it)
     {
-        std::cout << map_it->first << std::endl;
+        std::cout << map_it->first << "map texture" << map_it->second->m_ID << std::endl;
         if(*it)
         {
             glActiveTexture(GL_TEXTURE0+count);
             glBindTexture(map_it->second->m_format, map_it->second->m_ID);
             glUniform1i(glGetUniformLocation(shaderID, (map_it->first).c_str()), count);
+            std::string uniform_name = prefix + map_it->first;
+            glUniform1i(glGetUniformLocation(shaderID, uniform_name.c_str()), int(true));
             ++map_it;
+            ++count;
         }
-        ++count;
+        
     }
     return;
 }
 
 void VAO_mesh::set_material_uniform(GLuint& shaderID)
 {
+    glUseProgram(shaderID);
     glUniform3f(glGetUniformLocation(shaderID, "material.ambient"), m_material_ptr->Ka.X, m_material_ptr->Ka.Y, m_material_ptr->Ka.Z);
     glUniform3f(glGetUniformLocation(shaderID, "material.diffuse"), m_material_ptr->Kd.X, m_material_ptr->Kd.Y, m_material_ptr->Kd.Z);
     glUniform3f(glGetUniformLocation(shaderID, "material.specular"), m_material_ptr->Ks.X, m_material_ptr->Ks.Y, m_material_ptr->Ks.Z);
