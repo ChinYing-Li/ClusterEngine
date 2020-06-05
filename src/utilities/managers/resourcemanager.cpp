@@ -76,10 +76,13 @@ void ResourceManager::init_shader()
         {"skybox.vert", "skybox.frag", ""},
         {"singletex.vert", "singletex.frag", ""},
         {"model.vert", "model.frag", "" },
-        {"multiple_lighting.vert", "multiple_lighting.frag", ""}
+        {"multiple_lighting.vert", "multiple_lighting.frag", ""},
+        {
+            "instanced_w_lighting.vert", "instanced_w_lighting.frag", ""
+        }
     };
     std::vector<std::string> name = {
-        "monotone", "skybox", "texture", "model", "lighting"
+        "monotone", "skybox", "texture", "model", "lighting", "instance_w_lighting"
     };
     assert(name.size() == files.size());
     for(int i = 0; i < files.size(); ++i)

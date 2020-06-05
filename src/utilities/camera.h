@@ -21,11 +21,10 @@ public:
     
     void update_matrices(GLMatrices& mat);
     //void update_cam(const int user_input);
+    glm::mat4 m_xzy_mat;
     glm::vec3 m_eye;
 protected:
     //glm::vec3 m_stepsize;
-    
-    
     glm::vec3 m_direction;
     glm::vec3 m_up;
 };

@@ -6,3 +6,4 @@ struct glsl_type_set {
 };
 
 void eTB_GLSL_print_uniforms (unsigned int program);
+void glDebug();

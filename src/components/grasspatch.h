@@ -9,4 +9,5 @@ public:
     
 protected:
     void set_instanced_models() override;
+    objobject grassobject;
 };

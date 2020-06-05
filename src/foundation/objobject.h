@@ -21,7 +21,7 @@ class objobject
 {
 public:
     objobject() = default;
-    objobject(const std::string name, std::shared_ptr<GameData> data_ptr);
+    objobject(const std::string name, std::shared_ptr<GameData> data_ptr, unsigned int numinstance);
     ~objobject();
     void draw(GLuint& shaderID, glm::mat4& view, glm::mat4& project);
     void draw(GLuint& shaderID, glm::mat4& model, glm::mat4& view, glm::mat4& project);
@@ -31,7 +31,8 @@ public:
     glm::mat4 m_view;
     glm::vec3 m_position;
     glm::vec3 m_scale;
-    
+    unsigned int m_instance = 0;
+    void set_instance_mat(std::vector<glm::mat4>& instance_mat);
 protected:
     GLuint m_umodel;
     GLuint m_uproject;

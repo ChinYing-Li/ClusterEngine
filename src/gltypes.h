@@ -19,12 +19,18 @@ public:
     
     GLenum m_primitivemode;
     GLenum m_fillmode;
-    int    m_numvert;
+    bool isinstancing = false;
+    
+    int m_numvert;
     int m_numindices;
+    
     void virtual draw(GLuint& shaderID) = 0;
+    void set_instance_attrib();
+    void virtual send_instance_matrices(std::vector<glm::mat4>& instance_models){};
     void init(GLenum primitive_mode, int numVertices);
 protected:
     bool useEBO = false;
+    
 };
 
 namespace objl
@@ -39,15 +45,15 @@ class GameData;
 class VAO_mesh: public VAO
 {
 public:
-    VAO_mesh(objl::Mesh& mesh, std::shared_ptr<GameData> data_ptr);
+    VAO_mesh(objl::Mesh& mesh, std::shared_ptr<GameData> data_ptr, unsigned int numinstance);
     ~VAO_mesh() = default;
     void draw(GLuint& shaderID) override;
-    std::string name;
-private:
-    //GLuint VAO, VBO, EBO;
-    //int m_numindices;
-    void init(objl::Mesh& mesh);
     
+    std::string name;
+    void send_instance_matrices(std::vector<glm::mat4>& instance_models) override;
+private:
+    unsigned int m_numinstance;
+    void init(objl::Mesh& mesh);
     void draw_textures(GLuint shaderID);
     void set_material_uniform(GLuint& shaderID);
     

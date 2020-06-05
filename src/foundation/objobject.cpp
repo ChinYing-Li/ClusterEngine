@@ -12,17 +12,18 @@
 #include <iostream>
 #include <cmath>
 
-objobject::objobject(const std::string name, std::shared_ptr<GameData> data_ptr):
+objobject::objobject(const std::string name, std::shared_ptr<GameData> data_ptr, unsigned int num_instance):
 m_name(name),
 m_position(0.0f),
-m_scale(0.5f)
+m_scale(0.5f),
+m_instance(num_instance)
 {
     bool load_out = data_ptr->objloader.LoadFile(name);
     if(load_out)
     {
         for(int i = 0; i < data_ptr->objloader.LoadedMeshes.size(); ++i)
         {
-            vao_meshes.push_back(VAO_mesh(data_ptr->objloader.LoadedMeshes[i], data_ptr));
+            vao_meshes.push_back(VAO_mesh(data_ptr->objloader.LoadedMeshes[i], data_ptr, m_instance));
         }
     }
 }
@@ -55,6 +56,13 @@ void objobject::draw(GLuint& shaderID, glm::mat4& model, glm::mat4& view, glm::m
     return;
 }
 
+void objobject::set_instance_mat(std::vector<glm::mat4> &instance_mat)
+{
+    for(VAO_mesh m: vao_meshes)
+    {
+        m.send_instance_matrices(instance_mat);
+    }
+}
 void objobject::calc_model_mat()
 {
     m_model = glm::mat4(1.0f);

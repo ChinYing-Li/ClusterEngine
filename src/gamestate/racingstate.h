@@ -30,9 +30,8 @@ private:
     std::shared_ptr<Shader> model_shader_ptr;
     std::shared_ptr<Shader> monotone_shader_ptr;
     std::shared_ptr<Shader> lighting_shader_ptr;
-    GLuint test_VAO;
-    GLuint test_VBO;
     
+    void set_light_uniform();
     /* OBJECTS TO BE DRAWN
      
      Tree

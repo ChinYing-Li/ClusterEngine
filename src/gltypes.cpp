@@ -7,23 +7,46 @@
 void VAO::init(GLenum primitive_mode, int numVertices)
 {
     m_primitivemode = primitive_mode;
-    m_numvert   = numVertices;
     return;
 }
 
-VAO_mesh::VAO_mesh(objl::Mesh& mesh, std::shared_ptr<GameData> data_ptr):
+void VAO::set_instance_attrib()
+{
+    glBindVertexArray(m_vertexarray);
+    // set attribute pointers for matrix (4 times vec4)
+    glEnableVertexAttribArray(3);
+    glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(8*sizeof(float)*m_numvert));
+    glEnableVertexAttribArray(4);
+    glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(8*sizeof(float)*m_numvert+sizeof(glm::vec4)));
+    glEnableVertexAttribArray(5);
+    glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(8*sizeof(float)*m_numvert+2 * sizeof(glm::vec4)));
+    glEnableVertexAttribArray(6);
+    glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(8*sizeof(float)*m_numvert+3 * sizeof(glm::vec4)));
+
+    glVertexAttribDivisor(3, 1);
+    glVertexAttribDivisor(4, 1);
+    glVertexAttribDivisor(5, 1);
+    glVertexAttribDivisor(6, 1);
+    glBindVertexArray(0);
+    return;
+}
+
+
+VAO_mesh::VAO_mesh(objl::Mesh& mesh, std::shared_ptr<GameData> data_ptr, unsigned int numinstance = 0):
 VAO(),
 name(mesh.MeshName),
-use_maps(6, false)
+use_maps(6, false),
+m_numinstance(numinstance)
 {
     useEBO = true;
+    m_numindices = mesh.Indices.size();
+    m_numvert = mesh.Vertices.size();
     VAO::init(GL_TRIANGLES, 0);
     init(mesh);
     
     m_material_ptr = new objl::Material;
     *m_material_ptr = mesh.MeshMaterial;
-    std::cout << m_material_ptr->illum << std::endl;
-    m_numindices = mesh.Indices.size();
+    
     if(m_material_ptr->map_Ka.size())
     {
         map_ptrs["map_Ka"] = data_ptr->resmanager_ptr->retrieve_texture(m_material_ptr->map_Ka);
@@ -57,6 +80,7 @@ use_maps(6, false)
     return;
 }
 
+
 void VAO_mesh::init(objl::Mesh& mesh)
 {
     glGenVertexArrays(1, &m_vertexarray);
@@ -65,8 +89,14 @@ void VAO_mesh::init(objl::Mesh& mesh)
     glBindVertexArray (m_vertexarray);
     glBindBuffer (GL_ARRAY_BUFFER, m_vertexbuffer);
     glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, m_indicebuffer);
+
+    int vertexbuffersize = m_numvert*sizeof(objl::Vertex) + m_numinstance * sizeof(glm::mat4);
+    std::cout << vertexbuffersize << " buffer size" << std::endl;
+    glBufferData (GL_ARRAY_BUFFER, vertexbuffersize, nullptr, GL_STATIC_DRAW);
+    glBufferSubData(GL_ARRAY_BUFFER, 0, m_numvert*sizeof(objl::Vertex), &mesh.Vertices[0]);
     
-    glBufferData (GL_ARRAY_BUFFER, mesh.Vertices.size()*sizeof(objl::Vertex), &mesh.Vertices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh.Indices.size()*sizeof(unsigned int), &mesh.Indices[0], GL_STATIC_DRAW);
+    glDebug();
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
     glEnableVertexAttribArray(2);
@@ -94,8 +124,21 @@ void VAO_mesh::init(objl::Mesh& mesh)
         8*sizeof(float),                            // stride
         (void *)(6*sizeof(GLfloat))// array buffer offset
     );
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh.Indices.size()*sizeof(unsigned int), &mesh.Indices[0], GL_STATIC_DRAW);
+    if(m_numinstance > 0) set_instance_attrib();
+    glDebug();
     glBindVertexArray(0);
+}
+
+void VAO_mesh::send_instance_matrices(std::vector<glm::mat4>& instance_models)
+{
+    if(m_numinstance == 0) return;
+    glBindVertexArray (m_vertexarray);
+    glBindBuffer (GL_ARRAY_BUFFER, m_vertexbuffer);
+    glBufferSubData (GL_ARRAY_BUFFER,
+                     m_numvert*sizeof(objl::Vertex), //offsest
+                     m_numinstance*sizeof(glm::mat4),
+                     &instance_models[0][0][0]);
+    return;
 }
 
 void VAO_mesh::draw(GLuint& shaderID)
@@ -103,12 +146,29 @@ void VAO_mesh::draw(GLuint& shaderID)
     glBindVertexArray (m_vertexarray);
     glBindBuffer(GL_ARRAY_BUFFER, m_vertexbuffer);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indicebuffer);
+    glDebug();
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
     glEnableVertexAttribArray(2);
-    set_material_uniform(shaderID);
-    draw_textures(shaderID);
-    glDrawElements(GL_TRIANGLES, m_numindices, GL_UNSIGNED_INT, nullptr);
+    glDebug();
+
+    if(m_numinstance>0)
+    {
+        glEnableVertexAttribArray(3);
+        glEnableVertexAttribArray(4);
+        glEnableVertexAttribArray(5);
+        glEnableVertexAttribArray(6);
+        set_material_uniform(shaderID);
+        draw_textures(shaderID);
+        glDrawElementsInstanced(GL_TRIANGLES, m_numindices, GL_UNSIGNED_INT, nullptr, 2);
+    }
+    else
+    {
+        set_material_uniform(shaderID);
+        draw_textures(shaderID);
+        glDrawElements(GL_TRIANGLES, m_numindices, GL_UNSIGNED_INT, nullptr);
+    }
+    
     glBindVertexArray(0);
     return;
 }

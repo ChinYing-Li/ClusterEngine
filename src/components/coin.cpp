@@ -68,7 +68,7 @@ void Coin::draw(GLuint& shaderID, glm::mat4& view, glm::mat4& project)
 void Coin::update(float delta_t)
 {
     m_orientation += 1.0f;
-    collision_shape.model_RS = glm::rotate((float) (m_orientation * M_PI / 180.0f), glm::vec3(0, 0, 1));
+    collision_shape.model_RS = glm::rotate((float) (m_orientation * M_PI / 180.0f), glm::vec3(0, 1, 0));
     collision_shape.displacement = m_position;
     return;
 }
