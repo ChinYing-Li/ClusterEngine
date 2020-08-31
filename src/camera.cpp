@@ -1,6 +1,5 @@
 
-
-#include "src/utilities/camera.h"
+#include "includes/utilities/camera.h"
 
 Camera::Camera():
 m_eye(0.0f, 0.5f, 0.0f),

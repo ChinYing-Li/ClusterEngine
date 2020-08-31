@@ -1,4 +1,14 @@
-#ifndef FRAMEBUFFER_H
-#define FRAMEBUFFER_H
+#pragma once
 
-#endif // FRAMEBUFFER_H
+#include "includes/GLincludes.h"
+
+class FrameBuffer
+{
+public:
+    FrameBuffer() = default;
+    ~FrameBuffer() = default;
+
+private:
+    GLuint m_frame_buffer;
+    void init();
+};

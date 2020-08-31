@@ -18,10 +18,6 @@
 #include <math.h>
 #include "../components/appearance/material.h"
 #include "GLincludes.h"
-// Namespace: OBJL
-//
-// Description: The namespace that holds eveyrthing that
-//    is needed and used for the OBJ Model Loader
 
 struct Vertex
 {

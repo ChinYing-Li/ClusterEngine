@@ -1,4 +1,5 @@
 #include <iostream>
+
 #include "inputmanager.h"
 #include "includes/GLincludes.h"
 

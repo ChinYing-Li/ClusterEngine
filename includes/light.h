@@ -64,7 +64,7 @@ protected:
 class DirectionalLight final : public Light
 {
 public:
-    DirectionalLight();
+    DirectionalLight() = default;
     DirectionalLight(const glm::vec3 halfvec);
     ~DirectionalLight() = default;
 

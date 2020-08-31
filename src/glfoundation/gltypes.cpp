@@ -1,8 +1,8 @@
-#include "src/gltypes.h"
-#include "src/foundation/objloader.h"
-#include "src/game.h"
 #include <iostream>
 
+#include "includes/glfoundation/gltypes.h"
+#include "includes/ext/objloader.h"
+#include "includes/game.h"
 
 void VAO::init(GLenum primitive_mode, int numVertices)
 {
@@ -12,7 +12,8 @@ void VAO::init(GLenum primitive_mode, int numVertices)
 
 void VAO::set_instance_attrib()
 {
-    glBindVertexArray(m_vertexarray);
+    glBindVertexArray(m_vertex_array);
+
     // set attribute pointers for matrix (4 times vec4)
     glEnableVertexAttribArray(3);
     glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(8*sizeof(float)*m_numvert));
@@ -35,8 +36,8 @@ void VAO::set_instance_attrib()
 VAO_mesh::VAO_mesh(objl::Mesh& mesh, std::shared_ptr<GameData> data_ptr, unsigned int numinstance = 0):
 VAO(),
 name(mesh.MeshName),
-use_maps(6, false),
-m_numinstance(numinstance)
+m_numinstance(numinstance),
+use_maps(6, false)
 {
     useEBO = true;
     m_numindices = mesh.Indices.size();

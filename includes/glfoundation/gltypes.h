@@ -18,6 +18,10 @@ class Mesh;
 
 class GameData;
 
+/*! VAO stands for "Vertex Array Object", and is the
+ *
+ *
+ */
 class VAO
 {
 public:
@@ -25,7 +29,7 @@ public:
     //VAO(GLuint& vertArrID);
     ~VAO() = default;
     
-    GLuint m_vertexarray;
+    GLuint m_vertex_array;
     GLuint m_vertexbuffer;
     GLuint color_buffer;
     GLuint m_indicebuffer; // EBO

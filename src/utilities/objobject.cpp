@@ -1,16 +1,9 @@
-//
-//  OBJObject.cpp
-//  BumperCarSimulation
-//
-//  Created by Peter Mai on 3/4/18.
-//  Copyright © 2018 William Ma & Peter Mai. All rights reserved.
-//
-
-#include "src/gamedata.h"
-#include "src/foundation/shader.h"
-#include "src/foundation/objobject.h"
 #include <iostream>
 #include <cmath>
+
+#include "includes/gamedata.h"
+#include "includes/glfoundation/shader.h"
+#include "includes/utilities/objobject.h"
 
 objobject::objobject(const std::string name, std::shared_ptr<GameData> data_ptr, unsigned int num_instance):
 m_name(name),

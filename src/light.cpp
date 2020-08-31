@@ -114,10 +114,6 @@ void PointLight::set_shader(int index, GLuint& shaderID)
     glUniform3fv(glGetUniformLocation(shaderID, "lights[0].position"), 1, &m_position[0]);
 }
 
-DirectionalLight::DirectionalLight():
-Light()
-{}
-
 DirectionalLight::DirectionalLight(const glm::vec3 direction):
 Light(),
 m_direction(direction)

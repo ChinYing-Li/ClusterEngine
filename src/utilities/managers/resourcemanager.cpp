@@ -1,5 +1,5 @@
-#include "src/foundation/texture.h"
-#include "src/foundation/shader.h"
+#include "includes/glfoundation/texture.h"
+#include "includes/glfoundation/shader.h"
 #include "src/utilities/managers/resourcemanager.h"
 
 #include <iostream>

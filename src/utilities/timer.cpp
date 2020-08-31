@@ -1,6 +1,6 @@
-
-#include "src/utilities/timer.h"
 #include <GLFW/glfw3.h>
+
+#include "includes/utilities/timer.h"
 
 Timer::Timer():
 m_prev(0)
