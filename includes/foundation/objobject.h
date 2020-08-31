@@ -4,7 +4,7 @@
 #include <string.h>
 #include <map>
 #include <memory>
-#include "includes/gl_headers.h"
+#include "includes/GLincludes.h"
 #include "src/gltypes.h"
 #include "src/foundation/texture.h"
 namespace objl

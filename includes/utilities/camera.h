@@ -2,7 +2,7 @@
 
 #include <math.h>
 #include <iostream>
-#include "includes/gl_headers.h"
+#include "includes/GLincludes.h"
 enum camMove
 {
     move_forward  = 3,

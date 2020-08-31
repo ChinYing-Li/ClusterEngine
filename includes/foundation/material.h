@@ -1,7 +1,7 @@
 #pragma once
 #include <string.h>
 #include <memory>
-#include "includes/gl_headers.h"
+#include "includes/GLincludes.h"
 class Texture2D;
 class Material
 {

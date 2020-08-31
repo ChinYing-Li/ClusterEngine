@@ -1,7 +1,16 @@
-#include "includes/gl_headers.h"
-#include "includes/debug/debug.h"
 #include <stdio.h>
 #include <iostream>
+
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+
+#define GLM_FORCE_RADIANS
+#include <glm/glm.hpp>
+#include <glm/gtx/transform.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
+#include "includes/debug/debug.h"
+
 glsl_type_set type_set [] = {
   GL_INVALID_ENUM,                              "invalid",
   GL_FLOAT,                                     "float",
@@ -111,41 +120,45 @@ glsl_type_set type_set [] = {
   GL_UNSIGNED_INT_ATOMIC_COUNTER,               "atomic_uint"
 };
 
-void eTB_GLSL_print_uniforms (unsigned int program)
+void glsl_print_uniforms (unsigned int program)
 {
     glUseProgram(program);
-  GLint uniform_count;
-  glGetProgramiv (program, GL_ACTIVE_UNIFORMS, &uniform_count);
+    GLint uniform_count;
+    glGetProgramiv (program, GL_ACTIVE_UNIFORMS, &uniform_count);
     std::cout << "uniform count" << uniform_count << std::endl;
-  for (GLint i = 0; i < uniform_count; i++) {
-    GLchar name [256];
-    GLint  size;
-    GLenum type;
-    glGetActiveUniform(program, i, 255, NULL, &size, &type, name);
 
-    GLint location = glGetUniformLocation (program, name);
+    for (GLint i = 0; i < uniform_count; i++)
+    {
+      GLchar name [256];
+      GLint  size;
+      GLenum type;
+      glGetActiveUniform(program, i, 255, NULL, &size, &type, name);
 
-    for (int j = 0; j < sizeof (type_set) / sizeof (glsl_type_set); j++) {
-      if (type_set [j].type != type)
-        continue;
+      GLint location = glGetUniformLocation (program, name);
 
-      const char* type_name = type_set [j].name;
+      for (int j = 0; j < sizeof (type_set) / sizeof (glsl_type_set); j++)
+      {
+        if (type_set[j].type != type)
+          continue;
 
-      if (size > 1)
-        printf ( "Uniform %d (loc=%d):\t%20s %-20s <Size: %d>\n",
-                   i, location, type_name, name, size );
-      else
-        printf ( "Uniform %d (loc=%d):\t%20s %-20s\n",
-                   i, location, type_name, name );
-      break;
-    }
+        const char* type_name = type_set[j].name;
+
+        std::cout << "Uniform " << i
+                    << " (loc = " << location
+                    << " : " << type_name
+                    << " " << name
+                    <<  std::endl;
+        if(size > 1) std::cout << " <Size: " << size << " >" << std::endl;
+        break;
+      }
+
     if (i == (uniform_count - 1))
-      printf ("\n");
+      std::cout << "\n" << std::endl;
   }
 }
 
 
-void glDebug()
+void gl_debug()
 {
     GLenum errorCode;
     while ((errorCode = glGetError()) != GL_NO_ERROR)

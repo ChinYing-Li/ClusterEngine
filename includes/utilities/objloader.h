@@ -17,7 +17,7 @@
 // Math.h - STD math Library
 #include <math.h>
 #include "../components/appearance/material.h"
-#include "gl_headers.h"
+#include "GLincludes.h"
 // Namespace: OBJL
 //
 // Description: The namespace that holds eveyrthing that

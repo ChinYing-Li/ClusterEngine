@@ -1,6 +1,6 @@
 #pragma once
 #include <vector>
-#include "includes/gl_headers.h"
+#include "includes/GLincludes.h"
 
 class ConvexHull
 {

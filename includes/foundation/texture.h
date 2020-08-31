@@ -1,11 +1,12 @@
 #pragma once
+
 #include <map>
 #include <string>
 #include <vector>
 
-#include "includes/gl_headers.h"
+#include "includes/GLincludes.h"
 
-class Texture // only holds the data...
+class Texture
 {
 public:
     Texture();
@@ -15,17 +16,19 @@ public:
     bool m_initiated;
     
     unsigned int m_vertexsize;
+
     std::string m_name; // name for lookup in texture manager
     GLuint m_ID;
     GLenum m_format;
-    std::map<GLenum, GLenum> m_parametermap;
+
+    std::map<GLenum, GLenum> m_parameter_map;
     inline void virtual set_vertexattrib() = 0;
 protected:
     // functions only accessed by texturemanager
     void set_texparam();
 };
 
-class Texture2D: public Texture
+class Texture2D final : public Texture
 {
 public:
     Texture2D();
@@ -34,12 +37,14 @@ public:
     
     int m_height;
     int m_width;
+
     inline void set_vertexattrib() override;
+
 protected:
     bool init_from_file(const std::vector<std::string>& file_path);
 };
 
-class TextureCubemap: public Texture
+class TextureCubemap final : public Texture
 {
 public:
     TextureCubemap();
@@ -48,7 +53,9 @@ public:
     
     int m_height;
     int m_width;
+
     inline void set_vertexattrib() override;
+
 protected:
     bool init_from_file(const std::vector<std::string>& file_path);
 };

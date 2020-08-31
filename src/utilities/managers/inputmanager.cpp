@@ -1,6 +1,6 @@
 #include <iostream>
 #include "inputmanager.h"
-#include "includes/gl_headers.h"
+#include "includes/GLincludes.h"
 
 InputManager::InputManager()
 {

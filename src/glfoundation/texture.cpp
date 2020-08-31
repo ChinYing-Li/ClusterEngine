@@ -1,6 +1,7 @@
 #include <cassert>
 #include <iostream>
-#include "src/foundation/texture.h"
+
+#include "includes/foundation/texture.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -17,7 +18,7 @@ m_initiated(false)
 
 void Texture::set_texparam()
 {
-    for(auto it = m_parametermap.begin(); it !=  m_parametermap.end(); ++it)
+    for(auto it = m_parameter_map.begin(); it !=  m_parameter_map.end(); ++it)
     {
         glTexParameteri(m_format, it->first, it->second);
     }
@@ -40,10 +41,10 @@ Texture2D()
     
     bool init_success = init_from_file(file_path);
     if(init_success) m_initiated = true;
-    m_parametermap[GL_TEXTURE_MAG_FILTER] = GL_LINEAR;
-    m_parametermap[GL_TEXTURE_MIN_FILTER] = GL_LINEAR;
-    m_parametermap[GL_TEXTURE_WRAP_S] = GL_REPEAT;
-    m_parametermap[GL_TEXTURE_WRAP_T] = GL_REPEAT;
+    m_parameter_map[GL_TEXTURE_MAG_FILTER] = GL_LINEAR;
+    m_parameter_map[GL_TEXTURE_MIN_FILTER] = GL_LINEAR;
+    m_parameter_map[GL_TEXTURE_WRAP_S] = GL_REPEAT;
+    m_parameter_map[GL_TEXTURE_WRAP_T] = GL_REPEAT;
 }
 
 bool Texture2D::init_from_file(const std::vector<std::string>& file_path)
@@ -110,11 +111,11 @@ Texture(name)
 {
     m_format = GL_TEXTURE_CUBE_MAP;
     m_vertexsize = 3;
-    m_parametermap[GL_TEXTURE_MAG_FILTER] = GL_LINEAR;
-    m_parametermap[GL_TEXTURE_MIN_FILTER] = GL_LINEAR;
-    m_parametermap[GL_TEXTURE_WRAP_S] = GL_CLAMP_TO_EDGE;
-    m_parametermap[GL_TEXTURE_WRAP_T] = GL_CLAMP_TO_EDGE;
-    m_parametermap[GL_TEXTURE_WRAP_R] = GL_CLAMP_TO_EDGE;
+    m_parameter_map[GL_TEXTURE_MAG_FILTER] = GL_LINEAR;
+    m_parameter_map[GL_TEXTURE_MIN_FILTER] = GL_LINEAR;
+    m_parameter_map[GL_TEXTURE_WRAP_S] = GL_CLAMP_TO_EDGE;
+    m_parameter_map[GL_TEXTURE_WRAP_T] = GL_CLAMP_TO_EDGE;
+    m_parameter_map[GL_TEXTURE_WRAP_R] = GL_CLAMP_TO_EDGE;
     m_initiated = init_from_file(file_path);
     std::cout << name << file_path.size() << std::endl;
 }
@@ -154,8 +155,8 @@ inline void TextureCubemap::set_vertexattrib()
         3,                            // size (x,y,z)
         GL_FLOAT,                     // type
         GL_FALSE,                     // normalized?
-        3*sizeof(GLfloat),                            // stride
-        (void *) 0                      // array buffer offset
+        3*sizeof(GLfloat),            // stride
+        (void *) 0                    // array buffer offset
      );
     return;
 }

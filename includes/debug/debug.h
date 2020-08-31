@@ -5,5 +5,5 @@ struct glsl_type_set {
   const char* name;
 };
 
-void eTB_GLSL_print_uniforms (unsigned int program);
-void glDebug();
+void glsl_print_uniforms(unsigned int program);
+void gl_debug();

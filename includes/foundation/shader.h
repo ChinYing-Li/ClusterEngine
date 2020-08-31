@@ -1,16 +1,27 @@
 #pragma once
+
 #include <string.h>
-#include "includes/gl_headers.h"
+
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+
+#define GLM_FORCE_RADIANS
+#include <glm/glm.hpp>
+#include <glm/gtx/transform.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 class Shader
 {
 public:
     Shader() = default;
-    Shader(const std::string path_vert, const std::string path_frag, const std::string path_geo, const std::string name);
+    Shader(const std::string path_to_vert, const std::string path_to_frag, const std::string path_to_geo, const std::string name);
     ~Shader() = default;
     
     void use();
-    unsigned int ID;
+
+    unsigned int m_program_ID;
     std::string m_name;
+
 private:
     GLuint m_vert_ID;
     GLuint m_frag_ID;

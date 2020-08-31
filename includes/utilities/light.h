@@ -1,5 +1,5 @@
 #pragma once
-#include "../../includes/gl_headers.h"
+#include "../../includes/GLincludes.h"
 class Light
 {
 public:
