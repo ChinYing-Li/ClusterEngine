@@ -1,5 +1,5 @@
 #include <iostream>
-#include "src/foundation/convexhull.h"
+#include "includes/math/convexhull.h"
 
 ConvexHull::ConvexHull(std::vector<glm::vec3> vertices):
 m_vertices(vertices)

@@ -1,9 +1,22 @@
 #pragma once
+
 #include <memory>
 #include <string>
-#include "foundation/texture.h"
+
+#include "includes/glfoundation/texture.h"
 #include "gamestate/state.h"
 #include "utilities/managers/Imanagers.h"
+
+
+// Forward declarations
+namespace objl
+{
+class Loader;
+class Material;
+class Mesh;
+}
+
+class GameData;
 
 class VAO
 {
@@ -28,21 +41,12 @@ public:
     void set_instance_attrib();
     void virtual send_instance_matrices(std::vector<glm::mat4>& instance_models){};
     void init(GLenum primitive_mode, int numVertices);
+
 protected:
     bool useEBO = false;
-    
 };
 
-namespace objl
-{
-class Loader;
-class Material;
-class Mesh;
-}
-
-class GameData;
-
-class VAO_mesh: public VAO
+class VAO_mesh final : public VAO
 {
 public:
     VAO_mesh(objl::Mesh& mesh, std::shared_ptr<GameData> data_ptr, unsigned int numinstance);
@@ -69,7 +73,7 @@ private:
     map_bump_ptr = nullptr; GL_TEXTURE5*/
 };
 
-class VAO_monotone: public VAO
+class VAO_monotone final : public VAO
 {
 public:
     VAO_monotone();

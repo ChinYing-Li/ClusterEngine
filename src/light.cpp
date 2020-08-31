@@ -1,5 +1,7 @@
-#include "light.h"
 #include <iostream>
+
+#include "light.h"
+
 Light::Light():
 m_const_atten(10.0f),
 m_linear_atten(10.0f),
@@ -26,19 +28,16 @@ void Light::turn_off()
 void Light::set_color(const glm::vec3 new_color)
 {
     m_color = new_color;
-    return;
 }
 
 void Light::set_const_attenuation(const float const_atten)
 {
     m_const_atten = const_atten;
-    return;
 }
 
 void Light::set_lin_attenuation(const float linear_atten)
 {
     m_linear_atten = linear_atten;
-    return;
 }
 
 void Light::set_quad_attenuation(const float quad_atten)
@@ -75,11 +74,11 @@ Light()
 }
 
 SpotLight::SpotLight(const glm::vec3 position, glm::vec3 conedirection, const float cutoff, const float exponent):
-Light(),
-m_position(position),
-m_conedirection(conedirection),
-m_cutoff(cutoff),
-m_exponent(exponent)
+    Light(),
+    m_cutoff(cutoff),
+    m_exponent(exponent),
+    m_position(position),
+    m_conedirection(conedirection)
 {
     is_local = true;
     is_spotlight = true;
@@ -94,6 +93,7 @@ void SpotLight::set_shader(int index, GLuint& shaderID)
     glUniform1f(glGetUniformLocation(shaderID, "lights[0].exponent"), m_exponent);
     return;
 }
+
 PointLight::PointLight():
 Light()
 {
@@ -106,15 +106,12 @@ Light()
     m_position = position;
 }
 
-PointLight::~PointLight()
-{}
-
 void PointLight::set_shader(int index, GLuint& shaderID)
 {
     glUseProgram(shaderID);
     Light::set_shader(index, shaderID);
+
     glUniform3fv(glGetUniformLocation(shaderID, "lights[0].position"), 1, &m_position[0]);
-    return;
 }
 
 DirectionalLight::DirectionalLight():
@@ -126,14 +123,10 @@ Light(),
 m_direction(direction)
 {}
 
-DirectionalLight::~DirectionalLight()
-{}
-
 void DirectionalLight::set_shader(int index, GLuint& shaderID)
 {
     Light::set_shader(index, shaderID);
     glUniform3fv(glGetUniformLocation(shaderID, "lights[0].direction"), 1, &m_direction[0]);
-    return;
 }
 
 void DirectionalLight::set_direction(const glm::vec3 direction)

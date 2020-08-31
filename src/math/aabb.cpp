@@ -1,4 +1,4 @@
-#include "aabb.h"
+#include "includes/math/aabb.h"
 
 AABB::AABB(glm::vec3& mincoords, glm::vec3& maxcoords):
 m_mincoords(mincoords),
