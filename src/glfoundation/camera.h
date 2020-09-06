@@ -2,7 +2,10 @@
 
 #include <math.h>
 #include <iostream>
-#include "includes/GLincludes.h"
+#include "glincludes.h"
+
+namespace Cluster {
+
 enum camMove
 {
     move_forward  = 3,
@@ -18,7 +21,7 @@ public:
     Camera(const float x, const float y, const float z);
     Camera(const glm::vec3 position);
     ~Camera() = default;
-    
+
     void update_matrices(GLMatrices& mat);
     //void update_cam(const int user_input);
     glm::mat4 m_xzy_mat;
@@ -36,7 +39,7 @@ public:
     CarCam(const float x, const float y, const float z);
     CarCam(const glm::vec3 position);
     ~CarCam() = default;
-    
+
     void set_eye(const glm::vec3 pos);
     void set_direction(const glm::vec3 dir);
 };
@@ -48,7 +51,7 @@ public:
     FreeCam(const float x, const float y, const float z);
     FreeCam(const glm::vec3 position);
     ~FreeCam() = default;
-    
+
     void update_cam(const int user_input);
     void set_stepsize(const glm::vec3 new_stepsize);
 private:
@@ -57,3 +60,4 @@ private:
     glm::mat4 m_cw_mat;
     glm::mat4 m_ccw_mat;
 };
+}

@@ -5,9 +5,9 @@
 #include <map>
 #include <memory>
 
-#include "includes/GLincludes.h"
-#include "src/gltypes.h"
-#include "includes/glfoundation/texture.h"
+#include "glincludes.h"
+#include "globject.h"
+#include "texture.h"
 
 namespace objl
 {

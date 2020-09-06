@@ -1,7 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-#include "src/foundation/material.h"
+#include "material.h"
 
 Material::Material():
 m_ambient(0.5f),
@@ -37,75 +37,75 @@ void Material::set_properties_in_shader(GLuint shaderID)
 }
 
 void Material::parse_from_file(std::string filepath) {
-    
-    std::ifstream inFile;
-    inFile.open( filepath, std::ifstream::in );
-    if( !inFile ) {
+    std::ifstream infile;
+
+    try {
+        infile.open( filepath, std::ifstream::in );
+    } catch ( std::ifstream::failure err ) {
         std::cout << "Unable to read: " << filepath << std::endl;
-        exit(-1);
     }
     
-    // Read in line by line until end of file
-    std::string curLine;
-    std::string curMaterial = "";
-    while(getline(inFile, curLine)) {
-        std::istringstream ss(curLine);
-        std::string lineType;
-        ss >> lineType;
+    // Parse line by line until eof.
+    std::string curline;
+    std::string material = "";
+
+    while(getline(infile, curline)) {
+        std::istringstream ss(curline);
+        std::string type;
+        ss >> type;
         
-        if( lineType.compare("newmtl") == 0 ) {
+        if( type.compare("newmtl") == 0 ) {
             ss >> m_name;
         }
         
         // Reading in ambient color
-        else if( lineType.compare("Ka") == 0 ) {
+        else if( type.compare("Ka") == 0 ) {
             float r, g, b;
             ss >> r >> g >> b;
             m_ambient = glm::vec3(r,g,b);
         }
         
         // Read in diffuse color
-        else if( lineType.compare("Kd") == 0 ) {
+        else if( type.compare("Kd") == 0 ) {
             float r, g, b;
             ss >> r >> g >> b;
             m_diffuse = glm::vec3(r,g,b);
         }
         
         // Read in specular color
-        else if( lineType.compare("Ks") == 0 ){
+        else if( type.compare("Ks") == 0 ){
             float r, g, b;
             ss >> r >> g >> b;
             m_specular = glm::vec3(r,g,b);
         }
         
-        else if(lineType.compare("Ns"))
+        else if(type.compare("Ns"))
         {
             ss >> Ns;
         }
         
-        else if (lineType.compare("illum"))
+        else if (type.compare("illum"))
         {
             ss >> illum;
         }
         
-        else if (lineType.compare("map_Ka"))
+        else if (type.compare("map_Ka"))
         {
             use_map_Ka = true;
-            
         }
-        else if (lineType.compare("map_Kd"))
+        else if (type.compare("map_Kd"))
         {
             use_map_Kd = true;
         }
-        else if (lineType.compare("map_Ks"))
+        else if (type.compare("map_Ks"))
         {
             use_map_Ks = true;
         }
-        else if (lineType.compare("map_Ns"))
+        else if (type.compare("map_Ns"))
         {
             use_map_Ns = true;
         }
-        else if (lineType.compare("map_d"))
+        else if (type.compare("map_d"))
         {
             use_map_d = true;
         }
@@ -115,6 +115,6 @@ void Material::parse_from_file(std::string filepath) {
         }
     }
     
-    inFile.close();
+    infile.close();
 }
 

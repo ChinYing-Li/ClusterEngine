@@ -1,9 +1,9 @@
 #include <iostream>
 #include <cmath>
 
-#include "includes/gamedata.h"
-#include "includes/glfoundation/shader.h"
-#include "includes/utilities/objobject.h"
+#include "gamedata.h"
+#include "shader.h"
+#include "objobject.h"
 
 objobject::objobject(const std::string name, std::shared_ptr<GameData> data_ptr, unsigned int num_instance):
 m_name(name),

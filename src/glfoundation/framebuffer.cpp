@@ -1,6 +1,6 @@
-#include "includes/glfoundation/framebuffer.h"
+#include "src/glfoundation/framebuffer.h"
 
 void FrameBuffer::init()
 {
-    glGenFramebuffers(1, &m_frame_buffer);
+    glGenFramebuffers(1, &m_FBO);
 }

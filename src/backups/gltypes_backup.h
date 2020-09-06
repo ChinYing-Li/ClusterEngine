@@ -3,12 +3,12 @@
 #include "main.h"
 #include "foundation/texture.h"
 
-class VAO
+class GLObejct
 {
 public:
-    VAO(){};
+    GLObejct(){};
     //VAO(GLuint& vertArrID);
-    ~VAO() = default;
+    ~GLObejct() = default;
     
     GLuint m_vertexarrayID;
     GLuint m_vertexbuffer;
@@ -25,7 +25,7 @@ protected:
     bool useEBO = false;
 };
 
-class VAO_monotone: public VAO
+class VAO_monotone: public GLObejct
 {
 public:
     VAO_monotone();
@@ -46,7 +46,7 @@ private:
     void init(const GLfloat *vertex_buffer_data, const GLuint *indices, const GLfloat *color_buffer_data);
 };
 
-class VAO_texture: public VAO
+class VAO_texture: public GLObejct
 {
 public:
     VAO_texture();
@@ -62,11 +62,11 @@ private:
     void load_texture();
 };
 
-class VAO_cubemap: public VAO
+class Cubemap: public GLObejct
 {
 public:
-    VAO_cubemap();
-    VAO_cubemap(GLenum primitive_mode, int numVertices, const GLfloat *vertex_buffer_data, std::vector<std::string>& path_to_texture);
+    Cubemap();
+    Cubemap(GLenum primitive_mode, int numVertices, const GLfloat *vertex_buffer_data, std::vector<std::string>& path_to_texture);
     void draw(GLuint shaderID) override;
     GLuint texture_buffer;
 private:

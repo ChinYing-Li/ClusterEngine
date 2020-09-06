@@ -1,7 +1,7 @@
 #include <cassert>
 #include <iostream>
 
-#include "includes/foundation/texture.h"
+#include "src/glfoundation/texture.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"

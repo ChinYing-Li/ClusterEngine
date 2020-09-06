@@ -8,12 +8,12 @@
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "gltypes.h"
+#include "globject.h"
 
-void VAO::init_member(GLenum primitive_mode, int numVertices)
+void GLObejct::init_member(GLenum primitive_mode, int numVertices)
 {
     m_primitivemode = primitive_mode;
-    m_numvert   = numVertices;
+    m_num_vertices   = numVertices;
     return;
 }
 
@@ -24,7 +24,7 @@ VAO()
 VAO_monotone::VAO_monotone(GLenum primitive_mode, int numVertices, const GLfloat *vertex_buffer_data, const color_t color, GLenum fill_mode):
 VAO()
 {
-    VAO::init_member(primitive_mode, numVertices);
+    GLObejct::init_member(primitive_mode, numVertices);
     m_fillmode      = fill_mode;
     init(vertex_buffer_data, color);
 }
@@ -34,8 +34,8 @@ VAO()
 VAO_monotone::VAO_monotone(GLenum primitive_mode, int numVertices, const GLfloat *vertex_buffer_data, int numindices, const GLuint *indices, const color_t color, GLenum fill_mode):
 VAO()
 {
-    VAO::init_member(primitive_mode,numVertices);
-    useEBO = true;
+    GLObejct::init_member(primitive_mode,numVertices);
+    is_using_EBO = true;
     m_numindices = numindices;
     m_fillmode      = fill_mode;
     
@@ -113,7 +113,7 @@ void VAO_monotone::draw(GLuint shaderID) {
     // Bind the VBO to use
     glBindBuffer(GL_ARRAY_BUFFER, color_buffer);
     
-    if(useEBO)
+    if(is_using_EBO)
     {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indicebuffer);
         
@@ -151,7 +151,7 @@ VAO()
 VAO_texture::VAO_texture(GLenum primitive_mode, int numVertices, const GLfloat *vertex_buffer_data, std::vector<std::string>& path_to_texture):
 VAO()
 {
-    VAO::init_member(primitive_mode, numVertices);
+    GLObejct::init_member(primitive_mode, numVertices);
     init(vertex_buffer_data, path_to_texture);
 }
 

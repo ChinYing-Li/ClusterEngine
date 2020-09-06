@@ -1,5 +1,5 @@
 #include <cassert>
-#include "includes/color.h"
+#include "color.h"
 
 #define INV_256 1.0f/255.0f
 ColorU8::ColorU8(const std::uint8_t val):

@@ -1,28 +1,28 @@
 #include <iostream>
 
-#include "includes/glfoundation/gltypes.h"
-#include "includes/ext/objloader.h"
-#include "includes/game.h"
+#include "globject.h"
+#include "objloader.h"
+#include "game.h"
 
-void VAO::init(GLenum primitive_mode, int numVertices)
+void GLObejct::init(GLenum primitive_mode, int numVertices)
 {
     m_primitivemode = primitive_mode;
     return;
 }
 
-void VAO::set_instance_attrib()
+void GLObejct::set_instance_attrib()
 {
-    glBindVertexArray(m_vertex_array);
+    glBindVertexArray(m_VAO);
 
     // set attribute pointers for matrix (4 times vec4)
     glEnableVertexAttribArray(3);
-    glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(8*sizeof(float)*m_numvert));
+    glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(8*sizeof(float)*m_num_vertices));
     glEnableVertexAttribArray(4);
-    glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(8*sizeof(float)*m_numvert+sizeof(glm::vec4)));
+    glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(8*sizeof(float)*m_num_vertices+sizeof(glm::vec4)));
     glEnableVertexAttribArray(5);
-    glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(8*sizeof(float)*m_numvert+2 * sizeof(glm::vec4)));
+    glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(8*sizeof(float)*m_num_vertices+2 * sizeof(glm::vec4)));
     glEnableVertexAttribArray(6);
-    glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(8*sizeof(float)*m_numvert+3 * sizeof(glm::vec4)));
+    glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(8*sizeof(float)*m_num_vertices+3 * sizeof(glm::vec4)));
 
     glVertexAttribDivisor(3, 1);
     glVertexAttribDivisor(4, 1);
@@ -42,7 +42,7 @@ use_maps(6, false)
     useEBO = true;
     m_numindices = mesh.Indices.size();
     m_numvert = mesh.Vertices.size();
-    VAO::init(GL_TRIANGLES, 0);
+    GLObejct::init(GL_TRIANGLES, 0);
     init(mesh);
     
     m_material_ptr = new objl::Material;
@@ -215,7 +215,7 @@ VAO()
 VAO_monotone::VAO_monotone(GLenum primitive_mode, int numVertices, const GLfloat *vertex_buffer_data, const color_t color, GLenum fill_mode):
 VAO()
 {
-    VAO::init(primitive_mode, numVertices);
+    GLObejct::init(primitive_mode, numVertices);
     m_fillmode      = fill_mode;
     init(vertex_buffer_data, color);
 }
@@ -225,8 +225,8 @@ VAO()
 VAO_monotone::VAO_monotone(GLenum primitive_mode, int numVertices, const GLfloat *vertex_buffer_data, int numindices, const GLuint *indices, const color_t color, GLenum fill_mode):
 VAO()
 {
-    VAO::init(primitive_mode,numVertices);
-    useEBO = true;
+    GLObejct::init(primitive_mode,numVertices);
+    is_using_EBO = true;
     m_numindices = numindices;
     m_fillmode      = fill_mode;
     
@@ -304,7 +304,7 @@ void VAO_monotone::draw(GLuint& shaderID) {
     // Bind the VBO to use
     glBindBuffer(GL_ARRAY_BUFFER, color_buffer);
     
-    if(useEBO)
+    if(is_using_EBO)
     {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_indicebuffer);
         
@@ -343,7 +343,7 @@ VAO_texture::VAO_texture(GLenum primitive_mode, int numVertices, const GLfloat *
 VAO(),
 m_texname(texname)
 {
-    VAO::init(primitive_mode, numVertices);
+    GLObejct::init(primitive_mode, numVertices);
     init(vertex_buffer_data, gamedata);
 }
 
@@ -398,7 +398,7 @@ VAO()
 VAO_material::VAO_material(GLenum primitive_mode, int num_vertices, const GLfloat* vertex_position, const GLfloat* vertex_normal, GameData& gamedata):
 VAO()
 {
-    VAO::init(primitive_mode, num_vertices);
+    GLObejct::init(primitive_mode, num_vertices);
     init(vertex_position, vertex_normal, gamedata);
 }
 

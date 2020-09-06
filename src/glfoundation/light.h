@@ -1,5 +1,5 @@
 #pragma once
-#include "includes/GLincludes.h"
+#include "glincludes.h"
 
 class Light
 {
@@ -13,8 +13,8 @@ public:
     void set_color(const glm::vec3 new_color);
 
     void set_const_attenuation(const float const_atten);
-    void set_lin_attenuation(const float linear_atten);
-    void set_quad_attenuation(const float quad_atten);
+    void set_linear_attenuation(const float linear_atten);
+    void set_quadratic_attenuation(const float quad_atten);
     void set_ambient_strength(const glm::vec3 new_amb_strength);
 
     void virtual set_shader(int index, GLuint& shaderID);

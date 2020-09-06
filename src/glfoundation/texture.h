@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include "includes/GLincludes.h"
+#include "glincludes.h"
 
 class Texture
 {

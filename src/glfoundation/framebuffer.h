@@ -1,6 +1,6 @@
 #pragma once
 
-#include "includes/GLincludes.h"
+#include "glincludes.h"
 
 class FrameBuffer
 {
@@ -9,6 +9,6 @@ public:
     ~FrameBuffer() = default;
 
 private:
-    GLuint m_frame_buffer;
+    GLuint m_FBO;
     void init();
 };

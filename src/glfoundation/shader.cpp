@@ -2,16 +2,20 @@
 #include <fstream>
 #include <vector>
 
-#include "includes/foundation/shader.h"
+#include "shader.h"
 
-Shader::Shader(const std::string path_to_vert, const std::string path_to_frag, const std::string path_to_geo = "", const std::string name = ""):
+Shader::
+Shader(const std::string path_to_vert,
+       const std::string path_to_frag,
+       const std::string path_to_geo = "",
+       const std::string name = ""):
 m_name(name)
 {
   m_vert_ID = glCreateShader(GL_VERTEX_SHADER);
   m_frag_ID = glCreateShader(GL_FRAGMENT_SHADER);
 
-  std::string   vert_code = read_code(path_to_vert);
-  std::string   frag_code = read_code(path_to_frag);
+  std::string vert_code = read_code(path_to_vert);
+  std::string frag_code = read_code(path_to_frag);
   compile_shader(m_vert_ID, vert_code);
   compile_check(m_vert_ID);
   compile_shader(m_frag_ID, frag_code);
@@ -29,17 +33,22 @@ m_name(name)
 
   glAttachShader(m_program_ID, m_vert_ID);
   glAttachShader(m_program_ID, m_frag_ID);
-  if(path_geo.size()>0)
-     glAttachShader(m_program_ID, m_geom_ID);
+
+  if (!path_to_geo.empty())
+  {
+      glAttachShader(m_program_ID, m_geom_ID);
+  }
 
   glLinkProgram(m_program_ID);
   link_check(m_program_ID);
 
   glDeleteShader(m_vert_ID);
   glDeleteShader(m_frag_ID);
-  if(path_to_geo.size()>0)
-     glDeleteShader(m_geom_ID);
 
+  if (!path_to_geo.empty())
+  {
+      glDeleteShader(m_geom_ID);
+  }
 }
 
 void Shader::use()
@@ -47,7 +56,8 @@ void Shader::use()
     glUseProgram(m_program_ID);
 }
         
-std::string Shader::read_code(const std::string path_to_shader)
+std::string Shader::
+read_code(const std::string path_to_shader)
 {
   std::string  code;
   std::ifstream stream(path_to_shader, std::ios::in);
@@ -67,14 +77,17 @@ std::string Shader::read_code(const std::string path_to_shader)
 }
 
 
-void Shader::compile_shader(GLuint shader_ID, const std::string& shader_code)
+void Shader::
+compile_shader(GLuint& shader_ID,
+               const std::string& shader_code)
 {
   char const *src_ptr = shader_code.c_str();
   glShaderSource(shader_ID, 1, &src_ptr, NULL);
   glCompileShader(shader_ID);
 }
         
-void Shader::compile_check(GLuint shader_ID)
+void Shader::
+compile_check(GLuint shader_ID)
 {
     GLint result = GL_FALSE;
     int   info_log_length;
@@ -90,7 +103,8 @@ void Shader::compile_check(GLuint shader_ID)
 }
 
 
-void Shader::link_check(GLuint& program_ID)
+void Shader::
+link_check(GLuint program_ID)
 {
   GLint is_linked = 0;
   glGetProgramiv(program_ID, GL_LINK_STATUS, &is_linked);

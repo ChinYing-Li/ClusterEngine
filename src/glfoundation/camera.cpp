@@ -1,6 +1,8 @@
 
-#include "includes/utilities/camera.h"
+#include "camera.h"
 
+namespace Cluster
+{
 Camera::Camera():
 m_eye(0.0f, 0.5f, 0.0f),
 m_direction(1.0f, 0.0f, -0.1f),
@@ -79,7 +81,7 @@ void FreeCam::update_cam(const int user_input)
         m_eye += m_stepsize * m_direction;
         return;
     }
-    
+
     if(user_input == move_backward)
     {
         m_eye -= m_stepsize * m_direction;
@@ -105,4 +107,6 @@ void FreeCam::set_stepsize(const glm::vec3 new_stepsize)
 {
     m_stepsize = new_stepsize;
     return;
+}
+
 }

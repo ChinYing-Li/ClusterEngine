@@ -1,7 +1,8 @@
 #pragma once
 #include <string.h>
 #include <memory>
-#include "includes/GLincludes.h"
+#include "glincludes.h"
+
 class Texture2D;
 class Material
 {
@@ -28,18 +29,14 @@ public:
     bool use_map_Ns = false;
     bool use_map_d = false;
     bool use_map_bump = false;
-    // Ambient Texture Map
-    std::shared_ptr<Texture2D> map_Ka;
-    // Diffuse Texture Map
-    std::shared_ptr<Texture2D> map_Kd;
-    // Specular Texture Map
-    std::shared_ptr<Texture2D> map_Ks;
-    // Specular Hightlight Map
-    std::shared_ptr<Texture2D> map_Ns;
-    // Alpha Texture Map
-    std::shared_ptr<Texture2D> map_d;
-    // Bump Map
-    std::shared_ptr<Texture2D> map_bump;
+
+    std::shared_ptr<Texture2D> map_Ka;     // Ambient Texture Map
+    std::shared_ptr<Texture2D> map_Kd;     // Diffuse Texture Map
+    std::shared_ptr<Texture2D> map_Ks;     // Specular Texture Map
+    std::shared_ptr<Texture2D> map_Ns;     // Specular Hightlight Map
+    std::shared_ptr<Texture2D> map_alpha;  // Alpha Texture Map
+    std::shared_ptr<Texture2D> map_bump;   // Bump Map
+
 protected:
      // emission not in use
     void parse_from_file(std::string filepath);

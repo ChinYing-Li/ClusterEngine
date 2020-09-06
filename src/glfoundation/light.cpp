@@ -8,50 +8,60 @@ m_linear_atten(10.0f),
 m_quadratic_atten(10.0f)
 {}
 
-bool Light::is_enabled()
+bool Light::
+is_enabled()
 {
     return on_state;
 }
 
-void Light::turn_on()
+void Light::
+turn_on()
 {
     on_state = true;
     return;
 }
 
-void Light::turn_off()
+void Light::
+turn_off()
 {
     on_state = false;
     return;
 }
 
-void Light::set_color(const glm::vec3 new_color)
+void Light::
+set_color(const glm::vec3 new_color)
 {
     m_color = new_color;
 }
 
-void Light::set_const_attenuation(const float const_atten)
+void Light::
+set_const_attenuation(const float const_atten)
 {
     m_const_atten = const_atten;
 }
 
-void Light::set_lin_attenuation(const float linear_atten)
+void Light::
+set_linear_attenuation(const float linear_atten)
 {
     m_linear_atten = linear_atten;
 }
 
-void Light::set_quad_attenuation(const float quad_atten)
+void Light::
+set_quadratic_attenuation(const float quad_atten)
 {
     m_quadratic_atten = quad_atten;
     return;
 }
 
-void Light::set_ambient_strength(const glm::vec3 new_amb_strength)
+void Light::
+set_ambient_strength(const glm::vec3 new_amb_strength)
 {
     m_ambient_strength = new_amb_strength;
 }
 
-void Light::set_shader(int index, GLuint& shaderID)
+void Light::
+set_shader(int index,
+           GLuint& shaderID)
 {
     glUseProgram(shaderID);
     glUniform1i(glGetUniformLocation(shaderID, "lights[0].is_enabled"), int(on_state));

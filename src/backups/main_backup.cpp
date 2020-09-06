@@ -6,7 +6,7 @@
 #include "utilities/timer.h"
 #include "utilities/camera.h"
 #include "foundation/shader.h"
-#include "gltypes.h"
+#include "globject.h"
 #include "physics/collisiondetector.h"
 #include "foundation/objobject.h"
 #include "foundation/objloader.h"
