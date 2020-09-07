@@ -6,6 +6,15 @@
 
 #include "glincludes.h"
 
+enum TextureUsage
+{
+    TU_albedo = 0,
+    TU_bump,
+    TU_emission,
+    TU_normal,
+    TU_stencil,
+};
+
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief The Texture class
 ///

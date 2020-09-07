@@ -1,5 +1,7 @@
 #pragma once
 
+#include <map>
+
 #include "texture.h"
 
 class TextureRegistry
