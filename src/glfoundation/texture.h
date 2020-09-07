@@ -6,14 +6,6 @@
 
 #include "glincludes.h"
 
-enum TextureUsage
-{
-    TU_albedo = 0,
-    TU_bump,
-    TU_emission,
-    TU_normal,
-    TU_stencil,
-};
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief The Texture class
@@ -65,6 +57,17 @@ public:
     int m_width;
 
     inline void set_vertexattrib() override;
+
+    enum Texture2DUsage
+    {
+        TU_albedo = 0,
+        TU_bump,
+        TU_emission,
+        TU_normal,
+        TU_stencil,
+    };
+    static void init_type();
+    static unsigned int NUM_TEXTURE2D_TYPES;
 
 protected:
     bool init_from_file(const std::vector<std::string>& file_path);

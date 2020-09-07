@@ -35,10 +35,11 @@ set_texture_param()
     return;
 }
 
-Texture2D::Texture2D():
-Texture(),
-m_height(0),
-m_width(0)
+Texture2D::
+Texture2D():
+    Texture(),
+    m_height(0),
+    m_width(0)
 {
     m_format = GL_TEXTURE_2D;
 }
@@ -56,6 +57,11 @@ Texture2D()
     m_parameter_map[GL_TEXTURE_MIN_FILTER] = GL_LINEAR;
     m_parameter_map[GL_TEXTURE_WRAP_S] = GL_REPEAT;
     m_parameter_map[GL_TEXTURE_WRAP_T] = GL_REPEAT;
+}
+
+void Texture2D::init_type()
+{
+    Texture2D::NUM_TEXTURE2D_TYPES = 5;
 }
 
 bool Texture2D::init_from_file(const std::vector<std::string>& file_path)
