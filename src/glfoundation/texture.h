@@ -58,6 +58,9 @@ public:
 
     inline void set_vertexattrib() override;
 
+    static void init_type();
+    static unsigned int NUM_TEXTURE2D_TYPES;
+
     enum Texture2DUsage
     {
         TU_albedo = 0,
@@ -66,8 +69,6 @@ public:
         TU_normal,
         TU_stencil,
     };
-    static void init_type();
-    static unsigned int NUM_TEXTURE2D_TYPES;
 
 protected:
     bool init_from_file(const std::vector<std::string>& file_path);

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <string.h>
+#include <string>
 
 #include "glincludes.h"
 
@@ -15,14 +15,15 @@ public:
     ~Shader() = default;
     
     void use();
-
-    unsigned int m_program_ID;
-    std::string m_name;
+    GLuint get_ID() noexcept;
+    std::string get_name() noexcept;
 
 private:
+    GLuint m_program_ID;
     GLuint m_vert_ID;
     GLuint m_frag_ID;
     GLuint m_geom_ID;
+    std::string m_name;
     
     std::string read_code(const std::string path_to_shader);
     void compile_shader(GLuint& shaderID,

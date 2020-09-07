@@ -55,6 +55,18 @@ void Shader::use()
 {
     glUseProgram(m_program_ID);
 }
+
+GLuint Shader::
+get_ID() noexcept
+{
+    return m_program_ID;
+}
+
+std::string Shader::
+get_name() noexcept
+{
+    return m_name;
+}
         
 std::string Shader::
 read_code(const std::string path_to_shader)
