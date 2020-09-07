@@ -1,6 +1,9 @@
 #pragma once
 #include "glincludes.h"
 
+/*
+ *
+ */
 class Light
 {
 public:
@@ -20,9 +23,9 @@ public:
     void virtual set_shader(int index, GLuint& shaderID);
 
 protected:
-    bool on_state = true;
-    bool is_spotlight = false;
-    bool is_local = false;
+    bool m_on_state = true;
+    bool m_is_spotlight = false;
+    bool m_is_local = false;
 
     float m_const_atten;
     float m_linear_atten;
@@ -32,6 +35,9 @@ protected:
     glm::vec3 m_color;
 };
 
+/*
+ *
+ */
 class SpotLight final : public Light
 {
 public:
@@ -48,6 +54,9 @@ protected:
     glm::vec3 m_conedirection;
 };
 
+/*
+ *
+ */
 class PointLight final : public Light
 {
 public:
@@ -61,6 +70,9 @@ protected:
     glm::vec3 m_position;
 };
 
+/*!
+ *
+ */
 class DirectionalLight final : public Light
 {
 public:

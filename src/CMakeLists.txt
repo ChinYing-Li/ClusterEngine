@@ -1,11 +1,13 @@
 set(SOURCES
     glfoundation/camera.cpp
+    glfoundation/cubemap.cpp
     glfoundation/framebuffer.cpp
-    glfoundation/gltypes.cpp
+    glfoundation/globject.cpp
     glfoundation/light.cpp
     glfoundation/objloader.cpp
     glfoundation/shader.cpp
     glfoundation/texture.cpp
+    glfoundation/trivialobject.cpp
     utilities/color.cpp
     utilities/material.cpp
     utilities/objobject.cpp

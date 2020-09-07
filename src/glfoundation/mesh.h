@@ -5,10 +5,9 @@
 // Forward declarations
 namespace objl
 {
-class Loader;
-class Material;
-class Mesh;
+class Loader; class Material; class Mesh;
 }
+
 class GameData;
 
 /*
@@ -17,7 +16,7 @@ class GameData;
 class Mesh final : public GLObejct
 {
 public:
-    Mesh(objl::Mesh& mesh, std::shared_ptr<GameData> data_ptr, unsigned int numinstance);
+    Mesh(objl::Mesh& mesh, std::shared_ptr<GameData> data_ptr, unsigned int num_instance);
     ~Mesh() = default;
 
     void draw(GLuint& shaderID) override;

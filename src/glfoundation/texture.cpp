@@ -7,16 +7,26 @@
 #include "stb_image.h"
 
 Texture::Texture():
-m_initiated(false)
-{}
-
-Texture::Texture(const std::string name):
-m_initiated(false)
+m_initialized(false)
 {
-    m_name = name;
+    init();
 }
 
-void Texture::set_texparam()
+Texture::Texture(const std::string name):
+m_initialized(false)
+{
+    m_name = name;
+    init();
+}
+
+void Texture::init()
+{
+    glGenTextures(1, &m_ID);
+    m_initialized = true;
+}
+
+void Texture::
+set_texture_param()
 {
     for(auto it = m_parameter_map.begin(); it !=  m_parameter_map.end(); ++it)
     {
@@ -31,16 +41,17 @@ m_height(0),
 m_width(0)
 {
     m_format = GL_TEXTURE_2D;
-    m_vertexsize = 5;
 }
 
 Texture2D::Texture2D(const std::string name, const std::vector<std::string>& file_path):
 Texture2D()
 {
     m_name = name;
-    
+    m_vertex_size = 5;
+
     bool init_success = init_from_file(file_path);
-    if(init_success) m_initiated = true;
+    if(!init_success) throw;
+
     m_parameter_map[GL_TEXTURE_MAG_FILTER] = GL_LINEAR;
     m_parameter_map[GL_TEXTURE_MIN_FILTER] = GL_LINEAR;
     m_parameter_map[GL_TEXTURE_WRAP_S] = GL_REPEAT;
@@ -50,13 +61,14 @@ Texture2D()
 bool Texture2D::init_from_file(const std::vector<std::string>& file_path)
 {
     //assert(file_path.size() == 1);
-    glGenTextures(1, &(this->m_ID));
+    assert(m_initialized);
     glBindTexture(this->m_format, this->m_ID);
-    set_texparam();
+
+    set_texture_param();
     
-    int nchannels;
+    int num_channels;
     stbi_set_flip_vertically_on_load(true);
-    unsigned char *data = stbi_load(file_path[0].c_str(), &m_width, &m_height, &nchannels, 0);
+    unsigned char *data = stbi_load(file_path[0].c_str(), &m_width, &m_height, &num_channels, 0);
 
     if (data)
     {
@@ -73,6 +85,7 @@ bool Texture2D::init_from_file(const std::vector<std::string>& file_path)
         stbi_image_free(data);
         return false;
     }
+
     return true;
 }
 
@@ -102,7 +115,6 @@ inline void Texture2D::set_vertexattrib()
 TextureCubemap::TextureCubemap():
 Texture()
 {
-    m_ID = 0;
     m_format = GL_TEXTURE_CUBE_MAP;
 }
 
@@ -110,38 +122,48 @@ TextureCubemap::TextureCubemap(const std::string name, const std::vector<std::st
 Texture(name)
 {
     m_format = GL_TEXTURE_CUBE_MAP;
-    m_vertexsize = 3;
+    m_vertex_size = 3;
     m_parameter_map[GL_TEXTURE_MAG_FILTER] = GL_LINEAR;
     m_parameter_map[GL_TEXTURE_MIN_FILTER] = GL_LINEAR;
     m_parameter_map[GL_TEXTURE_WRAP_S] = GL_CLAMP_TO_EDGE;
     m_parameter_map[GL_TEXTURE_WRAP_T] = GL_CLAMP_TO_EDGE;
     m_parameter_map[GL_TEXTURE_WRAP_R] = GL_CLAMP_TO_EDGE;
-    m_initiated = init_from_file(file_path);
+
+    assert(init_from_file(file_path));
     std::cout << name << file_path.size() << std::endl;
 }
 
 bool TextureCubemap::init_from_file(const std::vector<std::string>& file_path)
 {
-    assert(file_path.size() == 6);
-    glGenTextures(1, &(m_ID));
+    assert(file_path.size() > 0);
+    assert(m_initialized);
+
+    m_num_faces = 0;
     glBindTexture(m_format, m_ID);
-    set_texparam();
+    this->set_texture_param();
     
-    int nchannels;
-    for(int i = 0; i < 6; ++i)
+    int num_channels;
+    for(int i = 0; i < file_path.size(); ++i)
     {
-        unsigned char *data = stbi_load(file_path[i].c_str(), &m_width, &m_height, &nchannels, 0);
+        unsigned char *data = stbi_load(file_path[i].c_str(), &m_width, &m_height, &num_channels, 0);
         if (data)
         {
-          glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X+i, 0, GL_RGB, m_width, m_height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+          glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X+i, 0,
+                       GL_RGB,
+                       m_width,
+                       m_height,
+                       0,
+                       GL_RGB, GL_UNSIGNED_BYTE,
+                       data);
+
           std::cout << "Cubemap texture loaded at path: " << file_path[i] << std::endl;
           stbi_image_free(data);
         }
         else
         {
           std::cout << "Cubemap texture failed to load at path: " << file_path[i] << std::endl;
-            stbi_image_free(data);
-            return false;
+          stbi_image_free(data);
+          return false;
         }
     }
     return true;

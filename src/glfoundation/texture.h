@@ -6,26 +6,43 @@
 
 #include "glincludes.h"
 
+///////////////////////////////////////////////////////////////////////////////
+/// \brief The Texture class
+///
 class Texture
 {
 public:
     Texture();
     Texture(const std::string name);
     ~Texture() = default;
-    
-    bool m_initiated;
-    
-    unsigned int m_vertexsize;
 
+    GLuint get_ID() const
+    {
+        return m_ID;
+    }
+
+    GLenum get_format() const
+    {
+        return m_format;
+    }
+
+    void set_vertex_size(unsigned int vertex_size)
+    {
+        m_vertex_size = vertex_size;
+    }
+
+protected:
+    bool m_initialized = false;
+    unsigned int m_vertex_size;
     std::string m_name; // name for lookup in texture manager
     GLuint m_ID;
     GLenum m_format;
 
+    void init();
+    // functions only accessed by texturemanager
+    void set_texture_param();
     std::map<GLenum, GLenum> m_parameter_map;
     inline void virtual set_vertexattrib() = 0;
-protected:
-    // functions only accessed by texturemanager
-    void set_texparam();
 };
 
 class Texture2D final : public Texture
@@ -50,12 +67,14 @@ public:
     TextureCubemap();
     TextureCubemap(const std::string name, const std::vector<std::string>& file_path);
     ~TextureCubemap() = default;
-    
-    int m_height;
-    int m_width;
 
     inline void set_vertexattrib() override;
 
 protected:
     bool init_from_file(const std::vector<std::string>& file_path);
+
+private:
+    int m_height;
+    int m_width;
+    int m_num_faces = 0;
 };

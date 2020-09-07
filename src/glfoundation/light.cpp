@@ -11,20 +11,20 @@ m_quadratic_atten(10.0f)
 bool Light::
 is_enabled()
 {
-    return on_state;
+    return m_on_state;
 }
 
 void Light::
 turn_on()
 {
-    on_state = true;
+    m_on_state = true;
     return;
 }
 
 void Light::
 turn_off()
 {
-    on_state = false;
+    m_on_state = false;
     return;
 }
 
@@ -64,9 +64,9 @@ set_shader(int index,
            GLuint& shaderID)
 {
     glUseProgram(shaderID);
-    glUniform1i(glGetUniformLocation(shaderID, "lights[0].is_enabled"), int(on_state));
-    glUniform1i(glGetUniformLocation(shaderID, "lights[0].is_local"), int(is_local));
-    glUniform1i(glGetUniformLocation(shaderID, "lights[0].is_spotlight"), int(is_spotlight));
+    glUniform1i(glGetUniformLocation(shaderID, "lights[0].is_enabled"), int(m_on_state));
+    glUniform1i(glGetUniformLocation(shaderID, "lights[0].is_local"), int(m_is_local));
+    glUniform1i(glGetUniformLocation(shaderID, "lights[0].is_spotlight"), int(m_is_spotlight));
     glUniform3f(glGetUniformLocation(shaderID, "lights[0].color"), m_color.r, m_color.g, m_color.b);
     glUniform3f(glGetUniformLocation(shaderID, "lights[0].ambient_strength"), m_ambient_strength.r, m_ambient_strength.g, m_ambient_strength.b);
     
@@ -76,25 +76,35 @@ set_shader(int index,
     return;
 }
 
-SpotLight::SpotLight():
+/*
+ *
+ */
+SpotLight::
+SpotLight():
 Light()
 {
-    is_local = true;
-    is_spotlight = true;
+    m_is_local = true;
+    m_is_spotlight = true;
 }
 
-SpotLight::SpotLight(const glm::vec3 position, glm::vec3 conedirection, const float cutoff, const float exponent):
+SpotLight::
+SpotLight(const glm::vec3 position,
+          glm::vec3 conedirection,
+          const float cutoff,
+          const float exponent):
     Light(),
     m_cutoff(cutoff),
     m_exponent(exponent),
     m_position(position),
     m_conedirection(conedirection)
 {
-    is_local = true;
-    is_spotlight = true;
+    m_is_local = true;
+    m_is_spotlight = true;
 }
 
-void SpotLight::set_shader(int index, GLuint& shaderID)
+void SpotLight::
+set_shader(int index,
+           GLuint& shaderID)
 {
     Light::set_shader(index, shaderID);
     glUniform3fv(glGetUniformLocation(shaderID, "lights[0].position"), 1, &m_position[0]);
@@ -104,19 +114,26 @@ void SpotLight::set_shader(int index, GLuint& shaderID)
     return;
 }
 
-PointLight::PointLight():
+/*
+ *
+ */
+PointLight::
+PointLight():
 Light()
 {
-    is_local = true;
+    m_is_local = true;
 }
 
-PointLight::PointLight(const glm::vec3 position):
+PointLight::
+PointLight(const glm::vec3 position):
 Light()
 {
     m_position = position;
 }
 
-void PointLight::set_shader(int index, GLuint& shaderID)
+void PointLight::
+set_shader(int index,
+           GLuint& shaderID)
 {
     glUseProgram(shaderID);
     Light::set_shader(index, shaderID);
@@ -124,12 +141,18 @@ void PointLight::set_shader(int index, GLuint& shaderID)
     glUniform3fv(glGetUniformLocation(shaderID, "lights[0].position"), 1, &m_position[0]);
 }
 
-DirectionalLight::DirectionalLight(const glm::vec3 direction):
+/*
+ *
+ */
+DirectionalLight::
+DirectionalLight(const glm::vec3 direction):
 Light(),
 m_direction(direction)
 {}
 
-void DirectionalLight::set_shader(int index, GLuint& shaderID)
+void DirectionalLight::
+set_shader(int index,
+           GLuint& shaderID)
 {
     Light::set_shader(index, shaderID);
     glUniform3fv(glGetUniformLocation(shaderID, "lights[0].direction"), 1, &m_direction[0]);

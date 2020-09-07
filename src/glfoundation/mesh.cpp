@@ -11,15 +11,14 @@ name(mesh.MeshName),
 m_numinstance(numinstance),
 use_maps(6, false)
 {
-    useEBO = true;
-    m_numindices = mesh.Indices.size();
+    is_using_EBO = true;
+    m_num_indices = mesh.Indices.size();
     m_num_vertices = mesh.Vertices.size();
 
     GLObejct::init(GL_TRIANGLES, 0);
     init(mesh);
 
-    m_material_ptr = new objl::Material;
-    *m_material_ptr = mesh.MeshMaterial;
+    m_material_ptr = new objl::Material(mesh.MeshMaterial);
 
     if(m_material_ptr->map_Ka.size())
     {
@@ -61,44 +60,50 @@ init(objl::Mesh& mesh)
     glGenVertexArrays(1, &m_VAO);
     glGenBuffers (1, &m_VBO);
     glGenBuffers(1, &m_EBO);
+
     glBindVertexArray (m_VAO);
     glBindBuffer (GL_ARRAY_BUFFER, m_VBO);
     glBindBuffer (GL_ELEMENT_ARRAY_BUFFER, m_EBO);
 
-    int vertexbuffersize = m_num_vertices * sizeof(objl::Vertex) + m_numinstance * sizeof(glm::mat4);
-    std::cout << vertexbuffersize << " buffer size" << std::endl;
-    glBufferData (GL_ARRAY_BUFFER, vertexbuffersize, nullptr, GL_STATIC_DRAW);
+    int vertex_buffer_size = m_num_vertices * sizeof(objl::Vertex) + m_numinstance * sizeof(glm::mat4);
+    std::cout << vertex_buffer_size << " buffer size" << std::endl;
+    glBufferData (GL_ARRAY_BUFFER, vertex_buffer_size, nullptr, GL_STATIC_DRAW);
     glBufferSubData(GL_ARRAY_BUFFER, 0, m_num_vertices*sizeof(objl::Vertex), &mesh.Vertices[0]);
 
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh.Indices.size()*sizeof(unsigned int), &mesh.Indices[0], GL_STATIC_DRAW);
     glDebug();
+
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
     glEnableVertexAttribArray(2);
+
     glVertexAttribPointer(
         0,                            // attribute 0. Vertices
         3,                            // size (x,y,z)
         GL_FLOAT,                     // type
         GL_FALSE,                     // normalized?
-        8*sizeof(float),                            // stride
-        (void *) 0                      // array buffer offset
+        8*sizeof(float),              // stride
+        (void *) 0                    // array buffer offset
     );
+
     glVertexAttribPointer(
-        1,      // attribute 1. Normal
-        3,
-        GL_FLOAT,          // type
+        1,                            // attribute 1. Normal
+        3,                            //
+        GL_FLOAT,                     // type
         GL_FALSE,                     // normalized?
-        8*sizeof(float),                            // stride
-        (void *)(3*sizeof(GLfloat))// array buffer offset
+        8*sizeof(float),              // stride
+        (void *)(3*sizeof(GLfloat))   // array buffer offset
     );
+
     glVertexAttribPointer(
-        2,      // attribute 1. texture
+        2,      // attribute 2. texture
         2,
         GL_FLOAT,          // type
         GL_FALSE,    // normalized?
         8*sizeof(float),                            // stride
         (void *)(6*sizeof(GLfloat))// array buffer offset
     );
+
     if(m_numinstance > 0) set_instance_attrib();
     glDebug();
     glBindVertexArray(0);
@@ -107,7 +112,8 @@ init(objl::Mesh& mesh)
 void Mesh::
 send_instance_matrices(std::vector<glm::mat4>& instance_models)
 {
-    if(m_numinstance == 0) return;
+    if (m_numinstance == 0) return;
+
     glBindVertexArray (m_VAO);
     glBindBuffer (GL_ARRAY_BUFFER, m_VBO);
     glBufferSubData (GL_ARRAY_BUFFER,
@@ -129,7 +135,7 @@ draw(GLuint& shaderID)
     glEnableVertexAttribArray(2);
     glDebug();
 
-    if(m_numinstance>0)
+    if (m_numinstance>0)
     {
         glEnableVertexAttribArray(3);
         glEnableVertexAttribArray(4);
@@ -137,13 +143,13 @@ draw(GLuint& shaderID)
         glEnableVertexAttribArray(6);
         set_material_uniform(shaderID);
         draw_textures(shaderID);
-        glDrawElementsInstanced(GL_TRIANGLES, m_numindices, GL_UNSIGNED_INT, nullptr, 2);
+        glDrawElementsInstanced(GL_TRIANGLES, m_num_indices, GL_UNSIGNED_INT, nullptr, 2);
     }
     else
     {
         set_material_uniform(shaderID);
         draw_textures(shaderID);
-        glDrawElements(GL_TRIANGLES, m_numindices, GL_UNSIGNED_INT, nullptr);
+        glDrawElements(GL_TRIANGLES, m_num_indices, GL_UNSIGNED_INT, nullptr);
     }
 
     glBindVertexArray(0);
