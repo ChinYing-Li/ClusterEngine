@@ -1,19 +1,22 @@
 #include <cassert>
 #include <iostream>
 
-#include "src/glfoundation/texture.h"
+#include "texture.h"
+#include "textureregistry.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
 Texture::Texture():
-m_initialized(false)
+m_initialized(false),
+  m_binding_point(-1)
 {
     init();
 }
 
 Texture::Texture(const std::string name):
-m_initialized(false)
+m_initialized(false),
+   m_binding_point(-1)
 {
     m_name = name;
     init();
@@ -23,6 +26,12 @@ void Texture::init()
 {
     glGenTextures(1, &m_ID);
     m_initialized = true;
+}
+
+void Texture::
+bind(const GLenum texture_unit)
+{
+    TextureRegistry::activate_texture(texture_unit);
 }
 
 void Texture::

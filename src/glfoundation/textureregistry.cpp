@@ -3,9 +3,12 @@
 #include "glincludes.h"
 #include "textureregistry.h"
 
+/*
+ * OpenGL gurantees that there's at least 16 available texture unit.
+ */
 TextureRegistry::TextureRegistry():
-    m_texture_in_use(nullptr),
-    m_textures(Texture2D::NUM_TEXTURE2D_TYPES, std::vector<std::shared_ptr<Texture2D>>(MAX_NUMBER_OF_SLOTS_PER_USAGE, nullptr))
+    m_texture_unit_in_use(0),
+    m_textures(16, std::shared_ptr<Texture2D>(nullptr))
 {
 }
 
@@ -21,9 +24,10 @@ TextureRegistry::
  *
  */
 void TextureRegistry::
-activate_texture(Texture2D::Texture2DUsage usage)
+activate_texture(unsigned int texture_unit)
 {
-
+    glActiveTexture(GL_TEXTURE0 + texture_unit);
+    m_texture_unit_in_use = texture_unit;
 }
 
 /*
@@ -42,14 +46,8 @@ register_texture(GLenum texture_target,
  */
 void TextureRegistry::
 bind_texture(GLenum texture_target,
-             Texture2D::Texture2DUsage usage)
+             std::shared_ptr<Texture> texture)
 {
-    int index = (unsigned int)usage;
-    if(m_textures[index] == nullptr)
-    {
-        std::cerr << "There's no texture registed for usage "
-                  <<  index << std::endl;
-    }
-
-    glBindTexture(texture_target, m_textures[index]->get_ID());
+    glBindTexture(texture_target, texture->get_ID());
+    m_textures[m_texture_unit_in_use] = texture;
 }

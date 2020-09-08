@@ -17,6 +17,9 @@ public:
     Texture(const std::string name);
     ~Texture() = default;
 
+    void init();
+    void bind(const GLenum texture_unit);
+
     GLuint get_ID() const
     {
         return m_ID;
@@ -38,8 +41,8 @@ protected:
     std::string m_name; // name for lookup in texture manager
     GLuint m_ID;
     GLenum m_format;
+    int m_binding_point;
 
-    void init();
     // functions only accessed by texturemanager
     void set_texture_param();
     std::map<GLenum, GLenum> m_parameter_map;

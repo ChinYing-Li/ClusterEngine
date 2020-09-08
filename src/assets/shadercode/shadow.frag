@@ -1,21 +1,12 @@
-#version 330 core
-
-in vec2 i_tex_coords;
-in vec3 i_position;
-in vec3 i_worldposition;
-in vec3 i_normal;
-in vec3 i_tangent;
-
-out vec4 frag_color;
-out vec4 frag_position;
-out vec4 frag_normal;
-out vec4 frag_emission;
+in vec2 texcoords;
 
 struct Material
 {
     vec3 ambient_color;
     vec3 diffuse_color;
     vec3 specular_color;
+
+    float shininess;
 
     bool use_map_Ambient;
     bool use_map_Diffuse;
@@ -30,19 +21,23 @@ struct Material
     sampler2D map_Stencil;
     sampler2D map_Emission;
     sampler2D map_Bump;
+
+    vec2 tiling;
 };
 
 uniform Material material;
 
-vec4
-vec3 calc_frag_normal(vec2 normalmap_texcoord,
-                      vec3 normal,
-                      vec3 tangent)
+vec4 sample_tiled(vec2 _texture_coordinates, sampler2D _texture)
 {
-
+    return texture(_texture, _texture_coordinates * material,tiling);
 }
 
-void main(void)
+void main()
 {
-    gl_FragColor = texture2D(qt_Texture0, qt_TexCoord0.st);
+    if (material.use_map_Stencil) {
+        float _sample = sample_tiled(material.map_Stencil, texcoords).r;
+        if (_sample != 1) {
+            discard;
+        }
+    }
 }

@@ -6,12 +6,12 @@
 
 namespace Cluster {
 
-enum camMove
+enum CamMove
 {
-    move_forward  = 3,
-    move_backward = 4,
-    turn_cw       = 5,
-    turn_ccw      = 6
+    CM_move_forward  = 3,
+    CM_move_backward = 4,
+    CM_turn_cw       = 5,
+    CM_turn_ccw      = 6
 };
 
 class Camera
