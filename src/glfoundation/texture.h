@@ -35,6 +35,7 @@ public:
 
 protected:
     bool m_initialized = false;
+    bool m_is_binded = false;
     unsigned int m_vertex_size;
     unsigned int m_binding_point;
 
@@ -71,7 +72,8 @@ public:
 
     void set_dimensions(unsigned int width, unsigned int height) noexcept;
     void set_image_param(GLint internal_format, GLenum format, GLenum tyoe, void* data);
-
+    void set_wrap_st(GLint wrap_s, GLint wrap_t);
+    void set_sampling(GLint mag_gilter, GLint min_filter);
 protected:
     int m_height;
     int m_width;

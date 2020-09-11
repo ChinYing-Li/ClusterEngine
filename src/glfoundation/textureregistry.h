@@ -11,9 +11,9 @@ public:
     TextureRegistry();
     ~TextureRegistry();
 
-    static void activate_texture(unsigned int texture_unit);
+    static void activate_texture(unsigned int texture_binding_point);
     void register_texture(GLenum texture_target, std::shared_ptr<Texture2D> texture, Texture2D::Texture2DUsage usage);
-    static void bind_texture(GLenum texture_target, std::shared_ptr<Texture> texture);
+    static void bind_texture(GLenum texture_target, GLuint texture_ID);
 
     void get_texture_in_use();
     void get_texture(Texture2D::Texture2DUsage usage);

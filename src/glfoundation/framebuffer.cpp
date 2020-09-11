@@ -1,4 +1,13 @@
-#include "src/glfoundation/framebuffer.h"
+#include <iostream>
+
+#include "framebuffer.h"
+#include "renderstate.h"
+
+FrameBuffer::FrameBuffer():
+  m_color_textures(MAX_NUM_COLOR_TEXTURE, nullptr)
+{
+  init();
+}
 
 void FrameBuffer::
 init()
@@ -7,9 +16,10 @@ init()
 }
 
 void FrameBuffer::
-bind(GLenum binding_target) const
+bind() const
 {
-    glBindFramebuffer(binding_target, m_FBO);
+    glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);
+    RenderState::set_current_framebuffer(this);
 }
 
 void FrameBuffer::
@@ -19,9 +29,36 @@ release() const
 }
 
 void FrameBuffer::
-set_texture2D(GLenum attachment_target, std::shared_ptr<Texture2D> texture_ptr, GLint level)
+attach_texture(GLuint attachment, std::shared_ptr<Texture2D>& texture, unsigned int level)
 {
-    glFramebufferTexture(GL_FRAMEBUFFER, attachment_target, texture_ptr->get_ID(), 0);
+    glFramebufferTexture(GL_FRAMEBUFFER, attachment, texture->get_ID(), level);
+}
+
+void FrameBuffer::
+attach_color_texture(unsigned int binding_point,
+                     std::shared_ptr<Texture2D> texture,
+                     GLint mipmap_level)
+{
+  if (binding_point > MAX_NUM_COLOR_TEXTURE)
+  {
+    std::cerr << "The intended binding point is at " << binding_point
+              << " but the maximum allowed is at " << MAX_NUM_COLOR_TEXTURE
+              << std::endl;
+  }
+
+  attach_texture(GL_COLOR_ATTACHMENT0 + binding_point, texture, mipmap_level);
+}
+
+void FrameBuffer::
+attach_depth_texture(std::shared_ptr<Texture2D>& texture)
+{
+
+}
+
+void FrameBuffer::
+attach_depth_stencil_texture(std::shared_ptr<Texture2D>& texture)
+{
+
 }
 
 void FrameBuffer::

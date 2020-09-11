@@ -1,6 +1,7 @@
 #include <cassert>
 #include <iostream>
 
+#include "renderstate.h"
 #include "texture.h"
 #include "textureregistry.h"
 
@@ -40,8 +41,9 @@ bind(const GLuint texture_binding_point)
   }
 
   TextureRegistry::activate_texture(texture_binding_point);
-  RenderState::bindTexture(target, handle);
-  lastBoundUnit = textureUnit;
+  TextureRegistry::bind_texture(m_target, m_ID);
+  m_binding_point = texture_binding_point;
+  m_is_binded = true;
 }
 
 void Texture::
@@ -137,6 +139,19 @@ set_dimensions(unsigned int width, unsigned int height) noexcept
 void Texture2D::set_image_param(GLint internal_format, GLenum format, GLenum type, void *data)
 {
   glTexImage2D(m_target, 0, internal_format, m_width, m_height, 0, format, type, data);
+}
+
+void Texture2D::set_wrap_st(GLint wrap_s, GLint wrap_t)
+{
+  glTexParameteri(m_target, GL_TEXTURE_WRAP_S, wrap_s);
+  glTexParameteri(m_target, GL_TEXTURE_WRAP_T, wrap_t);
+}
+
+void Texture2D::
+set_sampling(GLint mag_filter, GLint min_filter)
+{
+  glTexParameteri(m_target, GL_TEXTURE_MAG_FILTER, mag_filter);
+  glTexParameteri(m_target, GL_TEXTURE_MIN_FILTER, min_filter);
 }
 
 inline void Texture2D::set_vertexattrib()

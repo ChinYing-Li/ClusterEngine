@@ -2,6 +2,7 @@
 
 #include <map>
 
+#include "framebuffer.h"
 #include "glincludes.h"
 
 class RenderState
@@ -29,9 +30,12 @@ public:
   glm::mat4* get_view_transform();
   glm::mat4* get_model_transform();
 
+  static void set_current_framebuffer(const FrameBuffer* current_framebuffer) noexcept;
+
 private:
   GLuint m_screen_quad_ID;
   unsigned int m_active_texture_binding_point;
+
   glm::vec3 m_clear_color;
 
   glm::mat4 m_project_transform;
@@ -39,4 +43,6 @@ private:
   glm::mat4 m_model_transform;
 
   std::map<GL_SETTING, bool> m_state_settings;
+
+  static FrameBuffer* m_current_framebuffer;
 };

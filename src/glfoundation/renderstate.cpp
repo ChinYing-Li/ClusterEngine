@@ -65,3 +65,9 @@ get_model_transform()
 {
   return &m_model_transform;
 }
+
+void RenderState::
+set_current_framebuffer(const FrameBuffer* current_framebuffer) noexcept
+{
+  m_current_framebuffer = current_framebuffer;
+}
