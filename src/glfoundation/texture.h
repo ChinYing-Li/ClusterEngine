@@ -6,6 +6,7 @@
 
 #include "glincludes.h"
 
+#define MAX_NUM_TEXTURE_BINDING_POINTS 8
 
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief The Texture class
@@ -18,17 +19,14 @@ public:
     ~Texture() = default;
 
     void init();
-    void bind(const GLenum texture_unit);
+    void bind(const GLuint texture_binding_point);
 
-    GLuint get_ID() const
-    {
-        return m_ID;
-    }
+    void set_magmin_filter(GLenum mag_filter, GLenum min_filter);
+    void set_mipmap_level(const unsigned int level);
 
-    GLenum get_format() const
-    {
-        return m_format;
-    }
+    GLuint get_ID() const { return m_ID; }
+
+    GLenum get_target() const { return m_target; }
 
     void set_vertex_size(unsigned int vertex_size)
     {
@@ -38,10 +36,11 @@ public:
 protected:
     bool m_initialized = false;
     unsigned int m_vertex_size;
+    unsigned int m_binding_point;
+
     std::string m_name; // name for lookup in texture manager
     GLuint m_ID;
-    GLenum m_format;
-    int m_binding_point;
+    GLenum m_target;
 
     // functions only accessed by texturemanager
     void set_texture_param();
@@ -55,9 +54,6 @@ public:
     Texture2D();
     Texture2D(const std::string name, const std::vector<std::string>& file_path);
     ~Texture2D() = default;
-    
-    int m_height;
-    int m_width;
 
     inline void set_vertexattrib() override;
 
@@ -73,7 +69,13 @@ public:
         TU_stencil,
     };
 
+    void set_dimensions(unsigned int width, unsigned int height) noexcept;
+    void set_image_param(GLint internal_format, GLenum format, GLenum tyoe, void* data);
+
 protected:
+    int m_height;
+    int m_width;
+
     bool init_from_file(const std::vector<std::string>& file_path);
 };
 

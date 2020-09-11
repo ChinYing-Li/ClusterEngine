@@ -21,92 +21,83 @@ m_direction(1.0f, -0.1f, 0.0f),
 m_up(0, 1, 0)
 {}
 
-void Camera::update_matrices(GLMatrices& mat)
+void Camera::
+update_project_transform(glm::mat4 &mat) const noexcept
 {
-    mat.view = glm::lookAt(m_eye, m_eye+m_direction, m_up);
-    return;
+  mat = glm::perspective(glm::radians(15.0f), m_aspect_ratio, m_near_plane, m_far_plane);
 }
 
-CarCam::CarCam(const float x, const float y, const float z):
-Camera(x, y, z)
-{}
-
-CarCam::CarCam(const glm::vec3 position):
-Camera(position)
-{}
-
-void CarCam::set_eye(const glm::vec3 pos)
+void Camera::
+update_view_transform(glm::mat4 &mat) const noexcept
 {
-    m_eye = pos;
-    return;
+    mat = glm::lookAt(m_eye, m_eye+m_direction, m_up);
 }
 
-void CarCam::set_direction(const glm::vec3 dir)
+void Camera::
+set_fovy(float fovy)
 {
-    m_direction = dir;
-    return;
+  assert(fovy > 0.0 && fovy < 180.0);
+  m_fovy = fovy;
 }
 
-FreeCam::FreeCam():
-Camera(),
-m_rotate_ang(M_PI/180.0f),
-m_stepsize(0.01f, 0.0f, 0.01f)
+float Camera::
+get_fovy() const noexcept
 {
-    m_cw_mat = glm::rotate(-m_rotate_ang, m_up);
-    m_ccw_mat = glm::rotate(m_rotate_ang, m_up);
+  return m_fovy;
 }
 
-FreeCam::FreeCam(const float x, const float y, const float z):
-Camera(x, y, z),
-m_rotate_ang(M_PI/180.0f),
-m_stepsize(0.01f, 0.0f, 0.01f)
+void Camera::
+set_aspect_ratio(float aspect_ratio)
 {
-    m_cw_mat = glm::rotate(-m_rotate_ang, m_up);
-    m_ccw_mat = glm::rotate(m_rotate_ang, m_up);
+  assert(aspect_ratio > 0.0);
+  m_aspect_ratio = aspect_ratio;
 }
 
-FreeCam::FreeCam(const glm::vec3 position):
-Camera(position),
-m_rotate_ang(M_PI/180.0f),
-m_stepsize(0.01f, 0.0f, 0.01f)
+float Camera::
+get_aspect_ratio() const noexcept
 {
-    m_cw_mat = glm::rotate(-m_rotate_ang, m_up);
-    m_ccw_mat = glm::rotate(m_rotate_ang, m_up);
+  return m_aspect_ratio;
 }
 
-void FreeCam::update_cam(const int user_input)
+float Camera::
+get_near_plane() const noexcept
 {
-    if(user_input == move_forward)
-    {
-        m_eye += m_stepsize * m_direction;
-        return;
-    }
-
-    if(user_input == move_backward)
-    {
-        m_eye -= m_stepsize * m_direction;
-        return;
-    }
-    if(user_input == turn_cw)
-    {
-        glm::vec4 turned = m_cw_mat * glm::vec4(m_direction.x, m_direction.y, m_direction.z, 0.0f);
-        m_direction.x = turned.x;
-        m_direction.z = turned.z;
-        return;
-    }
-    if(user_input == turn_ccw)
-    {
-        glm::vec4 turned = m_ccw_mat * glm::vec4(m_direction.x, m_direction.y, m_direction.z, 0.0f);
-        m_direction.x = turned.x;
-        m_direction.z = turned.z;
-        return;
-    }
+  return m_near_plane;
 }
 
-void FreeCam::set_stepsize(const glm::vec3 new_stepsize)
+float Camera::
+get_far_plane() const noexcept
 {
-    m_stepsize = new_stepsize;
-    return;
+  return m_far_plane;
+}
+
+void Camera::
+set_near_plane(float near)
+{
+  m_near_plane = near;
+}
+
+void Camera::
+set_far_plane(float far)
+{
+  m_far_plane = far;
+}
+
+void Camera::
+set_eye(glm::vec3 eye)
+{
+  m_eye = eye;
+}
+
+void Camera::
+set_direction(glm::vec3 direction)
+{
+  m_direction = glm::normalize(direction);
+}
+
+void Camera::set_up(glm::vec3 up)
+{
+  m_up = glm::normalize(up);
 }
 
 }

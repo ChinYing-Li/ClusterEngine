@@ -28,10 +28,33 @@ void Texture::init()
     m_initialized = true;
 }
 
+
 void Texture::
-bind(const GLenum texture_unit)
+bind(const GLuint texture_binding_point)
 {
-    TextureRegistry::activate_texture(texture_unit);
+  if (texture_binding_point > MAX_NUM_TEXTURE_BINDING_POINTS - 1)
+  {
+    std::cerr << "The given binding point is " << texture_binding_point
+              <<"but the maximum allowed is " << MAX_NUM_TEXTURE_BINDING_POINTS << std::endl;
+    return;
+  }
+
+  TextureRegistry::activate_texture(texture_binding_point);
+  RenderState::bindTexture(target, handle);
+  lastBoundUnit = textureUnit;
+}
+
+void Texture::
+set_magmin_filter(GLenum mag_filter, GLenum min_filter)
+{
+  glTexParameteri(m_target, GL_TEXTURE_MAG_FILTER, mag_filter);
+  glTexParameteri(m_target, GL_TEXTURE_MIN_FILTER, min_filter);
+}
+
+void Texture::
+set_mipmap_level(const unsigned int level)
+{
+  glTexParameteri(m_target, GL_TEXTURE_MAX_LEVEL, level);
 }
 
 void Texture::
@@ -39,7 +62,7 @@ set_texture_param()
 {
     for(auto it = m_parameter_map.begin(); it !=  m_parameter_map.end(); ++it)
     {
-        glTexParameteri(m_format, it->first, it->second);
+        glTexParameteri(m_target, it->first, it->second);
     }
     return;
 }
@@ -50,7 +73,7 @@ Texture2D():
     m_height(0),
     m_width(0)
 {
-    m_format = GL_TEXTURE_2D;
+    m_target = GL_TEXTURE_2D;
 }
 
 Texture2D::Texture2D(const std::string name, const std::vector<std::string>& file_path):
@@ -77,7 +100,7 @@ bool Texture2D::init_from_file(const std::vector<std::string>& file_path)
 {
     //assert(file_path.size() == 1);
     assert(m_initialized);
-    glBindTexture(this->m_format, this->m_ID);
+    glBindTexture(this->m_target, this->m_ID);
 
     set_texture_param();
     
@@ -87,7 +110,7 @@ bool Texture2D::init_from_file(const std::vector<std::string>& file_path)
 
     if (data)
     {
-        glTexImage2D(m_format, 0, GL_RGB, m_width, m_height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glTexImage2D(m_target, 0, GL_RGB, m_width, m_height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
         
         std::cout << "texture loaded at path: " << file_path[0] << std::endl;
         glGenerateMipmap(GL_TEXTURE_2D);
@@ -102,6 +125,18 @@ bool Texture2D::init_from_file(const std::vector<std::string>& file_path)
     }
 
     return true;
+}
+
+void Texture2D::
+set_dimensions(unsigned int width, unsigned int height) noexcept
+{
+  m_width = width;
+  m_height = height;
+}
+
+void Texture2D::set_image_param(GLint internal_format, GLenum format, GLenum type, void *data)
+{
+  glTexImage2D(m_target, 0, internal_format, m_width, m_height, 0, format, type, data);
 }
 
 inline void Texture2D::set_vertexattrib()
@@ -130,13 +165,13 @@ inline void Texture2D::set_vertexattrib()
 TextureCubemap::TextureCubemap():
 Texture()
 {
-    m_format = GL_TEXTURE_CUBE_MAP;
+    m_target = GL_TEXTURE_CUBE_MAP;
 }
 
 TextureCubemap::TextureCubemap(const std::string name, const std::vector<std::string>& file_path):
 Texture(name)
 {
-    m_format = GL_TEXTURE_CUBE_MAP;
+    m_target = GL_TEXTURE_CUBE_MAP;
     m_vertex_size = 3;
     m_parameter_map[GL_TEXTURE_MAG_FILTER] = GL_LINEAR;
     m_parameter_map[GL_TEXTURE_MIN_FILTER] = GL_LINEAR;
@@ -154,7 +189,7 @@ bool TextureCubemap::init_from_file(const std::vector<std::string>& file_path)
     assert(m_initialized);
 
     m_num_faces = 0;
-    glBindTexture(m_format, m_ID);
+    glBindTexture(m_target, m_ID);
     this->set_texture_param();
     
     int num_channels;

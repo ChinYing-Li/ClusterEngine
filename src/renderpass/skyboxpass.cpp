@@ -6,3 +6,8 @@ SkyBoxPass()
 
 }
 
+void SkyBoxPass::setup()
+{
+    m_skybox_shader = Shader("", "", "", "skybox");
+
+}

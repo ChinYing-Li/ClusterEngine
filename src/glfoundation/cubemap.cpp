@@ -29,10 +29,10 @@ init(GLenum primitive_mode,
     m_texpath = path_to_texture;
 
     glGenVertexArrays(1, &(m_VAO)); // GLObject
-    glGenBuffers (1, &(m_vertexbuffer)); // VBO - vertices
+    glGenBuffers (1, &(m_VBO)); // VBO - vertices
 
     glBindVertexArray (m_VAO); // Bind the GLObject
-    glBindBuffer (GL_ARRAY_BUFFER, m_vertexbuffer); // Bind the VBO vertices
+    glBindBuffer (GL_ARRAY_BUFFER, m_VBO); // Bind the VBO vertices
     glBufferData (GL_ARRAY_BUFFER, 3*m_num_vertices*sizeof(GLfloat), vertex_buffer_data, GL_STATIC_DRAW); // Copy the vertices into VBO
     glVertexAttribPointer
     (0,
@@ -97,7 +97,7 @@ draw(GLuint& shaderID)
     //glActiveTexture(GL_TEXTURE0);
 
     // Bind the VBO to use
-    glBindBuffer(GL_ARRAY_BUFFER, m_vertexbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
     glBindTexture(GL_TEXTURE_CUBE_MAP, texture_buffer);
 
     // Draw the geometry !

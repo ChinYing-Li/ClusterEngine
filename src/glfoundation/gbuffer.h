@@ -5,11 +5,11 @@
 #include "glincludes.h"
 #include "texture.h"
 
-class Gbuffer
+class GBuffer
 {
 public:
-    Gbuffer();
-    ~Gbuffer();
+    GBuffer();
+    ~GBuffer();
 
 private:
     void init();

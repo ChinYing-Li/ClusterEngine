@@ -22,42 +22,35 @@ public:
     Camera(const glm::vec3 position);
     ~Camera() = default;
 
-    void update_matrices(GLMatrices& mat);
-    //void update_cam(const int user_input);
-    glm::mat4 m_xzy_mat;
+    void update_project_transform(glm::mat4& mat) const noexcept;
+    void update_view_transform(glm::mat4& mat) const noexcept;
+
+    void set_aspect_ratio(float aspect_ratio);
+    float get_aspect_ratio() const noexcept;
+
+    // In degrees
+    void set_fovy(float fovy);
+    float get_fovy() const noexcept;
+
+    float get_near_plane() const noexcept;
+    float get_far_plane() const noexcept;
+    void set_near_plane(float near);
+    void set_far_plane(float far);
+
+    void set_eye(glm::vec3 eye);
+    void set_direction(glm::vec3 direction);
+    void set_up(glm::vec3 up);
+
+private:
+    float m_aspect_ratio = 1.0f;
+    float m_fovy;
+    float m_near_plane = 0.1f;
+    float m_far_plane = 100.0f;
+    glm::vec2 m_screenspace_bottomleft_coordinate = glm::vec2(-1);
+    glm::vec2 m_screenspace_top_coordinate = glm::vec2(1);
+
     glm::vec3 m_eye;
-protected:
-    //glm::vec3 m_stepsize;
     glm::vec3 m_direction;
     glm::vec3 m_up;
-};
-
-class CarCam: public Camera
-{
-public:
-    CarCam() = delete;
-    CarCam(const float x, const float y, const float z);
-    CarCam(const glm::vec3 position);
-    ~CarCam() = default;
-
-    void set_eye(const glm::vec3 pos);
-    void set_direction(const glm::vec3 dir);
-};
-
-class FreeCam: public Camera
-{
-public:
-    FreeCam();
-    FreeCam(const float x, const float y, const float z);
-    FreeCam(const glm::vec3 position);
-    ~FreeCam() = default;
-
-    void update_cam(const int user_input);
-    void set_stepsize(const glm::vec3 new_stepsize);
-private:
-    float m_rotate_ang; // in radians
-    glm::vec3 m_stepsize;
-    glm::mat4 m_cw_mat;
-    glm::mat4 m_ccw_mat;
 };
 }
