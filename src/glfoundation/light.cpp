@@ -2,6 +2,7 @@
 
 #include "light.h"
 
+namespace Cluster{
 Light::Light():
 m_const_atten(10.0f),
 m_linear_atten(10.0f),
@@ -69,7 +70,7 @@ set_shader(int index,
     glUniform1i(glGetUniformLocation(shaderID, "lights[0].is_spotlight"), int(m_is_spotlight));
     glUniform3f(glGetUniformLocation(shaderID, "lights[0].color"), m_color.r, m_color.g, m_color.b);
     glUniform3f(glGetUniformLocation(shaderID, "lights[0].ambient_strength"), m_ambient_strength.r, m_ambient_strength.g, m_ambient_strength.b);
-    
+
     glUniform1f(glGetUniformLocation(shaderID, "lights[0].constant_atten"), m_const_atten);
     glUniform1f(glGetUniformLocation(shaderID, "lights[0].linear_atten"), m_linear_atten);
     glUniform1f(glGetUniformLocation(shaderID, "lights[0].quadratic_atten"), m_quadratic_atten);
@@ -162,3 +163,5 @@ void DirectionalLight::set_direction(const glm::vec3 direction)
 {
     m_direction = direction;
 }
+
+} // namespace Cluster

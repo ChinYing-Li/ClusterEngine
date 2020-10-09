@@ -2,6 +2,7 @@
 #include "objloader.h"
 #include "objobject.h"
 
+namespace Cluster{
 Mesh::
 Mesh(objl::Mesh& mesh,
      std::shared_ptr<GameData> data_ptr,
@@ -188,3 +189,5 @@ set_material_uniform(GLuint& shaderID)
     glUniform3f(glGetUniformLocation(shaderID, "material.specular"), m_material_ptr->Ks.X, m_material_ptr->Ks.Y, m_material_ptr->Ks.Z);
     glUniform1f(glGetUniformLocation(shaderID, "material.shininess"), m_material_ptr->Ns);
 }
+
+} // namespace Cluster

@@ -15,11 +15,6 @@ set_window_size(glm::vec2 window_size)
     m_window_size = window_size;
 }
 
-void PipelineBase::set_clear_color(glm::vec4 clear_color)
-{
-    m_clear_color = clear_color;
-}
-
 void PipelineBase::
 set_resource_mng(std::unique_ptr<ResourceManager> resource_mng)
 {

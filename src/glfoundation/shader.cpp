@@ -4,6 +4,7 @@
 
 #include "shader.h"
 
+namespace Cluster{
 Shader::
 Shader(const std::string path_to_vert,
        const std::string path_to_frag,
@@ -20,7 +21,7 @@ m_name(name)
   compile_check(m_vert_ID);
   compile_shader(m_frag_ID, frag_code);
   compile_check(m_frag_ID);
- 
+
   if(!path_to_geo.empty())
   {
         std::string geo_code = read_code(path_to_geo);
@@ -67,7 +68,7 @@ get_name() noexcept
 {
     return m_name;
 }
-        
+
 std::string Shader::
 read_code(const std::string path_to_shader)
 {
@@ -97,7 +98,7 @@ compile_shader(GLuint& shader_ID,
   glShaderSource(shader_ID, 1, &src_ptr, NULL);
   glCompileShader(shader_ID);
 }
-        
+
 void Shader::
 compile_check(GLuint shader_ID)
 {
@@ -132,3 +133,5 @@ link_check(GLuint program_ID)
         return;
   }
 }
+
+} // namespace Cluster

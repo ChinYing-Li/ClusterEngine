@@ -2,9 +2,11 @@ set(SOURCES
     glfoundation/camera.cpp
     glfoundation/cubemap.cpp
     glfoundation/framebuffer.cpp
+    glfoundation/gbuffer.cpp
     glfoundation/globject.cpp
     glfoundation/light.cpp
-    glfoundation/objloader.cpp
+    glfoundation/mesh.cpp
+    glfoundation/renderstate.cpp
     glfoundation/shader.cpp
     glfoundation/texture.cpp
     glfoundation/trivialobject.cpp
@@ -12,6 +14,9 @@ set(SOURCES
     utilities/material.cpp
     utilities/objobject.cpp
     utilities/timer.cpp
+    utilities/debug/debug.cpp
+    utilities/managers/resourcemanager
+    utilities/managers/windowmanager
     )
 
 add_library(ClusterEngine ${SOURCES})

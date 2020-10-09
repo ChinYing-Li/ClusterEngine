@@ -4,6 +4,7 @@
 #include "objloader.h"
 #include "game.h"
 
+namespace Cluster{
 void GLObejct::init(GLenum primitive_mode, int numVertices)
 {
     m_primitivemode = primitive_mode;
@@ -31,8 +32,9 @@ void GLObejct::set_instance_attrib()
     glBindVertexArray(0);
     return;
 }
+}
 
-
+/*
 VAO_mesh::VAO_mesh(objl::Mesh& mesh, std::shared_ptr<GameData> data_ptr, unsigned int numinstance = 0):
 VAO(),
 name(mesh.MeshName),

@@ -1,5 +1,6 @@
 #include "trivialobject.h"
 
+namespace Cluster{
 TrivialObject::
 TrivialObject():
 GLObject()
@@ -144,3 +145,5 @@ init(const GLfloat *vertex_buffer_data,
     init(vertex_buffer_data, color_buffer_data);
     return;
 }
+
+} // namespace Cluster

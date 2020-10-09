@@ -8,6 +8,7 @@
 
 #define MAX_NUM_TEXTURE_BINDING_POINTS 8
 
+namespace Cluster{
 ///////////////////////////////////////////////////////////////////////////////
 /// \brief The Texture class
 ///
@@ -74,6 +75,7 @@ public:
     void set_image_param(GLint internal_format, GLenum format, GLenum tyoe, void* data);
     void set_wrap_st(GLint wrap_s, GLint wrap_t);
     void set_sampling(GLint mag_gilter, GLint min_filter);
+
 protected:
     int m_height;
     int m_width;
@@ -98,3 +100,5 @@ private:
     int m_width;
     int m_num_faces = 0;
 };
+
+} // namespace Cluster

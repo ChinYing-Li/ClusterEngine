@@ -8,6 +8,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
+namespace Cluster{
 Texture::Texture():
 m_initialized(false),
   m_binding_point(-1)
@@ -105,7 +106,7 @@ bool Texture2D::init_from_file(const std::vector<std::string>& file_path)
     glBindTexture(this->m_target, this->m_ID);
 
     set_texture_param();
-    
+
     int num_channels;
     stbi_set_flip_vertically_on_load(true);
     unsigned char *data = stbi_load(file_path[0].c_str(), &m_width, &m_height, &num_channels, 0);
@@ -113,7 +114,7 @@ bool Texture2D::init_from_file(const std::vector<std::string>& file_path)
     if (data)
     {
         glTexImage2D(m_target, 0, GL_RGB, m_width, m_height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
-        
+
         std::cout << "texture loaded at path: " << file_path[0] << std::endl;
         glGenerateMipmap(GL_TEXTURE_2D);
         stbi_image_free(data);
@@ -206,7 +207,7 @@ bool TextureCubemap::init_from_file(const std::vector<std::string>& file_path)
     m_num_faces = 0;
     glBindTexture(m_target, m_ID);
     this->set_texture_param();
-    
+
     int num_channels;
     for(int i = 0; i < file_path.size(); ++i)
     {
@@ -247,3 +248,5 @@ inline void TextureCubemap::set_vertexattrib()
      );
     return;
 }
+
+} // namespace Cluster

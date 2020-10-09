@@ -2,6 +2,9 @@
 
 #include "globject.h"
 
+namespace Cluster
+{
+
 class Cubemap final : public GLObejct
 {
 public:
@@ -21,3 +24,5 @@ private:
               std::vector<std::string>& path_to_texture);
     void load_texture();
 };
+
+}

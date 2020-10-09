@@ -8,7 +8,7 @@
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "includes/debug/debug.h"
+#include "debug.h"
 
 struct color_t
 {
@@ -17,7 +17,6 @@ struct color_t
     int b;
 };
 
-// ---- Colors ----
 const color_t COLOR_RED = { 236, 100, 75 };
 const color_t COLOR_GREEN = { 135, 211, 124 };
 const color_t COLOR_BLACK = { 52, 73, 94 };

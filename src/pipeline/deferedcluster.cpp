@@ -1,6 +1,9 @@
 #include "deferedcluster.h"
+#include "Irenderpass.h"
 
-DeferedCluster::DeferedCluster()
+namespace Cluster{
+DeferredCluster::DeferredCluster()
 {
 
+}
 }

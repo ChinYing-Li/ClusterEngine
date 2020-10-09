@@ -5,6 +5,7 @@
 
 #include "texture.h"
 
+namespace Cluster{
 class TextureRegistry
 {
 public:
@@ -18,13 +19,20 @@ public:
     void get_texture_in_use();
     void get_texture(Texture2D::Texture2DUsage usage);
 
-    static Texture2D create_empty_depth_map(GLuint width, GLuint height);
-    static TextureCubemap create_empty_cubemap(GLuint resolution);
-    static Texture2D create_shadow_map(GLuint width, GLuint height);
-    static TextureCubemap create_shadow_cubemap(GLuint resolution);
+    static std::shared_ptr<Texture2D> create_empty_depth_map(GLuint width, GLuint height);
+    static std::shared_ptr<TextureCubemap> create_empty_cubemap(GLuint resolution);
+    static std::shared_ptr<Texture2D> create_shadow_map(GLuint width, GLuint height);
+    static std::shared_ptr<TextureCubemap> create_shadow_cubemap(GLuint resolution);
+
+    static void init()
+    {
+      _texture_unit_in_use = 0;
+      _textures = std::vector<std::shared_ptr<Texture>>(16, nullptr);
+    }
 
 private:
-    unsigned int m_texture_unit_in_use;
-    std::vector<std::shared_ptr<Texture>> m_textures;
-    //static unsigned int MAX_NUMBER_OF_SLOTS_PER_USAGE;
+    static unsigned int _texture_unit_in_use;
+    static std::vector<std::shared_ptr<Texture>> _textures;
 };
+
+} // namespace Cluster

@@ -1,7 +1,8 @@
 #pragma once
-
-class DeferedCluster
+namespace Cluster{
+class DeferredCluster
 {
 public:
-    DeferedCluster();
+    DeferredCluster();
 };
+}

@@ -4,7 +4,7 @@
 
 #include "framebuffer.h"
 #include "glincludes.h"
-
+namespace Cluster{
 class RenderState
 {
 public:
@@ -30,7 +30,7 @@ public:
   glm::mat4* get_view_transform();
   glm::mat4* get_model_transform();
 
-  static void set_current_framebuffer(const FrameBuffer* current_framebuffer) noexcept;
+  static void set_current_framebuffer(FrameBuffer* current_framebuffer) noexcept;
 
 private:
   GLuint m_screen_quad_ID;
@@ -46,3 +46,5 @@ private:
 
   static FrameBuffer* m_current_framebuffer;
 };
+
+} // namespace Cluster

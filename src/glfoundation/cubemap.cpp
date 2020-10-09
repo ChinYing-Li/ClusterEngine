@@ -4,6 +4,7 @@
 
 #include "cubemap.h"
 
+namespace Cluster{
 Cubemap::Cubemap():
 GLObejct()
 {}
@@ -105,3 +106,5 @@ draw(GLuint& shaderID)
     glBindVertexArray(0);
     return;
 }
+
+} // namespace Cluster

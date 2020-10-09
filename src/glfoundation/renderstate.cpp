@@ -1,5 +1,6 @@
 #include "renderstate.h"
 
+namespace Cluster{
 RenderState::RenderState():
   m_clear_color(0.0, 1.0, 0.0)
 {
@@ -67,7 +68,10 @@ get_model_transform()
 }
 
 void RenderState::
-set_current_framebuffer(const FrameBuffer* current_framebuffer) noexcept
+set_current_framebuffer(FrameBuffer* current_framebuffer) noexcept
 {
   m_current_framebuffer = current_framebuffer;
 }
+
+} // namespace Cluster
+

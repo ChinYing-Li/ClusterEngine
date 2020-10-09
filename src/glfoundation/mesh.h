@@ -1,13 +1,13 @@
 #pragma once
 
 #include "globject.h"
-
 // Forward declarations
 namespace objl
 {
 class Loader; class Material; class Mesh;
 }
 
+namespace Cluster{
 class GameData;
 
 /*
@@ -41,3 +41,6 @@ map_Ns_ptr = nullptr;GL_TEXTURE3
 map_d_ptr = nullptr; GL_TEXTURE4
 map_bump_ptr = nullptr; GL_TEXTURE5*/
 };
+
+} // namespace Cluster
+

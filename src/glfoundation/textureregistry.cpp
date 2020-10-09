@@ -3,12 +3,11 @@
 #include "glincludes.h"
 #include "textureregistry.h"
 
+namespace Cluster{
 /*
  * OpenGL gurantees that there's at least 16 available texture unit.
  */
-TextureRegistry::TextureRegistry():
-    m_texture_unit_in_use(0),
-    m_textures(16, std::shared_ptr<Texture2D>(nullptr))
+TextureRegistry::TextureRegistry()
 {
 }
 
@@ -46,8 +45,38 @@ register_texture(GLenum texture_target,
  */
 void TextureRegistry::
 bind_texture(GLenum texture_target,
-             std::shared_ptr<Texture> texture)
+             GLuint texture_ID)
 {
-    glBindTexture(texture_target, texture->get_ID());
-    m_textures[m_texture_unit_in_use] = texture;
+    glBindTexture(texture_target, texture_ID);
+    _textures[_texture_unit_in_use] = texture_ID;
 }
+
+std::shared_ptr<Texture2D> TextureRegistry::
+create_empty_depth_map(GLuint width, GLuint height)
+{
+  std::shared_ptr<Texture2D> depth_map_ptr = std::make_shared<Texture2D>();
+  depth_map_ptr->bind(0);
+  depth_map_ptr->set_dimensions(width, height);
+  depth_map_ptr->set_image_param( GL_DEPTH_COMPONENT16, GL_DEPTH_COMPONENT, GL_UNSIGNED_BYTE, nullptr);
+  depth_map_ptr->set_wrap_st(GL_CLAMP, GL_CLAMP);
+  // depth_map_ptr->release();
+  return depth_map_ptr;
+}
+
+std::shared_ptr<TextureCubemap> TextureRegistry::
+create_empty_cubemap(GLuint resolution)
+{
+
+}
+
+std::shared_ptr<Texture2D> TextureRegistry::
+create_shadow_map(GLuint width, GLuint height)
+{
+
+}
+std::shared_ptr<TextureCubemap> TextureRegistry::
+create_shadow_cubemap(GLuint resolution)
+{
+
+}
+} // namespace Cluster

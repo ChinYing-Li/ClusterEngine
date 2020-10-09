@@ -1,6 +1,7 @@
 #pragma once
 #include "glincludes.h"
 
+namespace Cluster{
 /*
  *
  */
@@ -9,7 +10,7 @@ class Light
 public:
     Light();
     ~Light() = default;
-    
+
     bool is_enabled();
     void turn_off();
     void turn_on();
@@ -86,3 +87,5 @@ public:
 protected:
     glm::vec3 m_direction;
 };
+
+} // namespace Cluster

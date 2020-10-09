@@ -2,6 +2,7 @@
 
 #include "globject.h"
 
+namespace Cluster{
 class TrivialObject final : public GLObejct
 {
 public:
@@ -21,3 +22,5 @@ private:
     void init(const GLfloat *vertex_buffer_data, const GLuint *indices, const color_t color);
     void init(const GLfloat *vertex_buffer_data, const GLuint *indices, const GLfloat *color_buffer_data);
 };
+
+} // namespace Cluster
