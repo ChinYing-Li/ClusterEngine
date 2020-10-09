@@ -1,22 +1,23 @@
+#include <boost/program_options.hpp>
 #include <memory>
-#include "src/game.h"
-/*
-void print_mat4(glm::mat4& m)
+
+#include "src/game/game.h"
+
+namespace po = boost::program_options;
+
+void create_options()
 {
-    for(int i = 0; i < 4; ++i)
-    {
-        for(int j = 0; j < 4; ++j)
-        {
-            std::cout << m[i][j] << " ";
-        }
-        std::cout << "\n\n" << std::endl;
-    }
-    return;
-}*/
+    bool use_deferred;
+
+    po::options_description allowed_op_description("Allowed options");
+    allowed_op_description.add_options()
+            ("help", "")
+            ("use_deferred", po::value<bool>(&use_deferred)->default_value(true), "whether to use deferred shading or not. If set to false, then forward shading will be used");
+}
 
 int main(int argc, char **argv)
 {
     Game game;
-    game.run();
+    game.begin();
     return 0;
 }

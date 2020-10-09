@@ -1,11 +1,15 @@
-# OpenGL-kart
-***Under construction!!!***
+# Cluster Engine
 
-A kart-game written in C++, using OpenGL as the graphics API.
-This project served as a means to learn OpenGL and GLSL, but  I ended (happily) up learning many gamedev techniques. And, yes, **OpenGL-kart** is gonna look like Super Mario Kart, my childhood favorite.
+## Table of Contents
+- [Introduction](#introduction)
+- [Dependencies](#dependencies)
+- [Installation](#installation)
+- [Documentation](#documentation)
 
-Gilbert–Johnson–Keerthi distance algorithm is used for collision detection between convex shapes.
-QuickHull algorithm is used for creating the convex hull of objects.
+## Introduction
+
+Cluster Engine is a real-time physically based renderer written in `C++`, using `OpenGL` as the graphics API.
+It supports the technique, Clustered Shading, described in the paper: [Clustered Deferred and Forward shading. O. Olsson, M. Billeter, U. Assarsson](http://www.cse.chalmers.se/~uffe/clustered_shading_preprint.pdf).
 
 ## Dependencies
 
@@ -15,11 +19,11 @@ QuickHull algorithm is used for creating the convex hull of objects.
  - [Doxygen](https://www.doxygen.nl/index.html)
 
 ## Installation
-### MacOSX (untested)
+### MacOSX
 
  1. Navigate to the directory where you want the game to be installed using command line
- 2. ```git clone https://github.com/ChinYing-Li/OpenGL-cart.git```
- 3. ```cd OpenGL-cart```
+ 2. ```git clone https://github.com/ChinYing-Li/ClusterEngine.git```
+ 3. ```cd ClusterEngine```
  4. ```mkdir build```
  5. ```cd build```
  6. ```cmake ..```
@@ -29,14 +33,7 @@ QuickHull algorithm is used for creating the convex hull of objects.
 
 TO BE UPDATED
 
-## Backfill list
-**High priority**
 
- - [ ] Test the lighting shaders
- - [ ] Complete the user kart control in all game states
- - [ ] Add documentation
+## Documentation
 
-**low priority**
-
- - [ ] Support height map
- - [ ] Add different scenes
+TO BE UPDATED
