@@ -2,8 +2,7 @@
 
 namespace Cluster{
 TrivialObject::
-TrivialObject():
-GLObject()
+TrivialObject(): GLObject()
 {}
 
 TrivialObject::

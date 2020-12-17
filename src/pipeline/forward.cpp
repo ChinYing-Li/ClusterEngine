@@ -5,9 +5,15 @@ namespace Cluster
 Forward::Forward(): PipelineBase()
 {}
 
+void Forward::resize_window(unsigned int width, unsigned int height)
+{
+    m_framebuffer = FrameBuffer(width, height);
+
+}
+
 void Forward::render_skybox()
 {
-    m_resmanager_ptr->
+
 }
 
 void Forward::render_framebuffer(FrameBuffer& framebuffer)

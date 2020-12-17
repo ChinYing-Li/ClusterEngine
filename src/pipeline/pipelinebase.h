@@ -21,7 +21,7 @@ public:
     PipelineBase();
     ~PipelineBase();
 
-    void virtual setup_pipeline(unsigned int width, unsigned int height, Scene& scene) = 0;
+    void virtual setup(unsigned int width, unsigned int height, Scene& scene) = 0;
     void virtual resize_window(unsigned int width, unsigned int height);
     void virtual render_scene();
     void virtual render_objects();

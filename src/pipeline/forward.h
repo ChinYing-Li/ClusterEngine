@@ -16,7 +16,7 @@ class Forward : public PipelineBase
 public:
     Forward();
 
-    void virtual setup_pipeline(unsigned int width, unsigned int height, Scene& scene) override;
+    void virtual setup(unsigned int width, unsigned int height, Scene& scene) override;
     void virtual resize_window(unsigned int width, unsigned int height) override;
     void virtual render_scene() override;
     void virtual render_objects() override;
@@ -26,7 +26,6 @@ protected:
   void virtual render_framebuffer(FrameBuffer& framebuffer);
   void render_skybox();
 
-  GBuffer m_gbuffer;
   FrameBuffer m_framebuffer;
 };
 

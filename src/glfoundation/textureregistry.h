@@ -24,10 +24,12 @@ public:
     static std::shared_ptr<Texture2D> create_shadow_map(GLuint width, GLuint height);
     static std::shared_ptr<TextureCubemap> create_shadow_cubemap(GLuint resolution);
 
+    static const int max_texture_slot = 16;
+
     static void init()
     {
       _texture_unit_in_use = 0;
-      _textures = std::vector<std::shared_ptr<Texture>>(16, nullptr);
+      _textures = std::vector<std::shared_ptr<Texture>>(TextureRegistry::max_texture_slot, nullptr);
     }
 
 private:

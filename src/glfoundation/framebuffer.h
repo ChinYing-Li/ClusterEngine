@@ -10,7 +10,7 @@ namespace Cluster{
 class FrameBuffer
 {
 public:
-    FrameBuffer();
+    FrameBuffer(unsigned int width, unsigned int height);
 
     ~FrameBuffer()
     {
@@ -37,8 +37,10 @@ public:
     static const unsigned int MAX_NUM_COLOR_TEXTURE = 10;
 
 private:
+    unsigned int m_width;
+    unsigned int m_height;
+    
     GLuint m_FBO;
-
     std::vector<std::shared_ptr<Texture2D>> m_color_textures;
     std::shared_ptr<Texture2D> m_depth_texture;
 

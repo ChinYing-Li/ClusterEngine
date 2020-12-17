@@ -5,6 +5,15 @@
 #include "game.h"
 
 namespace Cluster{
+
+GLObejct::GLObejct():
+    m_position(0.0),
+    m_rotation(0.0),
+    m_scale(1.0)
+{
+
+}
+
 void GLObejct::init(GLenum primitive_mode, int numVertices)
 {
     m_primitivemode = primitive_mode;
@@ -32,6 +41,38 @@ void GLObejct::set_instance_attrib()
     glBindVertexArray(0);
     return;
 }
+
+void GLObejct::
+rotate_x(float angle)
+{
+
+}
+
+void rotate_y(float angle)
+{
+
+}
+
+void rotate_z(float angle)
+{
+
+}
+
+void scale_x(float scale)
+{
+
+}
+
+void scale_y(float scale)
+{
+
+}
+
+void scale_z(float scale)
+{
+
+}
+
 }
 
 /*

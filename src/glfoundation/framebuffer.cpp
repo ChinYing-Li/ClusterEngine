@@ -4,7 +4,9 @@
 #include "renderstate.h"
 
 namespace Cluster{
-FrameBuffer::FrameBuffer():
+FrameBuffer::FrameBuffer(unsigned int width, unsigned int height):
+    m_width(width),
+    m_height(height),
   m_color_textures(MAX_NUM_COLOR_TEXTURE, nullptr)
 {
   init();

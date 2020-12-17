@@ -6,7 +6,7 @@
 #include "renderstate.h"
 #include "shader.h"
 
-namespace Cluster{
+namespace Cluster {
 
 class Scene;
 
@@ -15,7 +15,7 @@ class Deferred : public PipelineBase
 public:
   Deferred();
 
-  void virtual setup_pipeline(unsigned int width, unsigned int height, Scene& scene) override;
+  void virtual setup(unsigned int width, unsigned int height, Scene& scene) override;
   void virtual resize_window(unsigned int width, unsigned int height) override;
   void virtual render_scene() override;
   void virtual render_objects() override;

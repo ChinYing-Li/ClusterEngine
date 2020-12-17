@@ -8,14 +8,13 @@
 #include "Imanagers.h"
 
 namespace Cluster{
-/*! GLObject stands for "Vertex Array Object", and is the base class
- *
- *
+/**
+ * @brief The base class of all shadable objects
  */
 class GLObejct
 {
 public:
-    GLObejct() = default;
+    GLObejct();
     ~GLObejct() = default;
 
     GLuint m_VAO;
@@ -35,8 +34,22 @@ public:
     void virtual send_instance_matrices(std::vector<glm::mat4>& instance_models){};
     void init(GLenum primitive_mode, int numVertices);
 
+    void translate(float x_displacement, float y_displacement, float z_displacement);
+    void rotate_x(float angle);
+    void rotate_y(float angle);
+    void rotate_z(float angle);
+
+    void scale_x(float scale);
+    void scale_y(float scale);
+    void scale_z(float scale);
+
 protected:
     bool is_using_EBO = false;
+
+    // Geometry transformation
+    glm::vec3 m_position;
+    glm::vec3 m_rotation;
+    glm::vec3 m_scale;
 };
 
 } // namespace Cluster

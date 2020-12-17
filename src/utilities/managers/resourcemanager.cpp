@@ -1,10 +1,13 @@
-#include "includes/glfoundation/texture.h"
-#include "includes/glfoundation/shader.h"
+#include "src/glfoundation/texture.h"
+#include "src/glfoundation/shader.h"
 #include "src/utilities/managers/resourcemanager.h"
 
 #include <iostream>
+#include <vector>
+
 ResourceManager::ResourceManager()
 {
+    // TODO: initialize shader and texture based on the renderer used
     init_texture();
     init_shader();
     std::cout << "properly constructed" << std::endl;
@@ -72,17 +75,13 @@ void ResourceManager::init_texture()
 void ResourceManager::init_shader()
 {
     std::vector<std::vector<std::string>> files = {
-        {"monotone.vert", "monotone.frag", ""},
-        {"skybox.vert", "skybox.frag", ""},
-        {"singletex.vert", "singletex.frag", ""},
-        {"model.vert", "model.frag", "" },
-        {"multiple_lighting.vert", "multiple_lighting.frag", ""},
-        {
-            "instanced_w_lighting.vert", "instanced_w_lighting.frag", ""
-        }
+        {"position.vert", "lighting.frag", ""},
+        {"quad.vert", "skybox.frag", ""},
+        {"quad.vert", "singletexture.frag", ""}
     };
-    std::vector<std::string> name = {
-        "monotone", "skybox", "texture", "model", "lighting", "instance_w_lighting"
+    std::vector<std::string> name =
+    {
+        "direct", "skybox", "texture"
     };
     assert(name.size() == files.size());
     for(int i = 0; i < files.size(); ++i)

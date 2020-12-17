@@ -5,8 +5,7 @@
 namespace Cluster{
 Light::Light():
 m_const_atten(10.0f),
-m_linear_atten(10.0f),
-m_quadratic_atten(10.0f)
+m_linear_atten(10.0f)
 {}
 
 bool Light::
@@ -60,6 +59,12 @@ set_ambient_strength(const glm::vec3 new_amb_strength)
     m_ambient_strength = new_amb_strength;
 }
 
+Light::Type Light::
+get_type() const
+{
+    return m_type;
+}
+
 void Light::
 set_shader(int index,
            GLuint& shaderID)
@@ -82,7 +87,8 @@ set_shader(int index,
  */
 SpotLight::
 SpotLight():
-Light()
+Light(),
+  m_type(Type::LT_Point)
 {
     m_is_local = true;
     m_is_spotlight = true;

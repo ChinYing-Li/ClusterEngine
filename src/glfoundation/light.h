@@ -1,7 +1,15 @@
 #pragma once
+
 #include "glincludes.h"
+#include "framebuffer.h"
+#include "texture.h"
 
 namespace Cluster{
+
+class Deferred;
+class Forward;
+class DeferredCluster;
+class ForwardCluster;
 /*
  *
  */
@@ -12,6 +20,14 @@ public:
     ~Light() = default;
 
     bool is_enabled();
+
+    enum Type
+    {
+      LT_Spot = 0,
+      LT_Point,
+      LT_Directional,
+    };
+
     void turn_off();
     void turn_on();
     void set_color(const glm::vec3 new_color);
@@ -22,8 +38,14 @@ public:
     void set_ambient_strength(const glm::vec3 new_amb_strength);
 
     void virtual set_shader(int index, GLuint& shaderID);
+    Type get_type() const;
 
 protected:
+    class Deferred;
+    class Forward;
+    class DeferredCluster;
+    class ForwardCluster;
+
     bool m_on_state = true;
     bool m_is_spotlight = false;
     bool m_is_local = false;
@@ -34,6 +56,10 @@ protected:
 
     glm::vec3 m_ambient_strength;
     glm::vec3 m_color;
+
+    TextureCubemap m_shadowmap;
+    FrameBuffer m_framebuffer;
+    const Type m_type = Type::LT_Spot;
 };
 
 /*
@@ -49,10 +75,16 @@ public:
     void set_shader(int index, GLuint& shaderID) override;
 
 protected:
+    class Deferred;
+    class Forward;
+    class DeferredCluster;
+    class ForwardCluster;
+
     float m_cutoff;
     float m_exponent;
     glm::vec3 m_position;
     glm::vec3 m_conedirection;
+    const Type m_type = Type::LT_Spot;
 };
 
 /*
@@ -68,7 +100,13 @@ public:
     void set_shader(int index, GLuint& shaderID) override;
 
 protected:
+    class Deferred;
+    class Forward;
+    class DeferredCluster;
+    class ForwardCluster;
+
     glm::vec3 m_position;
+    const Type m_type = Type::LT_Point;
 };
 
 /*!
@@ -85,7 +123,16 @@ public:
     void set_direction(const glm::vec3 halfvec);
 
 protected:
+    class Deferred;
+    class Forward;
+    class DeferredCluster;
+    class ForwardCluster;
+
     glm::vec3 m_direction;
+    glm::mat4 m_shadowspace;
+    Texture2D m_shadowmap;
+    FrameBuffer m_shadowbuffer;
+    const Type m_type = Type::LT_Directional;
 };
 
 } // namespace Cluster
