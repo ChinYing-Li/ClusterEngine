@@ -1,3 +1,12 @@
+add_subdirectory(glfoundation)
+add_subdirectory(utilities)
+add_subdirectory(renderpass)
+add_subdirectory(pipeline)
+
+if(BUILD_PHYSICS)
+    add_subdirectory(physics)
+endif()
+
 set(SOURCES
     glfoundation/camera.cpp
     glfoundation/cubemap.cpp

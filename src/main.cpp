@@ -1,7 +1,7 @@
 #include <boost/program_options.hpp>
 #include <memory>
 
-#include "src/game/game.h"
+#include "game.h"
 
 namespace po = boost::program_options;
 
