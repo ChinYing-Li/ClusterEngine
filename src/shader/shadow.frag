@@ -1,4 +1,4 @@
-in vec2 texcoords;
+in vec2 i_texcoords;
 
 struct Material
 {
@@ -8,35 +8,35 @@ struct Material
 
     float shininess;
 
-    bool use_map_Ambient;
-    bool use_map_Diffuse;
-    bool use_map_Specular;
-    bool use_map_Stencil;
-    bool use_map_Emission;
-    bool use_map_Bump;
+    bool use_map_ambient;
+    bool use_map_diffuse;
+    bool use_map_specular;
+    bool use_map_stencil;
+    bool use_map_emission;
+    bool use_map_bump;
 
-    sampler2D map_Ambient;
-    sampler2D map_Diffuse;
-    sampler2D map_Specular;
-    sampler2D map_Stencil;
-    sampler2D map_Emission;
-    sampler2D map_Bump;
+    sampler2D map_ambient;
+    sampler2D map_diffuse;
+    sampler2D map_specular;
+    sampler2D map_stencil;
+    sampler2D map_emission;
+    sampler2D map_bump;
 
     vec2 tiling;
 };
 
-uniform Material material;
+uniform Material u_material;
 
-vec4 sample_tiled(vec2 _texture_coordinates, sampler2D _texture)
+vec4 sample_tiled(sampler2D tex2D, vec2 tex_coords)
 {
-    return texture(_texture, _texture_coordinates * material,tiling);
+    return texture(tex2D, tex_coords * u_material.tiling);
 }
 
 void main()
 {
-    if (material.use_map_Stencil) {
-        float _sample = sample_tiled(material.map_Stencil, texcoords).r;
-        if (_sample != 1) {
+    if (u_material.use_map_stencil) {
+        float sampled_stencil = sample_tiled(u_material.map_stencil, i_texcoords).r;
+        if (sampled_stencil <= 0.5) {
             discard;
         }
     }

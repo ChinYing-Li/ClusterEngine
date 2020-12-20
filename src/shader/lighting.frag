@@ -163,6 +163,21 @@ float Smith()
 
 }
 
+
+/*
+ *  Cook-Torrance shading model
+ */
+vec3 Cook_Torrance_Shading(vec3 normal,
+                           vec3 half_vector,
+                           vec3 view_dir,
+                           vec3 light_dir,
+                           vec3 color,
+                           float specular,
+                           float roughness)
+{
+    float norm_dot_half = max(0.0, dot(normal, half_vector));
+}
+
 void main()
 {
     vec3 scattered = vec3(0.0);
