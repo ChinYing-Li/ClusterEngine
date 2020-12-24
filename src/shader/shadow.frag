@@ -29,7 +29,7 @@ uniform Material u_material;
 
 vec4 sample_tiled(sampler2D tex2D, vec2 tex_coords)
 {
-    return texture(tex2D, tex_coords * u_material.tiling);
+    return texture2D(tex2D, tex_coords * u_material.tiling);
 }
 
 void main()

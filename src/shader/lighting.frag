@@ -73,7 +73,7 @@ uniform Light u_lights[MAX_LIGHT];
 
 vec4 sample_tiled(sampler2D tex2D, vec2 tex_coords)
 {
-    return texture(tex2D, tex_coords * u_material.tiling);
+    return texture2D(tex2D, tex_coords * u_material.tiling);
 }
 
 vec3 calc_frag_normal(vec2 normalmap_texcoord,

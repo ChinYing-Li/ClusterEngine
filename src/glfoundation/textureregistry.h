@@ -5,7 +5,11 @@
 
 #include "texture.h"
 
-namespace Cluster{
+namespace Cluster
+{
+/*
+ * A
+ */
 class TextureRegistry
 {
 public:

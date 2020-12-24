@@ -16,7 +16,7 @@ Deferred::Deferred():
 void Deferred::
 setup(unsigned int width, unsigned int height, Scene& scene)
 {
-  std::shared_ptr<LightPass> light_pass = std::make_shared<LightPass>();
+  std::shared_ptr<LightingPass> light_pass = std::make_shared<LightingPass>();
   light_pass->set_gbuffer(m_gbuffer);
 
   m_renderstate.gl_enable(RenderState::GS_cull);
