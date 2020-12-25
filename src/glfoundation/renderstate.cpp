@@ -1,32 +1,59 @@
 #include "renderstate.h"
 
 namespace Cluster{
-RenderState::RenderState():
-  m_clear_color(0.0, 1.0, 0.0)
+RenderState::
+RenderState():
+  m_clear_color(0.0, 1.0, 0.0),
+  m_settings(get_default_settings())
 {
-  m_state_settings[GS_blend] = m_state_settings[GS_cull] = m_state_settings[GS_depth_test] \
-      = m_state_settings[GS_stencil_test] = m_state_settings[GS_polygon_offset_fill] = false;
-
   glGenVertexArrays(1, &m_screen_quad_ID);
 }
 
-void RenderState::
-gl_enable(RenderState::GL_SETTING setting)
+GL_Capabilities RenderState::get_default_settings()
 {
-  if (!m_state_settings[setting])
+  GL_Capabilities default_settings = {{GS_blend, false},
+                                  {GS_cull, false},
+                                  {GS_depth_test, false},
+                                  {GS_stencil_test, false},
+                                  {GS_polygon_offset_fill, false}};
+  return default_settings;
+}
+
+void RenderState::
+gl_enable(GL_Capability setting)
+{
+  if (!m_settings[setting])
   {
-    m_state_settings[setting] = true;
+    m_settings[setting] = true;
     glEnable(setting);
   }
 }
 
 void RenderState::
-gl_disable(GL_SETTING setting)
+gl_disable(GL_Capability setting)
 {
-  if (m_state_settings[setting])
+  if (m_settings[setting])
   {
-    m_state_settings[setting] = false;
+    m_settings[setting] = false;
     glDisable(setting);
+  }
+}
+
+void RenderState::
+gl_change_settings(GL_Capabilities& settings)
+{
+  auto it = settings.begin();
+
+  for(int i = 0; i < m_settings.size(); ++i)
+  {
+    if (it->second && !m_settings[it->first])
+    {
+      gl_enable(it->first);
+    }
+    else if (!it->second && m_settings[it->first])
+    {
+      gl_disable(it->first);
+    }
   }
 }
 
@@ -38,7 +65,7 @@ draw_screen_quad()
 }
 
 GLuint RenderState::
-get_screen_quad_handle()
+get_screen_quad_handle() const
 {
   return m_screen_quad_ID;
 }
@@ -49,20 +76,20 @@ set_clear_color(glm::vec3 &color)
   m_clear_color = color;
 }
 
-glm::mat4* RenderState::
-get_project_transform()
+const glm::mat4* RenderState::
+get_project_transform() const
 {
   return &m_project_transform;
 }
 
-glm::mat4* RenderState::
-get_view_transform()
+const glm::mat4* RenderState::
+get_view_transform() const
 {
   return &m_view_transform;
 }
 
-glm::mat4* RenderState::
-get_model_transform()
+const glm::mat4* RenderState::
+get_model_transform() const
 {
   return &m_model_transform;
 }

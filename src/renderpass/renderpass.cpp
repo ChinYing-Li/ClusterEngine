@@ -7,14 +7,33 @@ RenderPass(const std::string& passname) :
   m_pass_name(passname)
 {}
 
-// A private constructor not to be used.
-RenderPass::
-RenderPass()
-{}
+void RenderPass::
+enable() noexcept
+{
+  m_enabled = true;
+}
 
 void RenderPass::
-set_clear_color(const glm::vec3 new_clear_color) noexcept
+disable() noexcept
 {
-    m_clear_color = new_clear_color;
+  m_enabled = false;
+}
+
+bool RenderPass::
+is_enabled() const noexcept
+{
+  return m_enabled;
+}
+
+std::string RenderPass::
+get_pass_name() const noexcept
+{
+  return m_pass_name;
+}
+
+void RenderPass::
+set_source()
+{
+
 }
 }

@@ -1,5 +1,6 @@
 #pragma once
 
+#include <filesystem>
 #include <string>
 #include <vector>
 
@@ -10,10 +11,10 @@ class Shader
 {
 public:
     Shader() = default;
-    Shader(const std::string path_to_vert,
-           const std::string path_to_frag,
-           const std::string path_to_geo,
-           const std::string name);
+    Shader(const std::filesystem::path path_to_vert,
+           const std::filesystem::path path_to_frag,
+           const std::filesystem::path path_to_geo,
+           const std::filesystem::path name);
     ~Shader() = default;
 
     void use();
@@ -30,7 +31,7 @@ public:
     void set_uniform2f(std::string name, const glm::vec2 &data);
     void set_uniform3f(std::string name, const glm::vec3 &data);
     void set_uniform3fv(std::string name, int count, std::vector<glm::vec3> &data);
-    void uniformMatrix4f(std::string name, glm::mat4 &data);
+    void set_uniformMat4f(std::string name, glm::mat4 &data);
 
 private:
     GLuint m_program_ID;
@@ -39,7 +40,7 @@ private:
     GLuint m_geom_ID;
     std::string m_name;
 
-    std::string read_code(const std::string path_to_shader);
+    std::string read_shader_code(const std::filesystem::path& path_to_shader);
     void compile_shader(GLuint& shaderID,
                         const std::string& shader_code);
     void compile_check(GLuint shaderID);

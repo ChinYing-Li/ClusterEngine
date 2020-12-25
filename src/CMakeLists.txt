@@ -27,6 +27,7 @@ set(SOURCES
     utilities/managers/resourcemanager
     utilities/managers/windowmanager
     )
+set(SHADER_ROOT "${CMAKE_CURRENT_DIR}/shader")
 
 add_library(ClusterEngine ${SOURCES})
 add_library(STB_IMAGE "ext/stb_image.h")

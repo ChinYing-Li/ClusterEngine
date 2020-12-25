@@ -34,13 +34,13 @@ get_current_framebuffer() noexcept
 }
 
 void PipelineBase::
-enable(GL_SETTING setting)
+enable(GL_Capability setting)
 {
     m_glsetting[setting] = true;
 }
 
 void PipelineBase::
-disable(GL_SETTING setting)
+disable(GL_Capability setting)
 {
     m_glsetting[setting] = false;
 }

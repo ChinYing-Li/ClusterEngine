@@ -2,7 +2,7 @@
 
 namespace Cluster
 {
-BloomPass::m_pass_name = "bloom";
+const std::string BloomPass::m_pass_name = "bloom";
 
 BloomPass::
 BloomPass():

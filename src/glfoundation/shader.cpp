@@ -15,8 +15,8 @@ m_name(name)
   m_vert_ID = glCreateShader(GL_VERTEX_SHADER);
   m_frag_ID = glCreateShader(GL_FRAGMENT_SHADER);
 
-  std::string vert_code = read_code(path_to_vert);
-  std::string frag_code = read_code(path_to_frag);
+  std::string vert_code = read_shader_code(path_to_vert);
+  std::string frag_code = read_shader_code(path_to_frag);
   compile_shader(m_vert_ID, vert_code);
   compile_check(m_vert_ID);
   compile_shader(m_frag_ID, frag_code);
@@ -24,7 +24,7 @@ m_name(name)
 
   if(!path_to_geo.empty())
   {
-        std::string geo_code = read_code(path_to_geo);
+        std::string geo_code = read_shader_code(path_to_geo);
         compile_shader(m_geom_ID, path_to_geo);
         compile_check(m_geom_ID);
   }
@@ -70,19 +70,18 @@ get_name() noexcept
 }
 
 std::string Shader::
-read_code(const std::string path_to_shader)
+read_shader_code(const std::filesystem::path& path_to_shader)
 {
   std::string  code;
-  std::ifstream stream(path_to_shader, std::ios::in);
+  std::ifstream stream(path_to_shader.c_str(), std::ios::in);
 
   if (stream.is_open())
   {
-    std::cout << "reading shader code: " << std::endl;
+    std::cout << "Reading shader code: " << std::endl;
+    std::string line = "";
 
-    std::string Line = "";
-
-    while (getline(stream, Line))
-      code += "\n" + Line;
+    while (getline(stream, line))
+      code += "\n" + line;
 
     stream.close();
   }
@@ -91,8 +90,7 @@ read_code(const std::string path_to_shader)
 
 
 void Shader::
-compile_shader(GLuint& shader_ID,
-               const std::string& shader_code)
+compile_shader(GLuint& shader_ID, const std::string& shader_code)
 {
   char const *src_ptr = shader_code.c_str();
   glShaderSource(shader_ID, 1, &src_ptr, NULL);
@@ -103,7 +101,7 @@ void Shader::
 compile_check(GLuint shader_ID)
 {
     GLint result = GL_FALSE;
-    int   info_log_length;
+    int info_log_length;
 
     glGetShaderiv(shader_ID,  GL_COMPILE_STATUS, &result);
     glGetShaderiv(shader_ID, GL_INFO_LOG_LENGTH, &info_log_length);

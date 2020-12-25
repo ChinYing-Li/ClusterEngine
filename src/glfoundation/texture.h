@@ -106,7 +106,7 @@ public:
     int get_num_faces() const noexcept;
 
 protected:
-    bool init_from_file(const std::vector<std::filesystem::path>& path, TYPE type);
+    bool init_from_file(const std::vector<std::filesystem::path>& path, Texture::Type type);
 
 private:
     int m_height;
