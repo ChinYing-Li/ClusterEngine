@@ -4,7 +4,8 @@ namespace Cluster
 {
 RenderPass::
 RenderPass(const std::string& passname) :
-  m_pass_name(passname)
+  m_pass_name(passname),
+  m_capabilities(RenderState::get_default_settings())
 {}
 
 void RenderPass::
@@ -32,8 +33,8 @@ get_pass_name() const noexcept
 }
 
 void RenderPass::
-set_source()
+set_render_target(Texture2D* target)
 {
-
+  m_render_target = target;
 }
 }

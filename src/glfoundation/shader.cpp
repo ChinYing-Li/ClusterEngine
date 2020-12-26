@@ -69,6 +69,78 @@ get_name() noexcept
     return m_name;
 }
 
+void Shader::
+set_uniform1i(const std::string name, const int data)
+{
+  int uniform_location = glGetUniformLocation(m_program_ID, name.c_str());
+  glUniform1i(uniform_location, data);
+}
+
+void Shader::
+set_uniform1ui(const std::string name, const unsigned int data)
+{
+  int uniform_location = glGetUniformLocation(m_program_ID, name.c_str());
+  glUniform1ui(uniform_location, data);
+};
+
+void Shader::
+set_uniform1iv(const std::string name, int count, const std::vector<int> &data)
+{
+  int uniform_location = glGetUniformLocation(m_program_ID, name.c_str());
+  glUniform1iv(uniform_location, count, &data[0]);
+}
+
+void Shader::
+set_uniform2i(const std::string name, const std::vector<int> &data)
+{
+  int uniform_location = glGetUniformLocation(m_program_ID, name.c_str());
+  glUniform2i(uniform_location, data[0], data[1]);
+}
+
+void Shader::
+set_uniform2ui(const std::string name, const std::vector<unsigned int> &data)
+{
+  int uniform_location = glGetUniformLocation(m_program_ID, name.c_str());
+  glUniform2ui(uniform_location, data[0], data[1]);
+}
+
+void Shader::
+set_uniform1f(const std::string name, const float value)
+{
+  int uniform_location = glGetUniformLocation(m_program_ID, name.c_str());
+  glUniform1f(uniform_location, value);
+}
+
+void Shader::
+set_uniform1fv(const std::string name, const float* values)
+{
+  int uniform_location = glGetUniformLocation(m_program_ID, name.c_str());
+}
+
+void Shader::
+set_uniform2f(const std::string name, const glm::vec2 &data)
+{
+  int uniform_location = glGetUniformLocation(m_program_ID, name.c_str());
+}
+
+void Shader::
+set_uniform3f(const std::string name, const glm::vec3 &data)
+{
+
+}
+
+void Shader::
+set_uniform3fv(const std::string name, int count, const std::vector<glm::vec3> &data)
+{
+
+}
+
+void Shader::
+set_uniformMat4f(const std::string name, const glm::mat4 &data)
+{
+
+}
+
 std::string Shader::
 read_shader_code(const std::filesystem::path& path_to_shader)
 {

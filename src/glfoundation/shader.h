@@ -21,17 +21,17 @@ public:
     GLuint get_ID() noexcept;
     std::string get_name() noexcept;
 
-    void set_uniform1i(std::string name, int data);
-    void set_uniform1ui(std::string name, unsigned int data);
-    void set_uniform1iv(std::string name, int count, std::vector<int> &data);
-    void set_uniform2i(std::string name, std::vector<int> &data);
-    void set_uniform2ui(std::string name, std::vector<unsigned int> &data);
-    void set_uniform1f(std::string name, float value);
-    void set_uniform1fv(std::string name, int count, float* values);
-    void set_uniform2f(std::string name, const glm::vec2 &data);
-    void set_uniform3f(std::string name, const glm::vec3 &data);
-    void set_uniform3fv(std::string name, int count, std::vector<glm::vec3> &data);
-    void set_uniformMat4f(std::string name, glm::mat4 &data);
+    void set_uniform1i(const std::string name, const int data);
+    void set_uniform1ui(const std::string name, const unsigned int data);
+    void set_uniform1iv(const std::string name, const int count, const std::vector<int> &data);
+    void set_uniform2i(const std::string name, const std::vector<int> &data);
+    void set_uniform2ui(const std::string name, const std::vector<unsigned int> &data);
+    void set_uniform1f(const std::string name, const float value);
+    void set_uniform1fv(const std::string name, const int count, const std::vector<float> values);
+    void set_uniform2f(const std::string name, const glm::vec2 &data);
+    void set_uniform3f(const std::string name, const glm::vec3 &data);
+    void set_uniform3fv(const std::string name, const int count, const std::vector<glm::vec3> &data);
+    void set_uniformMat4f(const std::string name, const glm::mat4 &data);
 
 private:
     GLuint m_program_ID;

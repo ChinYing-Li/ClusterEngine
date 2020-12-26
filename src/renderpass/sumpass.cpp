@@ -2,7 +2,7 @@
 
 namespace Cluster
 {
-std::string SumPass::m_pass_name = "sum";
+const std::string SumPass::m_pass_name = "sum";
 
 SumPass::SumPass() :
   RenderPass(m_pass_name),
@@ -19,9 +19,9 @@ resize(const unsigned int win_width, const unsigned int win_height)
 }
 
 void SumPass::
-render()
+render(RenderState& r_state, const Scene& scene)
 {
-
+  // TODO: implement render function for SumPass
 }
 
 int SumPass::

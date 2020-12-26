@@ -2,14 +2,15 @@
 
 namespace Cluster
 {
-class FPSCounter {
+class Timer {
 public:
-    FPSCounter();
-
-    void update();
+  Timer();
+  double get_frame_per_second() const;
 
 private:
-    unsigned int m_frames;
-    double m_prev_time;
+  void update();
+  unsigned int m_frames;
+  double m_prev_time;
+  double m_frame_per_second;
 };
 }

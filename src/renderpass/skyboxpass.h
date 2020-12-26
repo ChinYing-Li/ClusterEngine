@@ -11,8 +11,8 @@ public:
     SkyBoxPass();
     ~SkyBoxPass() = default;
 
-    void resize() override;
-    void render() override;
+    void resize(const unsigned int win_width, const unsigned int win_height) override;
+    void render(RenderState& r_state, const Scene& scene) override;
 
 private:
     void setup();

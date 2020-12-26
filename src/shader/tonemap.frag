@@ -3,7 +3,7 @@
 in vec3 i_coords;
 out vec3 frag_color;
 
-uniform uint u_curve;
+uniform int u_curve;
 uniform float u_exposure;
 uniform sampler2D u_input;
 

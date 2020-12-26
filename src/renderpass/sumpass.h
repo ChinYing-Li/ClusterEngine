@@ -13,7 +13,7 @@ public:
   SumPass();
 
   void resize(const unsigned int win_width, const unsigned int win_height) override;
-  void render() override;
+  void render(RenderState& r_state, const Scene& scene) override;
 
   int max_textures() const noexcept;
   void set_texture(const unsigned int index, std::shared_ptr<Texture2D> tex);

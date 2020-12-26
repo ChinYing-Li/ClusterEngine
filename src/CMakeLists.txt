@@ -1,6 +1,9 @@
-add_subdirectory(glfoundation)
-add_subdirectory(utilities)
-add_subdirectory(renderpass)
+
+
+# add_subdirectory(glfoundation)
+# add_subdirectory(utilities)
+# add_subdirectory(renderpass)
+# The three subdirectory up there should be grouped into a library
 add_subdirectory(pipeline)
 
 if(BUILD_PHYSICS)
@@ -26,11 +29,22 @@ set(SOURCES
     utilities/debug/debug.cpp
     utilities/managers/resourcemanager
     utilities/managers/windowmanager
+    renderpass/bloompass.cpp
+    renderpass/gammacorrectpass.cpp
+    renderpass/lightingpass.cpp
+    renderpass/skyboxpass.cpp
+    renderpass/sumpass.cpp
+    renderpass/tonemappass.cpp
     )
+
 set(SHADER_ROOT "${CMAKE_CURRENT_DIR}/shader")
 
-add_library(ClusterEngine ${SOURCES})
+add_library(ClusterEngine STATIC ${SOURCES})
 add_library(STB_IMAGE "ext/stb_image.h")
+set_target_properties(ClusterEngine PROPERTIES POSITION_INDEPENDENT_CODE ON)
+
+# Currently have no flags specified...
+# set_target_properties(ClusterEngine PROPERTIES COMPILE_FLAGS "{PLATFORM_COMPILE_FLAGS")
 
 target_include_directories(ClusterEngine
     PRIVATE
@@ -40,12 +54,23 @@ target_include_directories(ClusterEngine
     ${GLUT_INCLUDE_DIR}
 )
 
-
-target_link_libraries(oglapphelpers
+target_link_libraries(ClusterEngine
     PRIVATE
     OpenGL::OpenGL
     OpenGL::GLU
     ${GLEW_LIBRARIES}
     GLFW3
+    ASSIMP
     )
 
+if(${CLS_PROFILE_MODE})
+    find_library(NVTX_LIBRARY nvToolsExt PATHS ${CMAKE_CUDA_IMPLICIT_LINK_DIRECTORIES})
+    if(NOT NVTX_LIBRARY)
+        message(STATUS "NVIDIA Extension Library not found; can't profile with it.")
+        set(CLS_PROFILE_MODE OFF)
+    else()
+        target_link_libraries(ClusterEngine
+            PRIVATE
+            ${NVTX_LIBRARY})
+    endif()
+endif()

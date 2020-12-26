@@ -13,8 +13,8 @@ class LightingPass final : public RenderPass
 public:
     LightingPass();
 
-    void render() override;
-    void resize() override;
+    void resize(const unsigned int win_width, const unsigned int win_height) override;
+    void render(RenderState& r_state, const Scene& scene) override;
 
     void set_gbuffer(std::shared_ptr<GBuffer> gbuffer_ptr);
 

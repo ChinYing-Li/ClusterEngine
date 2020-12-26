@@ -1,23 +1,33 @@
 #include <GLFW/glfw3.h>
 
-#include "src/glfoundation/glincludes.h"
-#include "src/utilities/fpscounter.h"
+#include "glincludes.h"
+#include "fpscounter.h"
 
 
 namespace Cluster
 {
-FPSCounter::FPSCounter()
+Timer::
+Timer()
 {}
 
-void FPSCounter::update()
+double Timer::
+get_frame_per_second() const
 {
-    double time_difference = glfwGetTime() - m_prev_time;
-    ++ m_frames;
+  return m_frame_per_second;
+}
 
-    if (time_difference > 1.0)
+void Timer::
+update()
+{
+  double cur_time = glfwGetTime();
+  double time_difference = cur_time - m_prev_time;
+  ++m_frames;
+
+    if (time_difference >= 1.0)
     {
-        m_frames = 0; // Start counting again.
-        m_prev_time += 1.0;
+      m_frame_per_second = double(m_frames) / time_difference;
+      m_frames = 0; // Start counting again.
+      m_prev_time = cur_time;
     }
 }
 

@@ -30,6 +30,10 @@ set(SUPPORTED_CXX_STANDARDS 11 14)
 string(REPLACE ";" ", " SUPPORTED_CXX_STANDARDS_STR "${SUPPORTED_CXX_STANDARDS}")
 
 ###############################################################################
+# Build options
+option(CLS_PROFILE_MODE "Set to OFF to disable profiling using NVIDIA Extension Library" ON)
+
+###############################################################################
 # GPU configuration
 
 find_package(OpenGL REQUIRED COMPONENTS OpenGL)
