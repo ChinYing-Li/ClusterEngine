@@ -64,15 +64,15 @@ check_status() const noexcept
 }
 
 void FrameBuffer::
-attach_texture(GLuint attachment, std::shared_ptr<Texture2D>& texture, unsigned int level)
+attach_texture(GLuint attachment, std::shared_ptr<Texture2D> texture, unsigned int level)
 {
     glFramebufferTexture(GL_FRAMEBUFFER, attachment, texture->get_ID(), level);
 }
 
 void FrameBuffer::
 attach_color_texture(unsigned int binding_point,
-                     std::shared_ptr<Texture2D>& texture,
-                     GLint mipmap_level)
+                     std::shared_ptr<Texture2D> texture,
+                     unsigned int mipmap_level)
 {
   if (binding_point > MAX_NUM_COLOR_TEXTURE)
   {
@@ -86,13 +86,13 @@ attach_color_texture(unsigned int binding_point,
 }
 
 void FrameBuffer::
-attach_depth_texture(std::shared_ptr<Texture2D>& texture)
+attach_depth_texture(std::shared_ptr<Texture2D> texture)
 {
   attach_texture(GL_DEPTH_ATTACHMENT, texture, 0);
 }
 
 void FrameBuffer::
-attach_depth_stencil_texture(std::shared_ptr<Texture2D>& texture)
+attach_depth_stencil_texture(std::shared_ptr<Texture2D> texture)
 {
   attach_texture(GL_DEPTH_STENCIL_ATTACHMENT, texture, 0);
 }

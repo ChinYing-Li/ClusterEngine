@@ -54,7 +54,6 @@ protected:
     GLenum m_target;
     Type m_type;
 
-    std::map<GLenum, GLenum> m_parameter_map; // Not sure if this should be present
     inline void virtual set_vertexattrib() = 0;
 };
 
@@ -81,8 +80,7 @@ public:
 
     void set_dimensions(unsigned int width, unsigned int height) noexcept;
     void set_texture_param(GLint internal_format, GLenum format, GLenum tyoe, void* data);
-    void set_wrap_st(GLint wrap_s, GLint wrap_t);
-    void set_sampling(GLint mag_gilter, GLint min_filter);
+    void set_wrapping(GLint wrap_s, GLint wrap_t);
 
     int get_height() const noexcept;
     int get_weight() const noexcept;
@@ -101,9 +99,15 @@ public:
     ~TextureCubemap() = default;
 
     inline void set_vertexattrib() override;
+    void set_resolution(unsigned int resolution);
+    void set_face_texture_param(unsigned int face, GLint internal_format, GLenum format, GLenum type, void* data);
+    void set_wrapping(GLint wrap_s, GLint wrap_t, GLint wrap_r);
+    void set_current_face(unsigned int face);
+
     int get_height() const noexcept;
     int get_weight() const noexcept;
-    int get_num_faces() const noexcept;
+
+    int get_current_face() const noexcept;
 
 protected:
     bool init_from_file(const std::vector<std::filesystem::path>& path, Texture::Type type);
@@ -111,7 +115,9 @@ protected:
 private:
     int m_height;
     int m_width;
-    int m_num_faces = 0;
+    unsigned int m_current_face = 0;
+    unsigned int m_num_faces = 0;
+    unsigned int m_resolution;
 };
 
 } // namespace Cluster

@@ -79,7 +79,9 @@ void WindowManager
 void WindowManager::
 error_callback(int error, const char *description)
 {
-    std::cerr << "Window error: " << description << std::endl;
+    std::cerr << "Window error: "
+              << description
+              << std::endl;
 }
 
 void WindowManager::

@@ -22,7 +22,7 @@ public:
     ~PipelineBase();
 
     void virtual setup(unsigned int width, unsigned int height, Scene& scene) = 0;
-    void virtual resize_window(unsigned int width, unsigned int height);
+    void virtual resize(unsigned int width, unsigned int height);
     void virtual render_scene();
     void virtual render_objects();
 
@@ -32,7 +32,6 @@ public:
     std::shared_ptr<FrameBuffer> get_current_framebuffer() noexcept;
 
     void add_pass(std::shared_ptr<RenderPass> pass) noexcept;
-
 
     TextureRegistry m_texture_registry;
 
@@ -44,8 +43,7 @@ protected:
     // If either of resmanager_ptr or windowmanager_ptr is not present,
     // then the pipeline is not valid and should not be used.
     bool is_pipeline_valid = false;
-
-    glm::vec2 m_window_size;
+    unsigned int m_win_width, m_win_height;
 
     // buffers to store transforms loaded by RenderPasses
     glm::mat4 m_project_transform;
@@ -58,6 +56,6 @@ protected:
     std::shared_ptr<FrameBuffer> m_current_frambuffer_ptr;
     std::vector<std::shared_ptr<FrameBuffer>> m_back_buffers;
     std::vector<std::shared_ptr<RenderPass>> m_passes;
-    Camera m_cam;
+    Camera m_camera;
 };
 }

@@ -152,17 +152,10 @@ set_texture_param(GLint internal_format, GLenum format, GLenum type, void *data)
 }
 
 void Texture2D::
-set_wrap_st(GLint wrap_s, GLint wrap_t)
+set_wrapping(GLint wrap_s, GLint wrap_t)
 {
   glTexParameteri(m_target, GL_TEXTURE_WRAP_S, wrap_s);
   glTexParameteri(m_target, GL_TEXTURE_WRAP_T, wrap_t);
-}
-
-void Texture2D::
-set_sampling(GLint mag_filter, GLint min_filter)
-{
-  glTexParameteri(m_target, GL_TEXTURE_MAG_FILTER, mag_filter);
-  glTexParameteri(m_target, GL_TEXTURE_MIN_FILTER, min_filter);
 }
 
 inline void Texture2D::
@@ -201,11 +194,6 @@ Texture()
 {
     m_target = GL_TEXTURE_CUBE_MAP;
     m_vertex_size = 3;
-    m_parameter_map[GL_TEXTURE_MAG_FILTER] = GL_LINEAR;
-    m_parameter_map[GL_TEXTURE_MIN_FILTER] = GL_LINEAR;
-    m_parameter_map[GL_TEXTURE_WRAP_S] = GL_CLAMP_TO_EDGE;
-    m_parameter_map[GL_TEXTURE_WRAP_T] = GL_CLAMP_TO_EDGE;
-    m_parameter_map[GL_TEXTURE_WRAP_R] = GL_CLAMP_TO_EDGE;
 
     init_from_file(paths);
     std::cout << paths.size() << std::endl;
@@ -215,7 +203,7 @@ bool TextureCubemap::init_from_file(const std::vector<std::string>& file_path)
 {
     assert(m_initialized);
     m_num_faces = 0;
-    this->set_texture_param();
+    this->set_face_texture_param();
 
     int num_channels;
     for(int i = 0; i < file_path.size(); ++i)
@@ -256,6 +244,47 @@ inline void TextureCubemap::set_vertexattrib()
         (void *) 0                    // array buffer offset
      );
     return;
+}
+
+void TextureCubemap::
+set_resolution(unsigned int resolution)
+{
+  m_resolution = resolution;
+}
+
+void TextureCubemap::
+set_face_texture_param(unsigned int face,
+                       GLint internal_format,
+                       GLenum format,
+                       GLenum type,
+                       void *data)
+{
+  assert(m_resolution > 0);
+  glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + face,
+               0,
+               internal_format,
+               m_resolution,
+               m_resolution,
+               0,
+               format,
+               type,
+               data);
+}
+
+void TextureCubemap::
+set_wrapping(GLint wrap_s, GLint wrap_t, GLint wrap_r)
+{
+  //check whether this texture is binded
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrap_s);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrap_t);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, wrap_r);
+}
+
+void TextureCubemap::
+set_current_face(unsigned int face)
+{
+  assert(face < 6);
+  m_current_face = face;
 }
 
 } // namespace Cluster

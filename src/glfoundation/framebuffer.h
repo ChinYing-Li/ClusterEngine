@@ -21,10 +21,10 @@ public:
     void release() const noexcept;
     void check_status() const noexcept;
 
-    void attach_texture(GLuint attachment, std::shared_ptr<Texture2D>& texture, unsigned int mipmap_level);
-    void attach_color_texture(unsigned int binding_point, std::shared_ptr<Texture2D>& texture, GLint mipmap_level);
-    void attach_depth_texture(std::shared_ptr<Texture2D>& texture);
-    void attach_depth_stencil_texture(std::shared_ptr<Texture2D>& texture);
+    void attach_texture(GLuint attachment, std::shared_ptr<Texture2D> texture, unsigned int mipmap_level = 0);
+    void attach_color_texture(unsigned int binding_point, const std::shared_ptr<Texture2D> texture, unsigned int mipmap_level = 0);
+    void attach_depth_texture(std::shared_ptr<Texture2D> texture);
+    void attach_depth_stencil_texture(std::shared_ptr<Texture2D> texture);
 
     void set_cubemap(GLenum attachment, std::shared_ptr<TextureCubemap> texture_cubemap, GLint mipmap_level);
     void set_parameter(GLenum binding_target, GLenum param_name, GLint param_val);

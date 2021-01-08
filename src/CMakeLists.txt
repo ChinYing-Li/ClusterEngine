@@ -51,7 +51,6 @@ target_include_directories(ClusterEngine
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${OPENGL_INCLUDE_DIR}
     ${GLEW_INCLUDE_DIRS}
-    ${GLUT_INCLUDE_DIR}
 )
 
 target_link_libraries(ClusterEngine
@@ -59,7 +58,7 @@ target_link_libraries(ClusterEngine
     OpenGL::OpenGL
     OpenGL::GLU
     ${GLEW_LIBRARIES}
-    GLFW3
+    ${GLFW3_INCLUDE_DIRS}
     ASSIMP
     )
 

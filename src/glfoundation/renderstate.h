@@ -37,7 +37,7 @@ public:
   const glm::mat4* get_view_transform() const;
   const glm::mat4* get_model_transform() const;
 
-  static void set_current_framebuffer(FrameBuffer* current_framebuffer) noexcept;
+  static void set_current_framebuffer(const FrameBuffer* current_framebuffer) noexcept;
 
 private:
   GLuint m_screen_quad_ID;
@@ -50,7 +50,7 @@ private:
 
   GL_Capabilities m_settings;
 
-  static FrameBuffer* m_current_framebuffer;
+  static const FrameBuffer* m_current_framebuffer;
 };
 
 } // namespace Cluster

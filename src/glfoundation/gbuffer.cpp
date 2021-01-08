@@ -38,7 +38,7 @@ setup_texture(std::shared_ptr<Texture2D>& texture,
   texture->bind(0);
   texture->set_dimensions(width, height);
   texture->set_image_param(internal_format, format, type, nullptr);
-  texture->set_wrap_st(GL_CLAMP, GL_CLAMP);
+  texture->set_wrapping(GL_CLAMP, GL_CLAMP);
   texture->set_sampling(GL_NEAREST, GL_NEAREST);
 }
 

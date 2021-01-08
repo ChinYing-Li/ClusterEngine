@@ -6,7 +6,7 @@ cmake_minimum_required(VERSION 3.13)
 
 project(ClusterEngine
         VERSION 0.0.1
-        CMAKE_PROJECT_DESCRIPTION "Rendering Engine with Cluster Shading and OpenGL"
+        CMAKE_PROJECT_DESCRIPTION "OpenGL Rendering Engine implementing Cluster Shading"
 	LANGUAGES CXX C)
 
 enable_testing()
@@ -22,6 +22,7 @@ set(CMAKE_MODULE_PATH
     ${CMAKE_SOURCE_DIR}/share/cmake/macros
     ${CMAKE_SOURCE_DIR}/share/cmake/modules
 )
+list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake")
 
 ###############################################################################
 # C++ configuration
@@ -34,7 +35,7 @@ string(REPLACE ";" ", " SUPPORTED_CXX_STANDARDS_STR "${SUPPORTED_CXX_STANDARDS}"
 option(CLS_PROFILE_MODE "Set to OFF to disable profiling using NVIDIA Extension Library" ON)
 
 ###############################################################################
-# GPU configuration
+# OpenGL configuration
 
 find_package(OpenGL REQUIRED COMPONENTS OpenGL)
 
