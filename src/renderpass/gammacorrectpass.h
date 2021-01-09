@@ -10,7 +10,7 @@ class GammaCorrectPass : public RenderPass
 public:
   GammaCorrectPass();
 
-  void resize(const unsigned int win_width, const unsigned int win_height) override {};
+  void resize(const unsigned int width, const unsigned int height) override {};
   void render(RenderState& r_state, const Scene& scene) override;
 
   void set_gamma(const float gamma);

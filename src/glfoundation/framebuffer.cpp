@@ -64,14 +64,14 @@ check_status() const noexcept
 }
 
 void FrameBuffer::
-attach_texture(GLuint attachment, std::shared_ptr<Texture2D> texture, unsigned int level)
+attach_texture(const GLuint attachment, Texture2D& texture, const unsigned int level)
 {
-    glFramebufferTexture(GL_FRAMEBUFFER, attachment, texture->get_ID(), level);
+    glFramebufferTexture(GL_FRAMEBUFFER, attachment, texture.get_ID(), level);
 }
 
 void FrameBuffer::
 attach_color_texture(unsigned int binding_point,
-                     std::shared_ptr<Texture2D> texture,
+                      Texture2D& texture,
                      unsigned int mipmap_level)
 {
   if (binding_point > MAX_NUM_COLOR_TEXTURE)
@@ -82,24 +82,24 @@ attach_color_texture(unsigned int binding_point,
   }
 
   attach_texture(GL_COLOR_ATTACHMENT0 + binding_point, texture, mipmap_level);
-  m_color_textures[binding_point] = texture;
+  m_color_textures[binding_point] = &texture;
 }
 
 void FrameBuffer::
-attach_depth_texture(std::shared_ptr<Texture2D> texture)
+attach_depth_texture(Texture2D& texture)
 {
   attach_texture(GL_DEPTH_ATTACHMENT, texture, 0);
 }
 
 void FrameBuffer::
-attach_depth_stencil_texture(std::shared_ptr<Texture2D> texture)
+attach_depth_stencil_texture(Texture2D& texture)
 {
   attach_texture(GL_DEPTH_STENCIL_ATTACHMENT, texture, 0);
 }
 
 void FrameBuffer::
 set_cubemap(GLenum attachment_target,
-            std::shared_ptr<TextureCubemap> texture_cubemap,
+            TextureCubemap& texture_cubemap,
             GLint mipmap_level)
 {
     for (int i = 0; i < 6; ++i)
@@ -107,7 +107,7 @@ set_cubemap(GLenum attachment_target,
         glFramebufferTexture2D(GL_FRAMEBUFFER,
                                attachment_target,
                                GL_TEXTURE_CUBE_MAP_POSITIVE_X + i,
-                               texture_cubemap->get_ID(),
+                               texture_cubemap.get_ID(),
                                mipmap_level);
     }
 }
