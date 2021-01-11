@@ -9,11 +9,11 @@ namespace Cluster{
 
 enum GL_Capability
 {
-    GS_blend = GL_BLEND,
-    GS_cull = GL_CULL_FACE,
-    GS_depth_test = GL_DEPTH_TEST,
-    GS_stencil_test = GL_STENCIL_TEST,
-    GS_polygon_offset_fill = GL_POLYGON_OFFSET_FILL
+    BLEND = GL_BLEND,
+    CULL = GL_CULL_FACE,
+    DEPTH_TEST = GL_DEPTH_TEST,
+    STENCIL_TEST = GL_STENCIL_TEST,
+    POLYGON_OFFSET_FILL = GL_POLYGON_OFFSET_FILL
 };
 
 typedef std::map<GL_Capability, bool> GL_Capabilities;

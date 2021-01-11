@@ -66,7 +66,7 @@ protected:
     std::vector<FrameBuffer*> m_ldr_back_buffers;
 
     std::vector<std::shared_ptr<RenderPass>> m_hdr_passes;
-    std::vector<std::shared_ptr<RenderPass>> m_passes;
+    std::vector<std::shared_ptr<RenderPass>> m_ldr_passes;
     std::shared_ptr<TonemapPass> m_tonemappass;
 
     void set_pass(const std::shared_ptr<RenderPass> pass, std::vector<std::shared_ptr<RenderPass>>& passes, const int index = -1);

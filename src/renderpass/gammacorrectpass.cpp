@@ -8,8 +8,8 @@ GammaCorrectPass::GammaCorrectPass() :
   RenderPass(m_pass_name),
   m_gamma(2.2)
 {
-  m_capabilities[GS_stencil_test] = false;
-  m_capabilities[GS_depth_test] = false;
+  m_capabilities[STENCIL_TEST] = false;
+  m_capabilities[DEPTH_TEST] = false;
 }
 
 void GammaCorrectPass::

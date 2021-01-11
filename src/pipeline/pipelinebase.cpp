@@ -50,7 +50,7 @@ set_hdr_pass(const std::shared_ptr<RenderPass> pass, const int index)
 void PipelineBase::
 set_ldr_pass(const std::shared_ptr<RenderPass> pass, const int index)
 {
-  set_pass(pass, m_passes, index);
+  set_pass(pass, m_ldr_passes, index);
 }
 
 void PipelineBase::
@@ -62,7 +62,7 @@ print_hdr_pass_info() const noexcept
 void PipelineBase::
 print_ldr_pass_info() const noexcept
 {
-  print_info(m_passes);
+  print_info(m_ldr_passes);
 }
 
 void PipelineBase::

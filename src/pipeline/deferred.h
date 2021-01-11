@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "framebuffer.h"
 #include "gbuffer.h"
 #include "pipelinebase.h"
@@ -18,18 +20,22 @@ public:
   void virtual setup(unsigned int width, unsigned int height, Scene& scene) override;
   void virtual resize(unsigned int width, unsigned int height) override;
   void virtual render_scene() override;
+  void virtual render_scene(const Scene& scene, Shader& shader);
   void virtual render_objects() override;
 
 protected:
+  static float m_poly_offset_factor;
+  static float m_poly_offset_units;
+
   void virtual create_backbuffer(unsigned int width, unsigned int height);
   void virtual create_shadowmaps(Scene& scene);
 
   void virtual render_gbuffer();
-  void virtual render_framebuffers();
-  void virtual render_depth_map();
-  void virtual render_shadow_maps();
+  void virtual render_framebuffers(const FrameBuffer& framebuffe);
+  void virtual render_depth_map(const Scene& scene);
+  void virtual render_shadow_maps(const Scene& scene);
 
-  GBuffer m_gbuffer;
+  std::shared_ptr<GBuffer> m_gbuffer;
   FrameBuffer m_framebuffer;
 
   Shader m_gbuffer_shader;

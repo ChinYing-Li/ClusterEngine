@@ -11,11 +11,11 @@ RenderState():
 
 GL_Capabilities RenderState::get_default_settings()
 {
-  GL_Capabilities default_settings = {{GS_blend, false},
-                                  {GS_cull, false},
-                                  {GS_depth_test, false},
-                                  {GS_stencil_test, false},
-                                  {GS_polygon_offset_fill, false}};
+  GL_Capabilities default_settings = {{BLEND, false},
+                                  {CULL, false},
+                                  {DEPTH_TEST, false},
+                                  {STENCIL_TEST, false},
+                                  {POLYGON_OFFSET_FILL, false}};
   return default_settings;
 }
 
