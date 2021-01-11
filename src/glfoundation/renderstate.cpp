@@ -100,5 +100,11 @@ set_current_framebuffer(const FrameBuffer* current_framebuffer) noexcept
   m_current_framebuffer = current_framebuffer;
 }
 
+const FrameBuffer* RenderState::
+get_current_framebuffer()
+{
+  return m_current_framebuffer;
+}
+
 } // namespace Cluster
 

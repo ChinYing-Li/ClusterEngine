@@ -38,6 +38,7 @@ public:
   const glm::mat4* get_model_transform() const;
 
   static void set_current_framebuffer(const FrameBuffer* current_framebuffer) noexcept;
+  static const FrameBuffer* get_current_framebuffer();
 
 private:
   GLuint m_screen_quad_ID;

@@ -36,7 +36,7 @@ public:
     void attach_depth_texture(std::shared_ptr<Texture2D> texture);
     void attach_depth_stencil_texture(std::shared_ptr<Texture2D> texture);
 
-    void set_cubemap(GLenum attachment, std::shared_ptr<TextureCubemap> texture_cubemap, GLint mipmap_level);
+    void set_cubemap(GLenum attachment, TextureCubemap& texture_cubemap, GLint mipmap_level);
     void set_parameter(GLenum binding_target, GLenum param_name, GLint param_val);
 
     // add drawbuffer and read buffer??
@@ -54,8 +54,13 @@ private:
     unsigned int m_height;
     
     GLuint m_FBO;
+<<<<<<< HEAD
     std::vector<Texture2D> m_color_textures; // TODO: remove shared_ptr here...
     Texture2D m_depth_texture;
+=======
+    std::vector<Texture2D*> m_color_textures;
+    Texture2D* m_depth_texture;
+>>>>>>> rm_smart_ptr
 
     unsigned int m_current_drawbuffer;
     std::vector<GLenum> m_drawbuffers;

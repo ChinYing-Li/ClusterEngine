@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include "glincludes.h"
+#include <glm/glm.hpp>
 
 namespace Cluster{
 class Shader
@@ -14,7 +14,7 @@ public:
     Shader(const std::filesystem::path path_to_vert,
            const std::filesystem::path path_to_frag,
            const std::filesystem::path path_to_geo,
-           const std::filesystem::path name);
+           const std::string name);
     ~Shader() = default;
 
     void use();
@@ -27,8 +27,9 @@ public:
     void set_uniform2i(const std::string name, const std::vector<int> &data);
     void set_uniform2ui(const std::string name, const std::vector<unsigned int> &data);
     void set_uniform1f(const std::string name, const float value);
-    void set_uniform1fv(const std::string name, const int count, const std::vector<float> values);
+    void set_uniform1fv(const std::string name, const int count, const std::vector<float>& values);
     void set_uniform2f(const std::string name, const glm::vec2 &data);
+    void set_uniform2fv(const std::string name, const int num_element, const std::vector<glm::vec2> &data);
     void set_uniform3f(const std::string name, const glm::vec3 &data);
     void set_uniform3fv(const std::string name, const int count, const std::vector<glm::vec3> &data);
     void set_uniformMat4f(const std::string name, const glm::mat4 &data);
@@ -40,8 +41,8 @@ private:
     GLuint m_geom_ID;
     std::string m_name;
 
-    std::string read_shader_code(const std::filesystem::path& path_to_shader);
-    void compile_shader(GLuint& shaderID,
+    std::string read_code(const std::filesystem::path& path_to_shader);
+    void compile(GLuint& shaderID,
                         const std::string& shader_code);
     void compile_check(GLuint shaderID);
     void link_check(GLuint programID);
