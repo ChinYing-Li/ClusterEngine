@@ -3,7 +3,7 @@
 
 #include "renderstate.h"
 #include "texture.h"
-#include "textureregistry.h"
+#include "shaderregistry.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
@@ -44,8 +44,8 @@ bind(const GLuint texture_binding_point)
     return;
   }
 
-  TextureRegistry::activate_texture(texture_binding_point);
-  TextureRegistry::bind_texture(m_target, m_ID);
+  ShaderRegistry::activate_texture(texture_binding_point);
+  ShaderRegistry::bind_texture(m_target, m_ID);
   m_binding_point = texture_binding_point;
   m_is_binded = true;
 }

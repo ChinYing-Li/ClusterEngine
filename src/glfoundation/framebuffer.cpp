@@ -7,7 +7,7 @@ namespace Cluster{
 FrameBuffer::FrameBuffer(unsigned int width, unsigned int height):
     m_width(width),
     m_height(height),
-  m_color_textures(MAX_NUM_COLOR_TEXTURE, nullptr)
+  m_color_textures()
 {
   init();
 }
@@ -19,10 +19,14 @@ init()
 }
 
 void FrameBuffer::
-bind() const noexcept
+bind(const Usage usage) const noexcept
 {
-    glBindFramebuffer(GL_FRAMEBUFFER, m_FBO);
-    RenderState::set_current_framebuffer(this);
+    glBindFramebuffer(usage, m_FBO);
+
+    if (usage == Usage::NORMAL)
+    {
+      RenderState::set_current_framebuffer(this);
+    }
 }
 
 void FrameBuffer::
@@ -64,9 +68,9 @@ check_status() const noexcept
 }
 
 void FrameBuffer::
-attach_texture(GLuint attachment, std::shared_ptr<Texture2D> texture, unsigned int level)
+attach_texture(GLuint attachment, std::shared_ptr<Texture2D> texture, unsigned int mipmap_level)
 {
-    glFramebufferTexture(GL_FRAMEBUFFER, attachment, texture->get_ID(), level);
+    glFramebufferTexture(GL_FRAMEBUFFER, attachment, texture->get_ID(), mipmap_level);
 }
 
 void FrameBuffer::
@@ -82,7 +86,7 @@ attach_color_texture(unsigned int binding_point,
   }
 
   attach_texture(GL_COLOR_ATTACHMENT0 + binding_point, texture, mipmap_level);
-  m_color_textures[binding_point] = texture;
+  m_color_textures[binding_point] = *texture;
 }
 
 void FrameBuffer::
@@ -112,4 +116,8 @@ set_cubemap(GLenum attachment_target,
     }
 }
 
+Texture2D& FrameBuffer::get_color_texture(unsigned int binding_point)
+{
+  return m_color_textures[binding_point];
+}
 }

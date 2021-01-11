@@ -5,6 +5,7 @@
 
 #include "glincludes.h"
 #include "texture.h"
+#include "texturegenerator.h"
 
 namespace Cluster{
 class FrameBuffer
@@ -17,12 +18,21 @@ public:
         glDeleteFramebuffers(1, &m_FBO);
     };
 
-    void bind() const noexcept;
+    enum Usage
+    {
+      NORMAL = GL_FRAMEBUFFER,
+      DRAW   = GL_DRAW_FRAMEBUFFER,
+      READ   = GL_READ_FRAMEBUFFER,
+    };
+
+    void bind(const Usage usage) const noexcept;
     void release() const noexcept;
     void check_status() const noexcept;
 
     void attach_texture(GLuint attachment, std::shared_ptr<Texture2D> texture, unsigned int mipmap_level = 0);
-    void attach_color_texture(unsigned int binding_point, const std::shared_ptr<Texture2D> texture, unsigned int mipmap_level = 0);
+    void attach_color_texture(unsigned int binding_point, const TextureFormat format, unsigned int mipmap_level = 0);
+    void attach_color_texture(unsigned int binding_point, std::shared_ptr<Texture2D> texture, unsigned int mipmap_level = 0);
+
     void attach_depth_texture(std::shared_ptr<Texture2D> texture);
     void attach_depth_stencil_texture(std::shared_ptr<Texture2D> texture);
 
@@ -31,8 +41,11 @@ public:
 
     // add drawbuffer and read buffer??
 
-    std::shared_ptr<Texture2D> get_color_texture(unsigned int binding_point);
-    std::shared_ptr<Texture2D> get_color_texture_in_use();
+    Texture2D& get_color_texture(unsigned int binding_point);
+    Texture2D& get_color_texture_in_use() const;
+
+    unsigned int get_current_draw_buffer() const;
+    void set_current_draw_buffer(unsigned int color_attachment);
 
     static const unsigned int MAX_NUM_COLOR_TEXTURE = 10;
 
@@ -41,8 +54,8 @@ private:
     unsigned int m_height;
     
     GLuint m_FBO;
-    std::vector<std::shared_ptr<Texture2D>> m_color_textures;
-    std::shared_ptr<Texture2D> m_depth_texture;
+    std::vector<Texture2D> m_color_textures; // TODO: remove shared_ptr here...
+    Texture2D m_depth_texture;
 
     unsigned int m_current_drawbuffer;
     std::vector<GLenum> m_drawbuffers;

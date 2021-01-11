@@ -17,10 +17,12 @@ class Scene;
 class Forward : public PipelineBase
 {
 public:
-    Forward();
+    Forward() = delete ;
+    Forward(const Scene& scene);
+    ~Forward();
 
     void virtual setup(unsigned int width, unsigned int height, Scene& scene) override;
-    void virtual resize_window(unsigned int width, unsigned int height) override;
+    void virtual resize(unsigned int width, unsigned int height) override;
     void virtual render_scene() override;
     void virtual render_objects() override;
 
@@ -28,7 +30,6 @@ public:
     void post_processing(Scene& sc);
 
 protected:
-
   void virtual render_framebuffer(FrameBuffer& framebuffer);
   void render_skybox();
 

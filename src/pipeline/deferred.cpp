@@ -24,7 +24,7 @@ setup(unsigned int width, unsigned int height, Scene& scene)
 }
 
 void Deferred::
-resize_window(unsigned int width, unsigned int height)
+resize(unsigned int width, unsigned int height)
 {
 
 }

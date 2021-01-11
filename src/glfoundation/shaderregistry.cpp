@@ -1,19 +1,19 @@
 #include <iostream>
 
 #include "glincludes.h"
-#include "textureregistry.h"
+#include "shaderregistry.h"
 
 namespace Cluster{
 /*
  * OpenGL gurantees that there's at least 16 available texture unit.
  */
-TextureRegistry::TextureRegistry()
+ShaderRegistry::ShaderRegistry()
 {
 }
 
 
-TextureRegistry::
-~TextureRegistry()
+ShaderRegistry::
+~ShaderRegistry()
 {
     // We don't have to delete the tectures as it still might be used
     // somewhere else.
@@ -22,7 +22,7 @@ TextureRegistry::
 /*
  *
  */
-void TextureRegistry::
+void ShaderRegistry::
 activate_texture(unsigned int texture_unit)
 {
     glActiveTexture(GL_TEXTURE0 + texture_unit);
@@ -32,7 +32,7 @@ activate_texture(unsigned int texture_unit)
 /*
  *
  */
-void TextureRegistry::
+void ShaderRegistry::
 register_texture(GLenum texture_target,
                  std::shared_ptr<Texture2D> texture,
                  Texture2D::Texture2DUsage usage)
@@ -43,7 +43,7 @@ register_texture(GLenum texture_target,
 /*
  *
  */
-void TextureRegistry::
+void ShaderRegistry::
 bind_texture(GLenum texture_target,
              GLuint texture_ID)
 {

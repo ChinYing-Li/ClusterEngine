@@ -4,7 +4,6 @@
 #include <string>
 
 #include "texture.h"
-#include "state.h"
 #include "Imanagers.h"
 
 namespace Cluster{

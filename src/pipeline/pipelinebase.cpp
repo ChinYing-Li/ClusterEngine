@@ -3,16 +3,24 @@
 namespace Cluster
 {
 PipelineBase::
-PipelineBase()
+PipelineBase():
+  m_current_frambuffer(800, 600)
 {
 
 }
 
-void PipelineBase::
-set_window_size(glm::vec2 window_size)
+PipelineBase::
+~PipelineBase()
 {
-    assert(window_size.x > 0 && window_size.y > 0);
-    m_window_size = window_size;
+  for(FrameBuffer* fb_ptr: m_hdr_back_buffers)
+  {
+    delete fb_ptr;
+  }
+
+  for(FrameBuffer* fb_ptr: m_ldr_back_buffers)
+  {
+    delete fb_ptr;
+  }
 }
 
 void PipelineBase::
@@ -27,23 +35,67 @@ return_resource_mng() noexcept
     return std::move(m_resmanager_ptr);
 }
 
-std::shared_ptr<FrameBuffer> PipelineBase::
-get_current_framebuffer() noexcept
+const FrameBuffer* PipelineBase::
+get_current_framebuffer() const noexcept
 {
-    return m_current_frambuffer_ptr;
+    return &m_current_frambuffer;
 }
 
 void PipelineBase::
-enable(GL_Capability setting)
+set_hdr_pass(const std::shared_ptr<RenderPass> pass, const int index)
 {
-    m_glsetting[setting] = true;
+  set_pass(pass, m_hdr_passes, index);
 }
 
 void PipelineBase::
-disable(GL_Capability setting)
+set_ldr_pass(const std::shared_ptr<RenderPass> pass, const int index)
 {
-    m_glsetting[setting] = false;
+  set_pass(pass, m_passes, index);
 }
 
+void PipelineBase::
+print_hdr_pass_info() const noexcept
+{
+  print_info(m_hdr_passes);
+}
 
+void PipelineBase::
+print_ldr_pass_info() const noexcept
+{
+  print_info(m_passes);
+}
+
+void PipelineBase::
+set_pass(const std::shared_ptr<RenderPass> pass, std::vector<std::shared_ptr<RenderPass>>& passes, const int index)
+{
+  if(index == -1)
+  {
+    passes.push_back(pass);
+  }
+  else
+  {
+    assert(index < passes.size());
+    passes[index] = pass;
+  }
+}
+
+void PipelineBase::
+print_info(const std::vector<std::shared_ptr<RenderPass>>& passes) const noexcept
+{
+    for(auto pass: passes)
+    {
+      std::cout << pass->get_pass_name() << std::endl;
+    }
+}
+
+void PipelineBase::
+reset_backbuffer(std::vector<FrameBuffer*>& back_buffer)
+{
+  for (FrameBuffer* ptr: back_buffer)
+  {
+    delete ptr;
+    ptr = nullptr;
+  }
+  back_buffer.clear();
+}
 }
