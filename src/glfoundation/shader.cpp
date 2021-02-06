@@ -7,12 +7,15 @@
 #include "shader.h"
 
 namespace Cluster{
+
+// TODO: Update this in case more shaders are added
+const unsigned int Shader::m_num_usage = 7;
+
 Shader::
 Shader(const std::filesystem::path path_to_vert,
        const std::filesystem::path path_to_frag,
-       const std::filesystem::path path_to_geo = "",
-       const std::string name = ""):
-m_name(name)
+       const std::filesystem::path path_to_geo):
+m_name()
 {
   m_vert_ID = glCreateShader(GL_VERTEX_SHADER);
   m_frag_ID = glCreateShader(GL_FRAGMENT_SHADER);
@@ -20,15 +23,26 @@ m_name(name)
   std::string vert_code = read_code(path_to_vert);
   std::string frag_code = read_code(path_to_frag);
   compile(m_vert_ID, vert_code);
-  compile_check(m_vert_ID);
   compile(m_frag_ID, frag_code);
-  compile_check(m_frag_ID);
 
   if(!path_to_geo.empty())
   {
         std::string geo_code = read_code(path_to_geo);
         compile(m_geom_ID, path_to_geo);
-        compile_check(m_geom_ID);
+  }
+
+  try
+  {
+    check_compilation(m_vert_ID);
+    check_compilation(m_frag_ID);
+    if(!path_to_geo.empty())
+    {
+      check_compilation(m_geom_ID);
+    }
+  }
+  catch (std::exception& exc)
+  {
+    // TODO: create a Log class, I suppose...
   }
 
   // shader Program
@@ -36,14 +50,18 @@ m_name(name)
 
   glAttachShader(m_program_ID, m_vert_ID);
   glAttachShader(m_program_ID, m_frag_ID);
-
-  if (!path_to_geo.empty())
-  {
-      glAttachShader(m_program_ID, m_geom_ID);
-  }
+  if (!path_to_geo.empty()) { glAttachShader(m_program_ID, m_geom_ID); }
 
   glLinkProgram(m_program_ID);
-  link_check(m_program_ID);
+  try
+  {
+    check_linking(m_program_ID);
+  }
+  catch (std::exception& excp)
+  {
+    // TODO
+    throw excp;
+  }
 
   glDeleteShader(m_vert_ID);
   glDeleteShader(m_frag_ID);
@@ -52,6 +70,8 @@ m_name(name)
   {
       glDeleteShader(m_geom_ID);
   }
+
+  // TODO: print something to say that we've compiled successfully
 }
 
 void Shader::use()
@@ -176,37 +196,38 @@ compile(GLuint& shader_ID, const std::string& shader_code)
 }
 
 void Shader::
-compile_check(GLuint shader_ID)
+check_compilation(GLuint shader_ID)
 {
-    GLint result = GL_FALSE;
-    unsigned int info_log_length;
+    GLint is_compiled = GL_FALSE;
+    glGetShaderiv(shader_ID,  GL_COMPILE_STATUS, &is_compiled);
 
-    glGetShaderiv(shader_ID,  GL_COMPILE_STATUS, &result);
-    glGetShaderiv(shader_ID, GL_INFO_LOG_LENGTH, &info_log_length);
-
-    std::vector<GLchar> shader_err_message(info_log_length);
-
-    glGetShaderInfoLog(shader_ID, info_log_length, NULL, &shader_err_message[0]);
-
-    fprintf(stdout, "%s\n", &shader_err_message[0]);
+    if (is_compiled == GL_FALSE)
+    {
+      int log_length;
+      glGetShaderiv(shader_ID, GL_INFO_LOG_LENGTH, &log_length);
+      std::vector<GLchar> shader_err_message(log_length);
+      glGetShaderInfoLog(shader_ID, log_length, NULL, &shader_err_message[0]);
+      fprintf(stdout, "%s\n", &shader_err_message[0]);
+      throw;
+    }
 }
 
 
 void Shader::
-link_check(GLuint program_ID)
+check_linking(GLuint program_ID)
 {
   GLint is_linked = 0;
   glGetProgramiv(program_ID, GL_LINK_STATUS, &is_linked);
 
   if (is_linked == GL_FALSE)
   {
-        GLint max_length = 0;
-        glGetProgramiv(program_ID, GL_INFO_LOG_LENGTH, &max_length);
-
-        std::vector<GLchar> info_log(max_length);
-        glGetProgramInfoLog(program_ID, max_length, &max_length, &info_log[0]);
-        return;
+        int log_length = 0;
+        glGetProgramiv(program_ID, GL_INFO_LOG_LENGTH, &log_length);
+        std::vector<GLchar> info_log(log_length);
+        glGetProgramInfoLog(program_ID, log_length, &log_length, &info_log[0]);
+        throw;
   }
+  return;
 }
 
 } // namespace Cluster

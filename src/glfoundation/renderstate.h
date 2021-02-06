@@ -32,7 +32,7 @@ public:
   void draw_screen_quad();
   GLuint get_screen_quad_handle() const;
 
-  void set_clear_color(glm::vec3 &color);
+  void set_clear_color(const glm::vec4 &color);
   const glm::mat4* get_project_transform() const;
   const glm::mat4* get_view_transform() const;
   const glm::mat4* get_model_transform() const;
@@ -43,7 +43,7 @@ public:
 private:
   GLuint m_screen_quad_ID;
   unsigned int m_active_texture_binding_point;
-  glm::vec3 m_clear_color;
+  glm::vec4 m_clear_color;
 
   glm::mat4 m_project_transform;
   glm::mat4 m_view_transform;

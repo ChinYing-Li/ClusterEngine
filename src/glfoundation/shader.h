@@ -13,9 +13,20 @@ public:
     Shader() = default;
     Shader(const std::filesystem::path path_to_vert,
            const std::filesystem::path path_to_frag,
-           const std::filesystem::path path_to_geo,
-           const std::string name);
+           const std::filesystem::path path_to_geo = "");
     ~Shader() = default;
+
+    const static unsigned int m_num_usage;
+    enum Usage
+    {
+      BLOOM,
+      BLUR,
+      DIRECT_LIGHTING,
+      GAMMA_CORRECT,
+      SKYBOX,
+      TEXTURE,
+      TONEMAP,
+    };
 
     void use();
     GLuint get_ID() noexcept;
@@ -44,8 +55,8 @@ private:
     std::string read_code(const std::filesystem::path& path_to_shader);
     void compile(GLuint& shaderID,
                         const std::string& shader_code);
-    void compile_check(GLuint shaderID);
-    void link_check(GLuint programID);
+    void check_compilation(GLuint shaderID);
+    void check_linking(GLuint programID);
 };
 
 } // namespace Cluster

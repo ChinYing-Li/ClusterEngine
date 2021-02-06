@@ -64,9 +64,9 @@ void Deferred::create_backbuffer(unsigned int width, unsigned int height)
 
 void Deferred::create_shadowmaps(Scene& scene)
 {
-  for (auto light : scene.get_all_lights())
+  for (auto light : scene.get_light_vec())
   {
-    if (light->get_type() == Light::Type::LT_Directional)
+    if (light->get_type() == Light::Type::DIRECTIONAL)
     {
       // light->m_shadowbuffer.;
 
@@ -131,7 +131,7 @@ void Deferred::render_shadow_maps(const Scene& scene)
   glPolygonOffset(m_poly_offset_factor, m_poly_offset_units);
   glDepthMask(GL_TRUE);
 
-  for(auto light_ptr: scene.get_all_lights())
+  for(auto light_ptr: scene.get_light_vec())
   {
 
   }

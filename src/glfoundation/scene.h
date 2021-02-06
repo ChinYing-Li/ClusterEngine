@@ -1,12 +1,13 @@
 #pragma once
 
-#include<vector>
+#include <vector>
 
 #include "light.h"
 #include "skybox.h"
 
 namespace Cluster{
-
+class Forward;
+class Deferred;
 /**
  * @brief This class contains static object that are to be rendered.
  */
@@ -17,7 +18,7 @@ public:
 
   void set_skybox(std::shared_ptr<Skybox> skybox, bool override);
   void add_light(std::shared_ptr<Light> light, int index);
-  const std::vector<std::shared_ptr<Light>>& get_all_lights() const;
+  const std::vector<std::shared_ptr<Light>>& get_light_vec() const;
 
 private:
   std::shared_ptr<Skybox> m_skybox;

@@ -88,7 +88,7 @@ set_shader(int index,
 SpotLight::
 SpotLight():
 Light(),
-  m_type(Type::LT_Point)
+  m_type(Type::POINTLIGHT)
 {
     m_is_local = true;
     m_is_spotlight = true;

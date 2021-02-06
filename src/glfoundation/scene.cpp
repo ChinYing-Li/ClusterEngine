@@ -34,7 +34,7 @@ add_light(std::shared_ptr<Light> light, int index = -1)
 
 
 const std::vector<std::shared_ptr<Light>>& Scene::
-get_all_lights() const
+get_light_vec() const
 {
   return m_lights;
 }

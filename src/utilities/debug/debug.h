@@ -2,8 +2,9 @@
 
 #include "glincludes.h"
 
-struct glsl_type_set {
-  GLenum      type;
+struct glsl_type_set
+{
+  GLenum type;
   const char* name;
 };
 

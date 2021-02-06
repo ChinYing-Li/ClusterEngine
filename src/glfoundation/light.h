@@ -23,9 +23,9 @@ public:
 
     enum Type
     {
-      LT_Spot = 0,
-      LT_Point,
-      LT_Directional,
+      SPOTLIGHT,
+      POINTLIGHT,
+      DIRECTIONAL,
     };
 
     void turn_off();
@@ -47,7 +47,7 @@ protected:
     class ForwardCluster;
 
     bool m_on_state = true;
-    bool m_is_spotlight = false;
+    bool m_is_spotlight = false; // TODO: remove this redundant variable
     bool m_is_local = false;
 
     float m_const_atten;
@@ -59,7 +59,7 @@ protected:
 
     TextureCubemap m_shadowmap;
     FrameBuffer m_framebuffer;
-    const Type m_type = Type::LT_Spot;
+    const Type m_type = Type::SPOTLIGHT;
 };
 
 /*
@@ -84,7 +84,7 @@ protected:
     float m_exponent;
     glm::vec3 m_position;
     glm::vec3 m_conedirection;
-    const Type m_type = Type::LT_Spot;
+    const Type m_type = Type::SPOTLIGHT;
 };
 
 /*
@@ -106,7 +106,7 @@ protected:
     class ForwardCluster;
 
     glm::vec3 m_position;
-    const Type m_type = Type::LT_Point;
+    const Type m_type = Type::POINTLIGHT;
 };
 
 /*!
@@ -132,7 +132,7 @@ protected:
     glm::mat4 m_shadowspace;
     Texture2D m_shadowmap;
     FrameBuffer m_shadowbuffer;
-    const Type m_type = Type::LT_Directional;
+    const Type m_type = Type::DIRECTIONAL;
 };
 
 } // namespace Cluster

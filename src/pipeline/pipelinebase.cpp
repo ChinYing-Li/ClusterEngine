@@ -12,15 +12,6 @@ PipelineBase():
 PipelineBase::
 ~PipelineBase()
 {
-  for(FrameBuffer* fb_ptr: m_hdr_back_buffers)
-  {
-    delete fb_ptr;
-  }
-
-  for(FrameBuffer* fb_ptr: m_ldr_back_buffers)
-  {
-    delete fb_ptr;
-  }
 }
 
 void PipelineBase::
@@ -98,4 +89,5 @@ reset_backbuffer(std::vector<FrameBuffer*>& back_buffer)
   }
   back_buffer.clear();
 }
+
 }

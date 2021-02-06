@@ -3,7 +3,7 @@
 namespace Cluster{
 RenderState::
 RenderState():
-  m_clear_color(0.0, 1.0, 0.0),
+  m_clear_color(glm::vec4(1.0, 0.0, 0.0, 1.0)),
   m_settings(get_default_settings())
 {
   glGenVertexArrays(1, &m_screen_quad_ID);
@@ -11,14 +11,18 @@ RenderState():
 
 GL_Capabilities RenderState::get_default_settings()
 {
-  GL_Capabilities default_settings = {{BLEND, false},
-                                  {CULL, false},
-                                  {DEPTH_TEST, false},
-                                  {STENCIL_TEST, false},
-                                  {POLYGON_OFFSET_FILL, false}};
+  GL_Capabilities default_settings =
+  {
+    {BLEND, false},
+    {CULL, false},
+    {DEPTH_TEST, false},
+    {STENCIL_TEST, false},
+    {POLYGON_OFFSET_FILL, false}
+  };
   return default_settings;
 }
 
+// TODO: Seriously, I don't think these two functions are useful
 void RenderState::
 gl_enable(GL_Capability setting)
 {
@@ -71,7 +75,7 @@ get_screen_quad_handle() const
 }
 
 void RenderState::
-set_clear_color(glm::vec3 &color)
+set_clear_color(const glm::vec4 &color)
 {
   m_clear_color = color;
 }
