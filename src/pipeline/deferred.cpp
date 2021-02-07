@@ -2,7 +2,8 @@
 #include "Irenderpass.h"
 #include "scene.h"
 
-namespace Cluster{
+namespace Cluster
+{
 namespace fs = std::filesystem;
 extern fs::path shader_dir;
 float Deferred::m_poly_offset_factor = 3.0;
@@ -71,6 +72,35 @@ void Deferred::
 render_objects(const Shader& shader, const Scene& scene)
 {
 
+}
+
+void Deferred::update_frame(const Scene &scene)
+{
+  gl_debug();
+  m_renderstate.set_clear_color(glm::vec4(1.0, 0.0, 1.0, 0.4));
+  render_shadow_maps(scene);
+  render_gbuffer();
+
+  // High dynamic range rendering
+  m_hdr_framebuffer.bind(FrameBuffer::NORMAL);
+  for(const std::shared_ptr<RenderPass>& pass: m_hdr_passes)
+  {
+    pass->set_render_target(m_hdr_framebuffer.get_color_texture());
+    pass->render(m_renderstate, scene);
+  }
+
+  // Tonemapping
+  m_tonemap_pass->set_render_target(0, m_hdr_framebuffer.get_color_texture());
+  m_ldr_framebuffer.bind(FrameBuffer::DRAW);
+  m_tonemap_pass->render(m_renderstate, scene);
+
+  // Low dynamic range rendering
+  for(const std::shared_ptr<RenderPass>& pass: m_ldr_passes)
+  {
+    pass->set_render_target(m_ldr_framebuffer.get_color_texture());
+
+  }
+  render_framebuffers(m_ldr_framebuffer);
 }
 
 void Deferred::

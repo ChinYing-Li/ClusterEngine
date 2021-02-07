@@ -149,34 +149,21 @@ namespace objl
             illum = 0;
         }
 
-        // Material Name
-        std::string name;
-        // Ambient Color
-        Vector3 Ka;
-        // Diffuse Color
-        Vector3 Kd;
-        // Specular Color
-        Vector3 Ks;
-        // Specular Exponent
-        float Ns;
-        // Optical Density
-        float Ni;
-        // Dissolve
-        float d;
-        // Illumination
-        int illum;
-        // Ambient Texture Map
-        std::string map_Ka;
-        // Diffuse Texture Map
-        std::string map_Kd;
-        // Specular Texture Map
-        std::string map_Ks;
-        // Specular Hightlight Map
-        std::string map_Ns;
-        // Alpha Texture Map
-        std::string map_d;
-        // Bump Map
-        std::string map_bump;
+        std::string name; // Material Name
+        Vector3 Ka; // Ambient Color
+        Vector3 Kd; // Diffuse Color
+        Vector3 Ks; // Specular Color
+        float Ns; // Specular Exponent
+        float Ni; // Optical Density
+        float d; // Dissolve
+        int illum; // Illumination
+
+        std::string map_Ka; // Ambient Texture Map
+        std::string map_Kd; // Diffuse Texture Map
+        std::string map_Ks; // Specular Texture Map
+        std::string map_Ns; // Specular Hightlight Map
+        std::string map_d; // Alpha Texture Map
+        std::string map_bump; // Bump Map
     };
 
     // Structure: Mesh

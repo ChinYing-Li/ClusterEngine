@@ -8,7 +8,8 @@
 #include "renderstate.h"
 #include "shader.h"
 
-namespace Cluster {
+namespace Cluster
+{
 
 class Scene;
 
@@ -21,6 +22,7 @@ public:
   void virtual resize(unsigned int width, unsigned int height) override;
   void virtual render_scene(const Shader& shader, const Scene& scene) override;
   void virtual render_objects(const Shader& shader, const Scene& scene) override;
+  void virtual update_frame(const Scene& scene) override;
 
 protected:
   static float m_poly_offset_factor;

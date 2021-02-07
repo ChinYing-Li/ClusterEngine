@@ -4,7 +4,8 @@ namespace Cluster
 {
 PipelineBase::
 PipelineBase():
-  m_hdr_framebuffer(800, 600)
+  m_hdr_framebuffer(800, 600),
+  m_ldr_framebuffer(800, 600)
 {
 
 }
@@ -13,6 +14,7 @@ PipelineBase::
 ~PipelineBase()
 {
 }
+
 
 void PipelineBase::
 set_resource_mng(std::unique_ptr<ResourceManager> resource_mng)

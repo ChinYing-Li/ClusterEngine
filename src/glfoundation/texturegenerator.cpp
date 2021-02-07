@@ -1,3 +1,4 @@
+#include "src/ext/stb_image.h"
 #include "texturegenerator.h"
 
 namespace Cluster
@@ -83,5 +84,28 @@ std::shared_ptr<Texture2D> generate_ldr_texture(const unsigned int width, const 
   ldr_texture->set_texture_param(GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
   // release
   return ldr_texture;
+}
+
+std::shared_ptr<Texture2D> load_texture_from_file(fs::path texture_path, Texture::Type type)
+{
+  // TODO: Check whether this function is needed
+  int n_channels = 0;
+  int width = 0;
+  int height = 0;
+  stbi_set_flip_vertically_on_load(true);
+  unsigned char* file_data;
+  std::shared_ptr<Texture2D> texture_ptr = std::make_shared<Texture2D>();
+
+  switch (type)
+  {
+  case Texture::GRAYSCALE:
+    file_data = stbi_load(texture_path.c_str(), &width, &height, &n_channels, STBI_grey);
+    break;
+  case Texture::LDR:
+    file_data = stbi_load(texture_path.c_str(), &width, &height, &n_channels, STBI_rgb_alpha);
+    break;
+  case Texture::HDR:
+    break;
+  }
 }
 }

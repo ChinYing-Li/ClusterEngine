@@ -1,14 +1,17 @@
 #pragma once
 
 #include "globject.h"
+
 // Forward declarations
 namespace objl
 {
-class Loader; class Material; class Mesh;
+class Loader;
+class Material;
+class Mesh;
 }
 
 namespace Cluster{
-class GameData;
+class ResourceManager;
 
 /*
  *
@@ -16,12 +19,10 @@ class GameData;
 class Mesh final : public GLObejct
 {
 public:
-    Mesh(objl::Mesh& mesh, std::shared_ptr<GameData> data_ptr, unsigned int num_instance);
+    Mesh(objl::Mesh& mesh, ResourceManager* resource_mng, unsigned int num_instance);
     ~Mesh() = default;
 
     void draw(GLuint& shaderID) override;
-
-    std::string name;
     void send_instance_matrices(std::vector<glm::mat4>& instance_models) override;
 
 private:

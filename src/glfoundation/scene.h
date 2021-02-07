@@ -5,9 +5,11 @@
 #include "light.h"
 #include "skybox.h"
 
-namespace Cluster{
+namespace Cluster
+{
 class Forward;
 class Deferred;
+
 /**
  * @brief This class contains static object that are to be rendered.
  */
@@ -23,6 +25,7 @@ public:
 private:
   std::shared_ptr<Skybox> m_skybox;
   std::vector<std::shared_ptr<Light>> m_lights;
+  std::vector<std::shared_ptr<GLObejct>> m_objects;
 };
 } // namespace Cluster
 

@@ -99,10 +99,10 @@ init_from_file(const std::filesystem::path& path, Texture::Type type)
 
     switch(type)
     {
-      case Texture::Type::GRAYSCALE:
+      case Texture::GRAYSCALE:
         data = stbi_load(path.c_str(), &m_width, &m_height, &num_channels, STBI_grey);
         break;
-      case Texture::Type::RGBA:
+      case Texture::LDR:
         data = stbi_load(path.c_str(), &m_width, &m_height, &num_channels, STBI_rgb_alpha);
         break;
       case Texture::Type::HDR:

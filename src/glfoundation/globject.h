@@ -34,7 +34,7 @@ public:
     void virtual send_instance_matrices(std::vector<glm::mat4>& instance_models){};
     void init(GLenum primitive_mode, int numVertices);
 
-    void translate(float x_displacement, float y_displacement, float z_displacement);
+    void translate(const glm::vec4 translation);
     void rotate_x(float angle);
     void rotate_y(float angle);
     void rotate_z(float angle);

@@ -28,9 +28,6 @@ public:
     void virtual render_objects(const Shader& shader, const Scene& scene);
     void virtual update_frame(const Scene& scene);
 
-    void set_resource_mng(std::unique_ptr<ResourceManager> resource_mng);
-    std::unique_ptr<ResourceManager> return_resource_mng() noexcept;
-
     const FrameBuffer* get_current_framebuffer() const noexcept;
 
     void set_hdr_pass(const std::shared_ptr<RenderPass> pass, const int index = -1);
@@ -57,8 +54,6 @@ protected:
     glm::mat4 m_project_transform;
     glm::mat4 m_view_transform;
     glm::mat4 m_model_transform;
-
-    std::unique_ptr<ResourceManager> m_resmanager_ptr = nullptr;
     std::vector<GLObejct*> m_objects;
 
     FrameBuffer m_hdr_framebuffer;
@@ -71,11 +66,12 @@ protected:
 
     std::vector<std::shared_ptr<RenderPass>> m_hdr_passes;
     std::vector<std::shared_ptr<RenderPass>> m_ldr_passes;
-    std::shared_ptr<TonemapPass> m_tonemappass;
+    std::shared_ptr<TonemapPass> m_tonemap_pass;
 
     void set_pass(const std::shared_ptr<RenderPass> pass, std::vector<std::shared_ptr<RenderPass>>& passes, const int index = -1);
     void print_info(const std::vector<std::shared_ptr<RenderPass>>& passes) const noexcept; // TODO: What's the point of this?
     void reset_backbuffer(std::vector<FrameBuffer*>& back_buffer);
     bool shaders_init_success();
+    void render_object(Shader& shader, GLObejct& object);
 };
 }

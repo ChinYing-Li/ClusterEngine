@@ -39,7 +39,7 @@ public:
     enum Type
     {
       GRAYSCALE = 0,
-      RGBA,
+      LDR,
       HDR,
     };
 

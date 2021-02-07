@@ -1,14 +1,14 @@
 #include "mesh.h"
 #include "objloader.h"
 #include "objobject.h"
+#include "src/utilities/managers/resourcemanager.h"
 
 namespace Cluster{
 Mesh::
 Mesh(objl::Mesh& mesh,
-     std::shared_ptr<GameData> data_ptr,
+     ResourceManager* resource_mng,
      unsigned int numinstance = 0):
 GLObejct(),
-name(mesh.MeshName),
 m_numinstance(numinstance),
 use_maps(6, false)
 {
@@ -23,7 +23,7 @@ use_maps(6, false)
 
     if(m_material_ptr->map_Ka.size())
     {
-        map_ptrs["map_Ka"] = data_ptr->resmanager_ptr->retrieve_texture(m_material_ptr->map_Ka);
+        map_ptrs["map_Ka"] = resource_mng->retrieve_texture(m_material_ptr->map_Ka);
         use_maps[0] = (map_ptrs["map_Ka"] != nullptr);
     }
     if(m_material_ptr->map_Kd.size())
