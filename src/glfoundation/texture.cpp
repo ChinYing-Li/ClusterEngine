@@ -10,18 +10,12 @@
 
 namespace Cluster
 {
+unsigned int Texture2D::NUM_TEXTURE2D_TYPES = 5;
+
 Texture::
 Texture():
 m_initialized(false),
   m_binding_point(-1)
-{
-    init();
-}
-
-Texture::
-Texture(const std::string name):
-m_initialized(false),
-   m_binding_point(-1)
 {
     init();
 }
@@ -40,7 +34,8 @@ bind(const GLuint texture_binding_point)
   if (texture_binding_point > MAX_NUM_TEXTURE_BINDING_POINTS - 1)
   {
     std::cerr << "The given binding point is " << texture_binding_point
-              <<"but the maximum allowed is " << MAX_NUM_TEXTURE_BINDING_POINTS << std::endl;
+              <<"but the maximum allowed is " << MAX_NUM_TEXTURE_BINDING_POINTS
+             << std::endl;
     return;
   }
 
@@ -60,7 +55,6 @@ destroy()
   {
     return;
   }
-
 
 }
 
@@ -93,11 +87,6 @@ Texture2D()
     m_vertex_size = 5;
     bool init_success = init_from_file(path, type);
     if(!init_success) throw;
-}
-
-void Texture2D::init_type()
-{
-    Texture2D::NUM_TEXTURE2D_TYPES = 5;
 }
 
 bool Texture2D::

@@ -4,6 +4,7 @@
 #include <string>
 
 #include "texture.h"
+#include "src/glfoundation/transformation.h"
 #include "Imanagers.h"
 
 namespace Cluster{
@@ -44,11 +45,7 @@ public:
 
 protected:
     bool is_using_EBO = false;
-
-    // Geometry transformation
-    glm::vec3 m_position;
-    glm::vec3 m_rotation;
-    glm::vec3 m_scale;
+    Transformation m_transformation;
 };
 
 } // namespace Cluster

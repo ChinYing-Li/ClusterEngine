@@ -4,7 +4,7 @@ namespace Cluster
 {
 PipelineBase::
 PipelineBase():
-  m_current_frambuffer(800, 600)
+  m_hdr_framebuffer(800, 600)
 {
 
 }
@@ -29,7 +29,7 @@ return_resource_mng() noexcept
 const FrameBuffer* PipelineBase::
 get_current_framebuffer() const noexcept
 {
-    return &m_current_frambuffer;
+    return &m_hdr_framebuffer;
 }
 
 void PipelineBase::

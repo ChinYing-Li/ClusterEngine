@@ -18,7 +18,6 @@ class Texture
 {
 public:
     Texture();
-    Texture(const std::string name);
     ~Texture();
 
     void init();
@@ -65,17 +64,15 @@ public:
     ~Texture2D() = default;
 
     inline void set_vertexattrib() override;
-
-    static void init_type();
     static unsigned int NUM_TEXTURE2D_TYPES;
 
-    enum T2D_Usage
+    enum Usage
     {
-        TU_albedo = 0,
-        TU_bump,
-        TU_emission,
-        TU_normal,
-        TU_stencil,
+        ALBEDO = 0,
+        BUMP,
+        EMISSION,
+        NORMAL,
+        STENCIL,
     };
 
     void set_dimensions(unsigned int width, unsigned int height) noexcept;

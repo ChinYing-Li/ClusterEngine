@@ -4,8 +4,9 @@
 
 namespace Cluster{
 Light::Light():
-m_const_atten(10.0f),
-m_linear_atten(10.0f)
+  m_const_atten(10.0f),
+  m_linear_atten(10.0f),
+  m_shadowbuffer(800, 600)
 {}
 
 bool Light::
@@ -26,6 +27,27 @@ turn_off()
 {
     m_on_state = false;
     return;
+}
+
+TextureCubemap& Light::
+get_shadowmap()
+{
+  return m_shadowmap;
+}
+
+void Light::
+setup_shadowbuffer(unsigned int width, unsigned int height)
+{
+  m_shadowbuffer.create(width, height);
+  m_shadowbuffer.bind(FrameBuffer::NORMAL);
+  m_shadowbuffer.disable_color();
+  m_shadowbuffer.release();
+}
+
+Light::Type Light::
+get_type() const
+{
+    return m_type;
 }
 
 void Light::
@@ -57,12 +79,6 @@ void Light::
 set_ambient_strength(const glm::vec3 new_amb_strength)
 {
     m_ambient_strength = new_amb_strength;
-}
-
-Light::Type Light::
-get_type() const
-{
-    return m_type;
 }
 
 void Light::

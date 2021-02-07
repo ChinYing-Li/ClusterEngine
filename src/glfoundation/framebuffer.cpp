@@ -4,24 +4,24 @@
 #include "renderstate.h"
 
 namespace Cluster{
-FrameBuffer::FrameBuffer(unsigned int width, unsigned int height):
-    m_width(width),
-    m_height(height),
-  m_color_textures()
+FrameBuffer::
+FrameBuffer(unsigned int width, unsigned int height):
+  m_width(width),
+  m_height(height),
+  m_color_textures(MAX_NUM_COLOR_TEXTURE, nullptr)
 {
-  init();
+  glGenFramebuffers(1, &m_fbo);
 }
 
-void FrameBuffer::
-init()
+FrameBuffer::~FrameBuffer()
 {
-    glGenFramebuffers(1, &m_FBO);
+  glDeleteFramebuffers(1, &m_fbo);
 }
 
 void FrameBuffer::
 bind(const Usage usage) const noexcept
 {
-    glBindFramebuffer(usage, m_FBO);
+    glBindFramebuffer(usage, m_fbo);
 
     if (usage == Usage::NORMAL)
     {
@@ -38,8 +38,7 @@ release() const noexcept
 void FrameBuffer::
 check_status() const noexcept
 {
-  GLuint status = glCheckFramebufferStatus(GL_FRAMEBUFFER);
-
+  GLuint status = glCheckNamedFramebufferStatus(m_fbo, GL_FRAMEBUFFER);
   if (status != GL_FRAMEBUFFER_COMPLETE)
   {
     switch (status)
@@ -68,14 +67,48 @@ check_status() const noexcept
 }
 
 void FrameBuffer::
-attach_texture(GLuint attachment, std::shared_ptr<Texture2D> texture, unsigned int mipmap_level)
+enable_color(GLenum mode)
 {
-    glFramebufferTexture(GL_FRAMEBUFFER, attachment, texture->get_ID(), mipmap_level);
+  glReadBuffer(mode);
+  glDrawBuffer(mode);
+}
+
+void FrameBuffer::
+disable_color()
+{
+  glReadBuffer(GL_NONE);
+  glDrawBuffer(GL_NONE);
+}
+
+void FrameBuffer::
+reset()
+{
+  std::fill(m_color_textures.begin(), m_color_textures.end(), nullptr);
+  m_depth_texture = nullptr;
+  m_width = m_height = 0;
+  glDeleteFramebuffers(1, &m_fbo);
+  m_fbo = -1;
+}
+
+void FrameBuffer::
+create(const unsigned int width, const unsigned int height)
+{
+  m_width = width;
+  m_height = height;
+  glGenFramebuffers(1, &m_fbo);
+}
+
+void FrameBuffer::
+attach_texture(GLuint attachment,
+               std::shared_ptr<Texture2D> texture,
+               unsigned int mipmap_level)
+{
+    glNamedFramebufferTexture(m_fbo, attachment, texture->get_ID(), mipmap_level);
 }
 
 void FrameBuffer::
 attach_color_texture(unsigned int binding_point,
-                      Texture2D& texture,
+                     std::shared_ptr<Texture2D> texture,
                      unsigned int mipmap_level)
 {
   if (binding_point > MAX_NUM_COLOR_TEXTURE)
@@ -86,17 +119,17 @@ attach_color_texture(unsigned int binding_point,
   }
 
   attach_texture(GL_COLOR_ATTACHMENT0 + binding_point, texture, mipmap_level);
-  m_color_textures[binding_point] = *texture;
+  m_color_textures[binding_point] = texture;
 }
 
 void FrameBuffer::
-attach_depth_texture(Texture2D& texture)
+attach_depth_texture(std::shared_ptr<Texture2D> texture)
 {
   attach_texture(GL_DEPTH_ATTACHMENT, texture, 0);
 }
 
 void FrameBuffer::
-attach_depth_stencil_texture(Texture2D& texture)
+attach_depth_stencil_texture(std::shared_ptr<Texture2D> texture)
 {
   attach_texture(GL_DEPTH_STENCIL_ATTACHMENT, texture, 0);
 }
@@ -116,7 +149,8 @@ set_cubemap(GLenum attachment_target,
     }
 }
 
-Texture2D& FrameBuffer::get_color_texture(unsigned int binding_point)
+std::shared_ptr<Texture2D>& FrameBuffer::
+get_color_texture(unsigned int binding_point)
 {
   return m_color_textures[binding_point];
 }

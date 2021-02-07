@@ -3,16 +3,31 @@
 #include "scene.h"
 
 namespace Cluster{
-
+namespace fs = std::filesystem;
+extern fs::path shader_dir;
 float Deferred::m_poly_offset_factor = 3.0;
 
-Deferred::Deferred():
-  m_gbuffer(800, 600),
-  m_framebuffer(800, 600),
-  m_gbuffer_shader("src/shader/model.vert", "src/shader/gbuffer.frag", "", ""),
-  m_texture_shader("src/shader/quad.vert", "src/shader/texture.frag", "", ""),
-  m_shadow_shader("src/shader/model.vert", "src/shader/shadow.frag", "", "")
+Deferred::
+Deferred():
+  PipelineBase(),
+  m_framebuffer(800, 600)
 {
+  m_gbuffer = std::make_unique<GBuffer>(800, 600);
+  fs::path world_vert = shader_dir / fs::path("position.vert");
+  fs::path quad_vert = shader_dir / fs::path("quad.vert");
+
+  try
+  {
+    m_shaders.insert({Shader::GBUFFER, std::make_unique<Shader>(world_vert, shader_dir / fs::path("gbuffer.frag"))});
+    m_shaders.insert({Shader::SHADOW, std::make_unique<Shader>(world_vert, shader_dir / fs::path("shadow.frag"))});
+    // TODO: write texture.frag
+    m_shaders.insert({Shader::TEXTURE, std::make_unique<Shader>(quad_vert, shader_dir / fs::path("texture.frag"))});
+  }
+  catch (std::exception& excp)
+  {
+    // TODO:
+    throw;
+  }
 }
 
 void Deferred::
@@ -22,14 +37,16 @@ setup(unsigned int width, unsigned int height, Scene& scene)
   light_pass->set_gbuffer(m_gbuffer);
 
   m_renderstate.gl_enable(GL_Capability::CULL);
-  render_shadow_maps();
+  render_shadow_maps(scene);
 }
 
 void Deferred::
 resize(unsigned int width, unsigned int height)
 {
-  m_width = width; m_height = height;
+  m_width = width;
+  m_height = height;
   m_gbuffer = std::make_shared<GBuffer>(m_width, m_height);
+  create_backbuffer(width, height);
 
   for(auto pass_ptr: m_hdr_passes)
   {
@@ -45,37 +62,61 @@ resize(unsigned int width, unsigned int height)
 
 
 void Deferred::
-render_scene(const Scene& scene)
-{
-
-}
-void Deferred::render_objects()
+render_scene(const Shader& shader, const Scene& scene)
 {
 
 }
 
-void Deferred::create_backbuffer(unsigned int width, unsigned int height)
+void Deferred::
+render_objects(const Shader& shader, const Scene& scene)
 {
-  m_framebuffer.bind(FrameBuffer::NORMAL);
-  m_framebuffer.attach_color_texture(0, );
-  m_framebuffer.attach_color_texture(1, );
-  m_framebuffer.attach_depth_stencil_texture();
+
 }
 
-void Deferred::create_shadowmaps(Scene& scene)
+void Deferred::
+create_backbuffer(unsigned int width, unsigned int height)
+{
+  m_ldr_framebuffer.reset();
+  m_ldr_framebuffer.create(width, height);
+  m_hdr_framebuffer.reset();
+  m_hdr_framebuffer.create(width, height);
+
+  for(int i = 0; i < 2; ++i)
+  {
+    m_ldr_framebuffer.attach_color_texture(i, generate_ldr_texture(width, height));
+    m_hdr_framebuffer.attach_color_texture(i, generate_hdr_texture(width, height));
+  }
+
+  m_ldr_framebuffer.check_status();
+  m_ldr_framebuffer.release();
+  m_hdr_framebuffer.check_status();
+  m_hdr_framebuffer.release();
+}
+
+void Deferred::
+create_shadowmaps(Scene& scene)
 {
   for (auto light : scene.get_light_vec())
   {
-    if (light->get_type() == Light::Type::DIRECTIONAL)
+    light->setup_shadowbuffer(m_width, m_height);
+    TextureCubemap& shadowmap = light->get_shadowmap();
+    switch (light->get_type())
     {
-      // light->m_shadowbuffer.;
+    case Light::DIRECTIONAL:
+      // TODO: Light classes have their own shadowbuffer !>
+      break;
+    case Light::POINTLIGHT:
+      break;
 
     }
   }
 }
 
-void Deferred::render_gbuffer()
+void Deferred::
+render_gbuffer()
 {
+  nvtxRangePushA("Render GBuffer");
+
   m_renderstate.gl_enable(STENCIL_TEST);
   m_renderstate.gl_enable(DEPTH_TEST);
 
@@ -91,10 +132,15 @@ void Deferred::render_gbuffer()
 
   render_scene();
   glStencilMask(0x00);
+
+  nvtxRangePop();
 }
 
-void Deferred::render_framebuffers(const FrameBuffer& framebuffer)
+void Deferred::
+render_framebuffers(const FrameBuffer& framebuffer)
 {
+  nvtxRangePushA("Render FrameBuffer");
+
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
   glDrawBuffer(GL_BACK);
   glClear(GL_COLOR_BUFFER_BIT);
@@ -104,9 +150,12 @@ void Deferred::render_framebuffers(const FrameBuffer& framebuffer)
   m_framebuffer.get_color_texture_in_use().bind(0);
   m_texture_shader.set_uniform1i("u_texture", 0);
   m_renderstate.draw_screen_quad();
+
+  nvtxRangePop();
 }
 
-void Deferred::render_depth_map(const Scene& scene)
+void Deferred::
+render_depth_map(const Scene& scene)
 {
   nvtxRangePushA("DEPTH");
 
@@ -121,9 +170,10 @@ void Deferred::render_depth_map(const Scene& scene)
   nvtxRangePop();
 }
 
-void Deferred::render_shadow_maps(const Scene& scene)
+void Deferred::
+render_shadow_maps(const Scene& scene)
 {
-  nvtxRangePushA("DEPTH");
+  nvtxRangePushA("Render Shadow maps");
 
   m_renderstate.gl_enable(DEPTH_TEST);
   m_renderstate.gl_enable(POLYGON_OFFSET_FILL);

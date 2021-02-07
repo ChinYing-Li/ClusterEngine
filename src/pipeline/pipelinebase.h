@@ -61,7 +61,8 @@ protected:
     std::unique_ptr<ResourceManager> m_resmanager_ptr = nullptr;
     std::vector<GLObejct*> m_objects;
 
-    FrameBuffer m_current_frambuffer;
+    FrameBuffer m_hdr_framebuffer;
+    FrameBuffer m_ldr_framebuffer;
 
     // We don't have to use smart pointers as there's no ownership involved
     std::vector<FrameBuffer> m_hdr_back_buffers;

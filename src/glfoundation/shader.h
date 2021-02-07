@@ -23,6 +23,8 @@ public:
       BLUR,
       DIRECT_LIGHTING,
       GAMMA_CORRECT,
+      GBUFFER,
+      SHADOW,
       SKYBOX,
       TEXTURE,
       TONEMAP,

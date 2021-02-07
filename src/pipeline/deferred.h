@@ -19,9 +19,8 @@ public:
 
   void virtual setup(unsigned int width, unsigned int height, Scene& scene) override;
   void virtual resize(unsigned int width, unsigned int height) override;
-  void virtual render_scene() override;
-  void virtual render_scene(const Scene& scene, Shader& shader);
-  void virtual render_objects() override;
+  void virtual render_scene(const Shader& shader, const Scene& scene) override;
+  void virtual render_objects(const Shader& shader, const Scene& scene) override;
 
 protected:
   static float m_poly_offset_factor;
@@ -36,7 +35,6 @@ protected:
   void virtual render_shadow_maps(const Scene& scene);
 
   std::shared_ptr<GBuffer> m_gbuffer;
-  FrameBuffer m_framebuffer;
 
   Shader m_gbuffer_shader;
   Shader m_texture_shader;

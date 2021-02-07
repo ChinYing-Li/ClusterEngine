@@ -51,25 +51,32 @@ Forward::
 
 void Forward::resize(unsigned int width, unsigned int height)
 {
-    m_framebuffer = FrameBuffer(width, height);
+    m_framebuffer.reset();
+    m_framebuffer.create(width, height);
     m_framebuffer.bind(FrameBuffer::NORMAL);
     m_framebuffer.attach_color_texture(0, generate_hdr_texture(width, height));
     m_framebuffer.attach_depth_texture(generate_empty_depth_map(width, height));
     m_framebuffer.check_status();
     m_framebuffer.release();
 
-    for(int i = 0; i < 2; ++i)
+    for(FrameBuffer& buffer: m_hdr_back_buffers)
     {
-      m_hdr_back_buffers[i] = FrameBuffer(width, height);
-      m_hdr_back_buffers[i].attach_color_texture(0, generate_hdr_texture(width, height));
-      m_hdr_back_buffers[i].check_status();
-      m_hdr_back_buffers[i].release();
-
-      m_ldr_back_buffers[i] = FrameBuffer(width, height);
-      m_hdr_back_buffers[i].attach_color_texture(0, generate_ldr_texture(width, height));
-      m_hdr_back_buffers[i].check_status();
-      m_hdr_back_buffers[i].release();
+      buffer.reset();
+      buffer.create(width, height);
+      buffer.attach_color_texture(0, generate_hdr_texture(width, height));
+      buffer.check_status();
+      buffer.release();
     }
+
+    for(FrameBuffer& buffer: m_ldr_back_buffers)
+    {
+      buffer.reset();
+      buffer.create(width, height);
+      buffer.attach_color_texture(0, generate_ldr_texture(width, height));
+      buffer.check_status();
+      buffer.release();
+    }
+
   m_renderstate.set_clear_color(m_clear_color);
   glViewport(0, 0, width, height);
 }
@@ -90,11 +97,14 @@ void Forward::
 update_frame(const Scene &scene)
 {
   gl_debug();
-
-  m_framebuffer.bind(FrameBuffer::NORMAL);
+  m_hdr_framebuffer.bind(FrameBuffer::NORMAL);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   render_skybox();
   post_processing(scene);
+
+  m_framebuffer.release();
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  render_framebuffer(*RenderState::get_current_framebuffer());
 }
 
 void Forward::
@@ -134,7 +144,6 @@ post_processing(const Scene &scene)
   shader_in_use->set_uniform1i("u_texture", 0);
   m_renderstate.draw_screen_quad();
 
-
   for(int i = 1; i < 3; ++i)
   {
     for(int j = 0; j < 2; ++j)
@@ -155,10 +164,9 @@ render_skybox()
 }
 
 void Forward::
-render_framebuffer(FrameBuffer& framebuffer)
+render_framebuffer(const FrameBuffer& framebuffer)
 {
-    framebuffer.get_color_texture(0).bind(0);
+    framebuffer.get_color_texture(0)->bind(0);
     m_renderstate.draw_screen_quad();
-
 }
 }

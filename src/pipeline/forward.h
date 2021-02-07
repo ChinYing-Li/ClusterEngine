@@ -32,7 +32,7 @@ public:
     const static glm::vec4 m_clear_color;
 
 protected:
-  void virtual render_framebuffer(FrameBuffer& framebuffer);
+  void virtual render_framebuffer(const FrameBuffer& framebuffer);
   void render_skybox();
 
   FrameBuffer m_framebuffer;

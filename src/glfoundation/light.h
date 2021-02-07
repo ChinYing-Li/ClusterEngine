@@ -30,17 +30,22 @@ public:
 
     void turn_off();
     void turn_on();
-    void set_color(const glm::vec3 new_color);
 
+    Type get_type() const;
+    TextureCubemap& get_shadowmap(); // TODO: Seriously, I don't think this
+    void setup_shadowbuffer(unsigned int width, unsigned int height);
+    void setup_shadowmap();
+
+    void set_color(const glm::vec3 new_color);
     void set_const_attenuation(const float const_atten);
     void set_linear_attenuation(const float linear_atten);
     void set_quadratic_attenuation(const float quad_atten);
     void set_ambient_strength(const glm::vec3 new_amb_strength);
 
     void virtual set_shader(int index, GLuint& shaderID);
-    Type get_type() const;
 
 protected:
+    // TODO: friend classes? Doesn't make sense to me.
     class Deferred;
     class Forward;
     class DeferredCluster;
@@ -58,7 +63,7 @@ protected:
     glm::vec3 m_color;
 
     TextureCubemap m_shadowmap;
-    FrameBuffer m_framebuffer;
+    FrameBuffer m_shadowbuffer;
     const Type m_type = Type::SPOTLIGHT;
 };
 
@@ -130,8 +135,6 @@ protected:
 
     glm::vec3 m_direction;
     glm::mat4 m_shadowspace;
-    Texture2D m_shadowmap;
-    FrameBuffer m_shadowbuffer;
     const Type m_type = Type::DIRECTIONAL;
 };
 
