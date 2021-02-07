@@ -5,7 +5,7 @@
 namespace Cluster
 {
 
-class Cubemap final : public GLObejct
+class Cubemap final : public Renderable
 {
 public:
     Cubemap();
@@ -14,7 +14,7 @@ public:
             const GLfloat *vertex_buffer_data,
             std::vector<std::string>& path_to_texture);
 
-    void draw(GLuint& shaderID) override;
+    void render(GLuint& shaderID) override;
     GLuint texture_buffer;
 private:
     std::vector<std::string> m_texpath;

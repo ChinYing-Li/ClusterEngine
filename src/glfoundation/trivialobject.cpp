@@ -11,9 +11,9 @@ TrivialObject(GLenum primitive_mode,
               const GLfloat *vertex_buffer_data,
               const color_t color,
               GLenum fill_mode):
-GLObejct()
+Renderable()
 {
-    GLObejct::init(primitive_mode, numVertices);
+    Renderable::init(primitive_mode, numVertices);
     m_fillmode      = fill_mode;
     init(vertex_buffer_data, color);
 }
@@ -28,10 +28,10 @@ TrivialObject(GLenum primitive_mode,
               const GLuint *indices,
               const color_t color,
               GLenum fill_mode):
-GLObejct()
+Renderable()
 {
-    GLObejct::init(primitive_mode,numVertices);
-    is_using_EBO = true;
+    Renderable::init(primitive_mode,numVertices);
+    m_using_EBO = true;
     m_num_indices = numindices;
     m_fillmode      = fill_mode;
 
@@ -53,7 +53,7 @@ init(const GLfloat *vertex_buffer_data,
     // Should be done after CreateWindow and before any other GL calls
     glGenVertexArrays(1, &m_VAO); // GLObject
     glGenBuffers (1, &m_VBO); // VBO - vertices
-    glGenBuffers (1, &color_buffer); // VBO - colors
+    glGenBuffers (1, &m_CBO); // VBO - colors
 
     glBindVertexArray (m_VAO); // Bind the GLObject
     glBindBuffer (GL_ARRAY_BUFFER, m_VBO); // Bind the VBO vertices
@@ -67,7 +67,7 @@ init(const GLfloat *vertex_buffer_data,
         (void *) 0                      // array buffer offset
     );
 
-    glBindBuffer (GL_ARRAY_BUFFER, color_buffer); // Bind the VBO colors
+    glBindBuffer (GL_ARRAY_BUFFER, m_CBO); // Bind the VBO colors
     glBufferData (GL_ARRAY_BUFFER, 3 * m_num_vertices * sizeof(GLfloat), color_buffer_data, GL_STATIC_DRAW); // Copy the vertex colors
     glVertexAttribPointer(
         1,                            // attribute 1. Color
@@ -99,7 +99,7 @@ init(const GLfloat *vertex_buffer_data,
 
 /* Render the VBOs handled by GLObject */
 void TrivialObject::
-draw(GLuint& shaderID) {
+render(GLuint& shaderID) {
     // Change the Fill Mode for this object
     glPolygonMode (GL_FRONT_AND_BACK, m_fillmode);
 
@@ -113,9 +113,9 @@ draw(GLuint& shaderID) {
     // Enable Vertex Attribute 1 - Color
     glEnableVertexAttribArray(1);
     // Bind the VBO to use
-    glBindBuffer(GL_ARRAY_BUFFER, color_buffer);
+    glBindBuffer(GL_ARRAY_BUFFER, m_CBO);
 
-    if(is_using_EBO)
+    if(m_using_EBO)
     {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
 

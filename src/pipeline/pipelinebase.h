@@ -54,7 +54,7 @@ protected:
     glm::mat4 m_project_transform;
     glm::mat4 m_view_transform;
     glm::mat4 m_model_transform;
-    std::vector<GLObejct*> m_objects;
+    std::vector<Renderable*> m_objects;
 
     FrameBuffer m_hdr_framebuffer;
     FrameBuffer m_ldr_framebuffer;
@@ -72,6 +72,6 @@ protected:
     void print_info(const std::vector<std::shared_ptr<RenderPass>>& passes) const noexcept; // TODO: What's the point of this?
     void reset_backbuffer(std::vector<FrameBuffer*>& back_buffer);
     bool shaders_init_success();
-    void render_object(Shader& shader, GLObejct& object);
+    void render_object(Shader& shader, Renderable& object);
 };
 }

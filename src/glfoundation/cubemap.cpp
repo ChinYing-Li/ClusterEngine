@@ -6,7 +6,7 @@
 
 namespace Cluster{
 Cubemap::Cubemap():
-GLObejct()
+Renderable()
 {}
 
 Cubemap::
@@ -14,7 +14,7 @@ Cubemap(GLenum primitive_mode,
         int numVertices,
         const GLfloat *vertex_buffer_data,
         std::vector<std::string> &path_to_texture):
-GLObejct()
+Renderable()
 {
     init(primitive_mode, numVertices, vertex_buffer_data, path_to_texture);
 }
@@ -90,7 +90,7 @@ load_texture()
 }
 
 void Cubemap::
-draw(GLuint& shaderID)
+render(GLuint& shaderID)
 {
     // Enable Vertex Attribute 1 - Color
     glBindVertexArray (m_VAO);

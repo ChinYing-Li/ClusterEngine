@@ -6,18 +6,12 @@
 
 namespace Cluster{
 
-GLObejct::GLObejct()
+Renderable::Renderable(int n_vertices)
 {
-
+  m_num_vertices = n_vertices;
 }
 
-void GLObejct::init(GLenum primitive_mode, int numVertices)
-{
-    m_primitivemode = primitive_mode;
-    return;
-}
-
-void GLObejct::set_instance_attrib()
+void Renderable::set_instance_attrib()
 {
     glBindVertexArray(m_VAO);
 
@@ -39,7 +33,7 @@ void GLObejct::set_instance_attrib()
     return;
 }
 
-void GLObejct::
+void Renderable::
 rotate_x(float angle)
 {
 

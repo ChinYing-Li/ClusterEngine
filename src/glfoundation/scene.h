@@ -25,7 +25,7 @@ public:
 private:
   std::shared_ptr<Skybox> m_skybox;
   std::vector<std::shared_ptr<Light>> m_lights;
-  std::vector<std::shared_ptr<GLObejct>> m_objects;
+  std::vector<std::shared_ptr<Renderable>> m_objects;
 };
 } // namespace Cluster
 

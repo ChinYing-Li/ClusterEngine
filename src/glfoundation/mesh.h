@@ -10,31 +10,32 @@ class Material;
 class Mesh;
 }
 
-namespace Cluster{
-class ResourceManager;
-
+namespace Cluster
+{
+class Shader;
 /*
  *
  */
-class Mesh final : public GLObejct
+class Mesh final : public Renderable
 {
 public:
-    Mesh(objl::Mesh& mesh, ResourceManager* resource_mng, unsigned int num_instance);
+    Mesh(objl::Mesh& mesh, unsigned int num_instance);
     ~Mesh() = default;
 
-    void draw(GLuint& shaderID) override;
     void send_instance_matrices(std::vector<glm::mat4>& instance_models) override;
+
+protected:
+    friend class PipelineBase;
+    void render(Shader& shader) override;
 
 private:
     unsigned int m_numinstance;
     void init(objl::Mesh& mesh);
-    void draw_textures(GLuint shaderID);
-    void set_material_uniform(GLuint& shaderID);
+    void draw_textures(Shader& shader);
+    void set_material_uniform(Shader& shader);
 
     objl::Material* m_material_ptr = nullptr;
     std::map<std::string, std::shared_ptr<Texture>> map_ptrs;
-    std::vector<bool> use_maps;
-
 /*map_Ka_ptr -->GL_TEXTURE0
 map_Kd_ptr = nullptr; GL_TEXTURE1
 map_Ks_ptr = nullptr; GL_TEXTURE2
