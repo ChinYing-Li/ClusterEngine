@@ -74,94 +74,95 @@ m_name()
   // TODO: print something to say that we've compiled successfully
 }
 
-void Shader::use()
+void Shader::use() const
 {
     glUseProgram(m_program_ID);
 }
 
 GLuint Shader::
-get_ID() noexcept
+get_ID() const noexcept
 {
     return m_program_ID;
 }
 
 std::string Shader::
-get_name() noexcept
+get_name() const noexcept
 {
     return m_name;
 }
 
 void Shader::
-set_uniform1i(const std::string name, const int data)
+set_uniform1i(const std::string name, const int data) const
 {
   int uniform_location = glGetUniformLocation(m_program_ID, name.c_str());
   glUniform1i(uniform_location, data);
 }
 
 void Shader::
-set_uniform1ui(const std::string name, const unsigned int data)
+set_uniform1ui(const std::string name, const unsigned int data) const
 {
   int uniform_location = glGetUniformLocation(m_program_ID, name.c_str());
   glUniform1ui(uniform_location, data);
 };
 
 void Shader::
-set_uniform1iv(const std::string name, int count, const std::vector<int> &data)
+set_uniform1iv(const std::string name, int count, const std::vector<int> &data) const
 {
   int uniform_location = glGetUniformLocation(m_program_ID, name.c_str());
   glUniform1iv(uniform_location, count, &data[0]);
 }
 
 void Shader::
-set_uniform2i(const std::string name, const std::vector<int> &data)
+set_uniform2i(const std::string name, const std::vector<int> &data) const
 {
   int uniform_location = glGetUniformLocation(m_program_ID, name.c_str());
   glUniform2i(uniform_location, data[0], data[1]);
 }
 
 void Shader::
-set_uniform2ui(const std::string name, const std::vector<unsigned int> &data)
+set_uniform2ui(const std::string name, const std::vector<unsigned int> &data) const
 {
   int uniform_location = glGetUniformLocation(m_program_ID, name.c_str());
   glUniform2ui(uniform_location, data[0], data[1]);
 }
 
 void Shader::
-set_uniform1f(const std::string name, const float value)
+set_uniform1f(const std::string name, const float value) const
 {
   int uniform_location = glGetUniformLocation(m_program_ID, name.c_str());
   glUniform1f(uniform_location, value);
 }
 
 void Shader::
-set_uniform1fv(const std::string name, const int count, const std::vector<float>& values)
+set_uniform1fv(const std::string name, const int count, const std::vector<float>& values) const
 {
   int uniform_location = glGetUniformLocation(m_program_ID, name.c_str());
   glUniform1fv(uniform_location, count, &values[0]);
 }
 
 void Shader::
-set_uniform2f(const std::string name, const glm::vec2 &data)
+set_uniform2f(const std::string name, const glm::vec2 &data) const
 {
   int uniform_location = glGetUniformLocation(m_program_ID, name.c_str());
   glUniform2f(uniform_location, data[0], data[1]);
 }
 
 void Shader::
-set_uniform3f(const std::string name, const glm::vec3 &data)
+set_uniform3f(const std::string name, const float x, const float y, const float z) const
 {
   int uniform_location = glGetUniformLocation(m_program_ID, name.c_str());
-  glUniform3f(uniform_location, data[0], data[1], data[2]);
+  glUniform3f(uniform_location, x, y, z);
 }
 
 void Shader::
-set_uniform3fv(const std::string name, int count, const std::vector<glm::vec3> &data)
+set_uniform3fv(const std::string name, int count, const std::vector<glm::vec3> &data) const
 {
   int uniform_location = glGetUniformLocation(m_program_ID, name.c_str());
+  // TODO: Finish set_uniform3fv
 }
 
 void Shader::
-set_uniformMat4f(const std::string name, const glm::mat4& data)
+set_uniformMat4f(const std::string name, const glm::mat4& data) const
 {
   int uniform_location = glGetUniformLocation(m_program_ID, name.c_str());
   glUniformMatrix4fv(uniform_location, 1, GL_FALSE, glm::value_ptr(data));

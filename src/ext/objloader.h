@@ -151,16 +151,6 @@ namespace objl
             illum = 0;
         }
 
-        enum MapType
-        {
-          K_AMBIENT,
-          K_DIFFUSE,
-          K_SPECULAR,
-          N_SPECULAR,
-          ALPHA,
-          BUMP,
-        };
-
         std::string name; // Material Name
         Vector3 Ka; // Ambient Color
         Vector3 Kd; // Diffuse Color

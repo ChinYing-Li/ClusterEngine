@@ -20,7 +20,7 @@ public:
     Renderable(int n_vertices);
     ~Renderable() = default;
 
-    void virtual render(Shader& shader) = 0;
+    void virtual render(const Shader& shader) = 0;
     void set_instance_attrib();
     void virtual send_instance_matrices(std::vector<glm::mat4>& instance_models){};
 

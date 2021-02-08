@@ -1,6 +1,6 @@
 #include "mesh.h"
+#include "src/utilities/material.h"
 #include "objloader.h"
-#include "objobject.h"
 #include "src/glfoundation/shader.h"
 
 namespace Cluster
@@ -17,41 +17,13 @@ m_numinstance(numinstance)
     m_primitivemode = GL_TRIANGLES;
 
     init(mesh);
-    m_material_ptr = new objl::Material(mesh.MeshMaterial);
-
-    if(!m_material_ptr->map_Ka.empty())
-    {
-        map_ptrs["map_Ka"] = resource_mng->retrieve_texture(m_material_ptr->map_Ka);
-        use_maps[0] = (map_ptrs["map_Ka"] != nullptr);
-    }
-    if(m_material_ptr->map_Kd.size())
-    {
-        map_ptrs["map_Kd"] = data_ptr->resmanager_ptr->retrieve_texture(m_material_ptr->map_Kd);
-        use_maps[1] = (map_ptrs["map_Kd"] != nullptr);
-    }
-    if(m_material_ptr->map_Ks.size())
-    {
-        map_ptrs["map_Ks"] = data_ptr->resmanager_ptr->retrieve_texture(m_material_ptr->map_Ks);
-        use_maps[2] = (map_ptrs["map_Ks"] != nullptr);
-    }
-    if(m_material_ptr->map_Ka.size())
-    {
-        map_ptrs["map_Ns"] = data_ptr->resmanager_ptr->retrieve_texture(m_material_ptr->map_Ns);
-        use_maps[3] = (map_ptrs["map_Ns"] != nullptr);
-    }
-    if(m_material_ptr->map_Ka.size())
-    {
-        map_ptrs["map_d"] = data_ptr->resmanager_ptr->retrieve_texture(m_material_ptr->map_d);
-        use_maps[4] = (map_ptrs["map_d"] != nullptr);
-    }
-    if(m_material_ptr->map_bump.size())
-    {
-        map_ptrs["map_bump"] = data_ptr->resmanager_ptr->retrieve_texture(m_material_ptr->map_bump);
-        use_maps[5] = (map_ptrs["map_bump"] != nullptr);
-    }
-    return;
+    m_material_ptr = new Material(mesh.MeshMaterial);
 }
 
+Mesh::~Mesh()
+{
+  delete m_material_ptr;
+}
 
 void Mesh::
 init(objl::Mesh& mesh)
@@ -123,7 +95,7 @@ send_instance_matrices(std::vector<glm::mat4>& instance_models)
 }
 
 void Mesh::
-render(Shader& shader)
+render(const Shader& shader)
 {
     glBindVertexArray (m_VAO);
     glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
@@ -156,7 +128,7 @@ render(Shader& shader)
 }
 
 void Mesh::
-draw_textures(Shader& shader)
+draw_textures(const Shader& shader)
 {
     auto map_it = map_ptrs.begin();
     int count = 0;
@@ -181,10 +153,9 @@ draw_textures(Shader& shader)
 }
 
 void Mesh::
-set_material_uniform(Shader& shader)
+set_material_uniform(const Shader& shader)
 {
-  GLuint shader_id = shader.get_ID();
-    glUseProgram(shader_id);
+    shader.use();
     glUniform3f(glGetUniformLocation(shader_id, "material.ambient"), m_material_ptr->Ka.X, m_material_ptr->Ka.Y, m_material_ptr->Ka.Z);
     glUniform3f(glGetUniformLocation(shader_id, "material.diffuse"), m_material_ptr->Kd.X, m_material_ptr->Kd.Y, m_material_ptr->Kd.Z);
     glUniform3f(glGetUniformLocation(shader_id, "material.specular"), m_material_ptr->Ks.X, m_material_ptr->Ks.Y, m_material_ptr->Ks.Z);

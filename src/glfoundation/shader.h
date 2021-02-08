@@ -30,22 +30,22 @@ public:
       TONEMAP,
     };
 
-    void use();
-    GLuint get_ID() noexcept;
-    std::string get_name() noexcept;
+    void use() const;
+    GLuint get_ID() const noexcept;
+    std::string get_name() const noexcept;
 
-    void set_uniform1i(const std::string name, const int data);
+    void set_uniform1i(const std::string name, const int data) const;
     void set_uniform1ui(const std::string name, const unsigned int data);
-    void set_uniform1iv(const std::string name, const int count, const std::vector<int> &data);
-    void set_uniform2i(const std::string name, const std::vector<int> &data);
-    void set_uniform2ui(const std::string name, const std::vector<unsigned int> &data);
-    void set_uniform1f(const std::string name, const float value);
-    void set_uniform1fv(const std::string name, const int count, const std::vector<float>& values);
-    void set_uniform2f(const std::string name, const glm::vec2 &data);
-    void set_uniform2fv(const std::string name, const int num_element, const std::vector<glm::vec2> &data);
-    void set_uniform3f(const std::string name, const glm::vec3 &data);
-    void set_uniform3fv(const std::string name, const int count, const std::vector<glm::vec3> &data);
-    void set_uniformMat4f(const std::string name, const glm::mat4 &data);
+    void set_uniform1iv(const std::string name, const int count, const std::vector<int> &data) const;
+    void set_uniform2i(const std::string name, const std::vector<int> &data) const;
+    void set_uniform2ui(const std::string name, const std::vector<unsigned int> &data) const;
+    void set_uniform1f(const std::string name, const float value) const;
+    void set_uniform1fv(const std::string name, const int count, const std::vector<float>& values) const;
+    void set_uniform2f(const std::string name, const glm::vec2 &data) const;
+    void set_uniform2fv(const std::string name, const int num_element, const std::vector<glm::vec2> &data) const;
+    void set_uniform3f(const std::string name, const float x, const float y, const float z) const;
+    void set_uniform3fv(const std::string name, const int count, const std::vector<glm::vec3> &data) const;
+    void set_uniformMat4f(const std::string name, const glm::mat4 &data) const;
 
 private:
     GLuint m_program_ID;

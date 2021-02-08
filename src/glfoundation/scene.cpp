@@ -39,5 +39,11 @@ get_light_vec() const
   return m_lights;
 }
 
+const std::vector<std::shared_ptr<Renderable>>& Scene::
+get_object_vec() const
+{
+  return m_objects;
+}
+
 } // namespace Cluster
 

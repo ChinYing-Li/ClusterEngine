@@ -28,7 +28,7 @@ public:
     Obj(fs::path obj_path, unsigned int num_instance = 1);
     ~Obj() = default;
 
-    void virtual render(Shader& shader) override;
+    void virtual render(const Shader& shader) override;
     void set_instance_mat(std::vector<glm::mat4>& instance_mat);
 
 protected:

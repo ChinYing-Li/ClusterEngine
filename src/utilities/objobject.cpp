@@ -7,24 +7,24 @@
 
 namespace Cluster
 {
-extern objl::Loader obj_loader;
+extern objl::Loader g_obj_loader;
 
 Obj::
 Obj(fs::path obj_path, unsigned int num_instance):
 m_instance(num_instance)
 {
-    bool loaded = obj_loader.LoadFile(obj_path.c_str());
+    bool loaded = g_obj_loader.LoadFile(obj_path.c_str());
     if(loaded)
     {
-        for(int i = 0; i < obj_loader.LoadedMeshes.size(); ++i)
+        for(int i = 0; i < g_obj_loader.LoadedMeshes.size(); ++i)
         {
-            m_meshes.push_back(Mesh(obj_loader.LoadedMeshes[i], m_instance));
+            m_meshes.push_back(Mesh(g_obj_loader.LoadedMeshes[i], m_instance));
         }
     }
 }
 
 void Obj::
-render(Shader& shader)
+render(const Shader& shader)
 {
     for(Mesh& mesh: m_meshes)
     {

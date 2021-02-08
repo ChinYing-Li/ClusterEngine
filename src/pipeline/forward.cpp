@@ -17,8 +17,8 @@ Forward::Forward(const Scene& scene):
   PipelineBase(),
   m_framebuffer(800, 600)
 {
-  glEnable(GL_DEPTH_TEST);
-  glEnable(GL_CULL_FACE);
+  m_renderstate.gl_enable(DEPTH_TEST);
+  m_renderstate.gl_enable(CULL);
   glCullFace(GL_BACK);
 
   fs::path world_vert = shader_dir / fs::path("position.vert");
@@ -84,13 +84,12 @@ void Forward::resize(unsigned int width, unsigned int height)
 void Forward::
 render_scene(const Shader &shader, const Scene &scene)
 {
+  // TODO: set the lights
 
-}
-
-void Forward::
-render_objects(const Shader &shader, const Scene &scene)
-{
-
+  for(auto object_ptr: scene.get_object_vec())
+  {
+    object_ptr->render(shader);
+  }
 }
 
 void Forward::
