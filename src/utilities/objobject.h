@@ -13,15 +13,15 @@ namespace fs = std::filesystem;
 namespace objl
 {
     class Loader;
-    class Material;
-    class Mesh;
+    struct Material;
+    struct Mesh;
 }
 
 namespace Cluster
 {
 class Shader;
 
-class Obj : public Renderable
+class Obj final : public Renderable
 {
 public:
     Obj() = delete;

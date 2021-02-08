@@ -6,16 +6,22 @@
 
 namespace Cluster{
 
-Renderable::Renderable(int n_vertices)
+Renderable::
+Renderable(int n_vertices)
 {
   m_num_vertices = n_vertices;
+}
+
+void Renderable::set_num_instances(const unsigned int num_instances)
+{
+  m_num_instances = num_instances;
 }
 
 void Renderable::set_instance_attrib()
 {
     glBindVertexArray(m_VAO);
 
-    // set attribute pointers for matrix (4 times vec4)
+    // set attribute pointers for matrix (4 x vec4)
     glEnableVertexAttribArray(3);
     glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(8*sizeof(float)*m_num_vertices));
     glEnableVertexAttribArray(4);

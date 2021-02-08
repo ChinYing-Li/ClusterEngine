@@ -6,18 +6,16 @@
 namespace Cluster
 {
 Mesh::
-Mesh(objl::Mesh& mesh,
-     unsigned int numinstance = 0):
-Renderable(),
-m_numinstance(numinstance)
+Mesh(objl::Mesh& mesh, fs::path obj_root_dir):
+Renderable()
 {
     m_using_EBO = true;
     m_num_indices = mesh.Indices.size();
     m_num_vertices = mesh.Vertices.size();
-    m_primitivemode = GL_TRIANGLES;
+    m_primitive_mode = GL_TRIANGLES;
 
     init(mesh);
-    m_material_ptr = new Material(mesh.MeshMaterial);
+    m_material_ptr = new Material(mesh.MeshMaterial, obj_root_dir);
 }
 
 Mesh::~Mesh()
@@ -83,13 +81,13 @@ init(objl::Mesh& mesh)
 void Mesh::
 send_instance_matrices(std::vector<glm::mat4>& instance_models)
 {
-    if (m_numinstance == 0) return;
+    if (!m_instanced) return;
 
     glBindVertexArray (m_VAO);
     glBindBuffer (GL_ARRAY_BUFFER, m_VBO);
     glBufferSubData (GL_ARRAY_BUFFER,
-                     m_num_vertices*sizeof(objl::Vertex), //offsest
-                     m_numinstance*sizeof(glm::mat4),
+                     m_num_vertices * sizeof(objl::Vertex), //offsest
+                     m_num_instances * sizeof(glm::mat4),
                      &instance_models[0][0][0]);
     return;
 }
@@ -106,7 +104,7 @@ render(const Shader& shader)
     glEnableVertexAttribArray(2);
     gl_debug();
 
-    if (m_numinstance>0)
+    if (m_instanced)
     {
         glEnableVertexAttribArray(3);
         glEnableVertexAttribArray(4);

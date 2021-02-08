@@ -20,12 +20,9 @@ class Material
 {
 public:
     Material() = delete;
-    explicit Material(objl::Material& objl_material);
+    explicit Material(objl::Material& objl_material, fs::path obj_root_dir);
     ~Material() = default;
 
-    void set_uniform(const Shader& shader);
-
-    static const unsigned int N_MapType;
     enum TextureMapType
     {
       K_AMBIENT,
@@ -36,11 +33,15 @@ public:
       BUMP,
     };
 
+    bool is_texture_in_use(TextureMapType type) const;
+    void set_uniform(const Shader& shader) const;
+
+    static const unsigned int N_MapType;
+
 protected:
     objl::Material m_objl_material;
     std::string m_name;
 
-    std::vector<int> m_use_texture_map;
     std::vector<std::shared_ptr<Texture2D>> m_map_ptr;
 };
 

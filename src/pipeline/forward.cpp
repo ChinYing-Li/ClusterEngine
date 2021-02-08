@@ -13,7 +13,8 @@ namespace fs = std::filesystem;
 extern fs::path shader_dir;
 const glm::vec4 Forward::m_clear_color = glm::vec4(1.0, 0.0, 1.0, 1.0);
 
-Forward::Forward(const Scene& scene):
+Forward::
+Forward(const Scene& scene):
   PipelineBase(),
   m_framebuffer(800, 600)
 {
@@ -45,9 +46,7 @@ Forward::Forward(const Scene& scene):
 
 Forward::
 ~Forward()
-{
-
-}
+{}
 
 void Forward::resize(unsigned int width, unsigned int height)
 {

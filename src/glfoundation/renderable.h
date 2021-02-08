@@ -16,13 +16,15 @@ class Shader;
 class Renderable
 {
 public:
-    Renderable();
+    Renderable() = default;
     Renderable(int n_vertices);
     ~Renderable() = default;
 
     void virtual render(const Shader& shader) = 0;
+
+    void set_num_instances(const unsigned int num_instances);
     void set_instance_attrib();
-    void virtual send_instance_matrices(std::vector<glm::mat4>& instance_models){};
+    void virtual send_instance_matrices(std::vector<glm::mat4>& instance_model_mat){};
 
     void translate(const glm::vec4 translation);
     void rotate_x(float angle);
@@ -39,11 +41,12 @@ protected:
     GLuint m_CBO; // Color buffer object
     GLuint m_EBO; // EBO
 
-    GLenum m_primitivemode;
-    GLenum m_fillmode;
+    GLenum m_primitive_mode;
+    GLenum m_fill_mode;
 
     int m_num_vertices;
     int m_num_indices;
+    int m_num_instances = 1;
     bool m_instanced = false;
     bool m_using_EBO = false;
 

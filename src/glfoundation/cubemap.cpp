@@ -25,7 +25,7 @@ init(GLenum primitive_mode,
      const GLfloat *vertex_buffer_data,
      std::vector<std::string> &path_to_texture)
 {
-    m_primitivemode = primitive_mode;
+    m_primitive_mode = primitive_mode;
     m_num_vertices   = numVertices;
     m_texpath = path_to_texture;
 
@@ -102,7 +102,7 @@ render(GLuint& shaderID)
     glBindTexture(GL_TEXTURE_CUBE_MAP, texture_buffer);
 
     // Draw the geometry !
-    glDrawArrays(m_primitivemode, 0, m_num_vertices); // Starting from vertex 0; 3 vertices total -> 1 triangle
+    glDrawArrays(m_primitive_mode, 0, m_num_vertices); // Starting from vertex 0; 3 vertices total -> 1 triangle
     glBindVertexArray(0);
     return;
 }

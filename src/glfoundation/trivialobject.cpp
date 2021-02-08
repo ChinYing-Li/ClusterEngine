@@ -14,7 +14,7 @@ TrivialObject(GLenum primitive_mode,
 Renderable()
 {
     Renderable::init(primitive_mode, numVertices);
-    m_fillmode      = fill_mode;
+    m_fill_mode      = fill_mode;
     init(vertex_buffer_data, color);
 }
 
@@ -33,7 +33,7 @@ Renderable()
     Renderable::init(primitive_mode,numVertices);
     m_using_EBO = true;
     m_num_indices = numindices;
-    m_fillmode      = fill_mode;
+    m_fill_mode      = fill_mode;
 
     GLfloat *color_buffer_data = new GLfloat[3 * m_num_vertices];
     for (int i = 0; i < m_num_vertices; i++) {
@@ -101,7 +101,7 @@ init(const GLfloat *vertex_buffer_data,
 void TrivialObject::
 render(GLuint& shaderID) {
     // Change the Fill Mode for this object
-    glPolygonMode (GL_FRONT_AND_BACK, m_fillmode);
+    glPolygonMode (GL_FRONT_AND_BACK, m_fill_mode);
 
     // Bind the GLObject to use
     glBindVertexArray (m_VAO);
@@ -122,7 +122,7 @@ render(GLuint& shaderID) {
     }
     // Draw the geometry !
 
-    glDrawArrays(m_primitivemode, 0, m_num_vertices);
+    glDrawArrays(m_primitive_mode, 0, m_num_vertices);
     // Starting from vertex 0; 3 vertices total -> 1 triangle
     glBindVertexArray(0);
 }
