@@ -5,7 +5,7 @@
 
 #include "camera.h"
 #include "framebuffer.h"
-#include "globject.h"
+#include "renderable.h"
 #include "Imanagers.h"
 #include "renderpass.h"
 #include "renderstate.h"
@@ -32,46 +32,39 @@ public:
 
     void set_hdr_pass(const std::shared_ptr<RenderPass> pass, const int index = -1);
     void set_ldr_pass(const std::shared_ptr<RenderPass> pass, const int index = -1);
-    void set_tonemap_pass();
+    void set_tonemap_pass();   
 
     void print_hdr_pass_info() const noexcept;
     void print_ldr_pass_info() const noexcept;
 
 protected:
     void virtual setup_backbuffers();
-
-    RenderState m_renderstate;
-    ShaderRegistry m_registry;
-
-    // If either of resmanager_ptr or windowmanager_ptr is not present,
-    // then the pipeline is not valid and should not be used.
-    bool is_pipeline_valid = false;
     unsigned int m_width, m_height;
-    // TODO: Camera should be a member of the Scene class
-    Camera m_camera;
+    glm::mat4 m_project_mat;
+    glm::mat4 m_view_mat;
+    glm::mat4 m_model_mat;
+    RenderState m_renderstate;
+    Camera* m_camera_ptr; // Camera is controlled by someone else
 
-    // buffers to store transforms loaded by RenderPasses
-    glm::mat4 m_project_transform;
-    glm::mat4 m_view_transform;
-    glm::mat4 m_model_transform;
     std::vector<Renderable*> m_objects;
+    std::map<Shader::Usage, std::unique_ptr<Shader>> m_shaders;
 
     FrameBuffer m_hdr_framebuffer;
     FrameBuffer m_ldr_framebuffer;
-
-    // We don't have to use smart pointers as there's no ownership involved
     std::vector<FrameBuffer> m_hdr_back_buffers;
     std::vector<FrameBuffer> m_ldr_back_buffers;
-    std::map<Shader::Usage, std::unique_ptr<Shader>> m_shaders;
-
     std::vector<std::shared_ptr<RenderPass>> m_hdr_passes;
     std::vector<std::shared_ptr<RenderPass>> m_ldr_passes;
     std::shared_ptr<TonemapPass> m_tonemap_pass;
 
     void set_pass(const std::shared_ptr<RenderPass> pass, std::vector<std::shared_ptr<RenderPass>>& passes, const int index = -1);
+    void set_camera_uniform(Shader& shader);
     void print_info(const std::vector<std::shared_ptr<RenderPass>>& passes) const noexcept; // TODO: What's the point of this?
     void reset_backbuffer(std::vector<FrameBuffer*>& back_buffer);
     bool shaders_init_success();
     void render_object(Shader& shader, Renderable& object);
+
+private:
+
 };
 }

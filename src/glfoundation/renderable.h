@@ -28,10 +28,10 @@ public:
     void rotate_x(float angle);
     void rotate_y(float angle);
     void rotate_z(float angle);
-
     void scale_x(float scale);
     void scale_y(float scale);
     void scale_z(float scale);
+    void update_model_mat(glm::mat4& model_mat);
 
 protected:
     GLuint m_VAO;

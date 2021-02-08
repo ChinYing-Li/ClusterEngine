@@ -1,6 +1,6 @@
 #pragma once
 
-#include "globject.h"
+#include "renderable.h"
 
 namespace Cluster
 {

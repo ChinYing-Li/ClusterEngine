@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include "globject.h"
+#include "renderable.h"
  
 
 class Skybox

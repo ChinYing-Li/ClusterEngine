@@ -1,13 +1,14 @@
 #pragma once
 
 #include <vector>
-#include <string.h>
-#include <map>
-#include <memory>
+#include <filesystem>
 
 #include "glincludes.h"
-#include "globject.h"
+#include "renderable.h"
+#include "src/glfoundation/mesh.h"
 #include "texture.h"
+
+namespace fs = std::filesystem;
 
 namespace objl
 {
@@ -16,36 +17,22 @@ namespace objl
     class Mesh;
 }
 
+namespace Cluster
+{
 class Shader;
 
-class objobject
+class Obj : public Renderable
 {
 public:
-    objobject() = default;
-    objobject(const std::string name, std::shared_ptr<GameData> data_ptr, unsigned int numinstance);
-    ~objobject();
+    Obj() = delete;
+    Obj(fs::path obj_path, unsigned int num_instance = 1);
+    ~Obj() = default;
 
-    void draw(GLuint& shaderID, glm::mat4& view, glm::mat4& project);
-    void draw(GLuint& shaderID, glm::mat4& model, glm::mat4& view, glm::mat4& project);
+    void virtual render(Shader& shader) override;
     void set_instance_mat(std::vector<glm::mat4>& instance_mat);
 
-    std::string m_name;
-    glm::mat4 m_model;
-    glm::mat4 m_project;
-    glm::mat4 m_view;
-    glm::vec3 m_position;
-    glm::vec3 m_scale;
-    unsigned int m_instance = 0;
-
 protected:
-    void virtual calc_model_mat();
-    void get_matrices_ID(GLuint& shaderID);
-    void set_matrices(GLuint& shaderID, glm::mat4& view, glm::mat4& project);
-    void set_matrices(GLuint& shaderID, glm::mat4& model, glm::mat4& view, glm::mat4& project);
-
-    GLuint m_umodel;
-    GLuint m_uproject;
-    GLuint m_uview;
-
-    std::vector<VAO_mesh> vao_meshes;
+    unsigned int m_instance = 1;
+    std::vector<Mesh> m_meshes;
 };
+} // namespace Cluster

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "globject.h"
+#include "renderable.h"
 
 // Forward declarations
 namespace objl
@@ -22,11 +22,10 @@ public:
     Mesh(objl::Mesh& mesh, unsigned int num_instance);
     ~Mesh() = default;
 
+    void render(Shader& shader) override;
     void send_instance_matrices(std::vector<glm::mat4>& instance_models) override;
 
 protected:
-    friend class PipelineBase;
-    void render(Shader& shader) override;
 
 private:
     unsigned int m_numinstance;

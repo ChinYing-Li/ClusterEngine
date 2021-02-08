@@ -1,4 +1,5 @@
 #include "pipelinebase.h"
+#include "src/glfoundation/shader.h"
 
 namespace Cluster
 {
@@ -13,19 +14,6 @@ PipelineBase():
 PipelineBase::
 ~PipelineBase()
 {
-}
-
-
-void PipelineBase::
-set_resource_mng(std::unique_ptr<ResourceManager> resource_mng)
-{
-    m_resmanager_ptr = std::move(resource_mng);
-}
-
-std::unique_ptr<ResourceManager> PipelineBase::
-return_resource_mng() noexcept
-{
-    return std::move(m_resmanager_ptr);
 }
 
 const FrameBuffer* PipelineBase::
@@ -57,6 +45,16 @@ print_ldr_pass_info() const noexcept
 {
   print_info(m_ldr_passes);
 }
+
+void PipelineBase::
+set_camera_uniform(Shader& shader)
+{
+  if (!m_camera_ptr) return;
+  m_camera_ptr->update_project_mat(m_project_mat);
+  m_camera_ptr->update_view_mat(m_view_mat);
+  shader.set_uniformMat4f("u_project_mat", m_project_mat);
+  shader.set_uniformMat4f("u_view_mat", m_view_mat);
+};
 
 void PipelineBase::
 set_pass(const std::shared_ptr<RenderPass> pass, std::vector<std::shared_ptr<RenderPass>>& passes, const int index)

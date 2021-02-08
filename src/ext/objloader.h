@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include <filesystem>
 #include <iostream>
 #include <vector>
 #include <string>
@@ -10,6 +11,7 @@
 
 // Print progress to console while loading (large models)
 #define OBJL_CONSOLE_OUTPUT
+namespace fs = std::filesystem;
 
 // Namespace: OBJL
 //
@@ -274,18 +276,13 @@ namespace objl
             LoadedMeshes.clear();
         }
 
-        // Load a file into the loader
-        //
-        // If file is loaded return true
-        //
-        // If the file is unable to be found
-        // or unable to be loaded return false
+        // Load a file into the loader. If file is loaded return true
+        // If the file is unable to be found or unable to be loaded return false
         bool LoadFile(std::string Path)
         {
             // If the file is not an .obj file return false
             if (Path.substr(Path.size() - 4, 4) != ".obj")
                 return false;
-
 
             std::ifstream file(Path);
 

@@ -3,34 +3,30 @@
 
 namespace Cluster
 {
-Camera::Camera():
+Camera::
+Camera():
 m_eye(0.0f, 0.5f, 0.0f),
 m_direction(1.0f, 0.0f, -0.1f),
 m_up(0, 1, 0)
 {}
 
-Camera::Camera(const float x, const float y, const float z):
+Camera::
+Camera(const float x, const float y, const float z):
 m_eye(x, y, z),
 m_direction(1.0f, -0.1f, 0.0f),
 m_up(0, 1, 0)
 {}
 
-Camera::Camera(const glm::vec3 position):
-m_eye(position),
-m_direction(1.0f, -0.1f, 0.0f),
-m_up(0, 1, 0)
-{}
-
 void Camera::
-update_project_transform(glm::mat4 &mat) const noexcept
+update_project_mat(glm::mat4 &mat) const noexcept
 {
   mat = glm::perspective(glm::radians(15.0f), m_aspect_ratio, m_near_plane, m_far_plane);
 }
 
 void Camera::
-update_view_transform(glm::mat4 &mat) const noexcept
+update_view_mat(glm::mat4 &mat) const noexcept
 {
-    mat = glm::lookAt(m_eye, m_eye+m_direction, m_up);
+    mat = glm::lookAt(m_eye, m_eye + m_direction, m_up);
 }
 
 void Camera::
@@ -100,4 +96,4 @@ void Camera::set_up(glm::vec3 up)
   m_up = glm::normalize(up);
 }
 
-}
+} // namespace Cluster
