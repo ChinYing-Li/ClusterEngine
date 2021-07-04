@@ -1,4 +1,4 @@
-#include "src/ext/stb_image.h"
+#include "stb_image.h"
 #include "texturegenerator.h"
 
 namespace Cluster

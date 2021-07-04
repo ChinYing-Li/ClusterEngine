@@ -1,6 +1,6 @@
 #pragma once
 
-#include "glincludes.h"
+#include "glfoundation/glincludes.h"
 
 struct glsl_type_set
 {

@@ -132,9 +132,9 @@ apply_direct_lighting(const Scene &scene)
 }
 
 void Forward::
-post_processing(const Scene &scene)
+post_processing(const Scene& scene)
 {
-  nvtxRangePushA("post processing");
+  nvtxRangePushA("Post processing");
 
   std::unique_ptr<Shader>& shader_in_use = m_shaders[Shader::BLOOM];
   shader_in_use->use();
@@ -146,8 +146,7 @@ post_processing(const Scene &scene)
   {
     for(int j = 0; j < 2; ++j)
     {
-      auto texture = get_current_framebuffer()->get_color_texture(0);
-
+      auto texture = m_renderstate.get_current_framebuffer()->get_color_texture(0);
       m_renderstate.draw_screen_quad();
     }
   }
@@ -158,7 +157,9 @@ post_processing(const Scene &scene)
 void Forward::
 render_skybox()
 {
+  nvtxRangePushA("Render skybox");
 
+  nvtxRangePop();
 }
 
 void Forward::

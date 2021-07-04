@@ -10,7 +10,8 @@ RenderPass(const std::string& passname) :
   m_capabilities(RenderState::get_default_settings())
 {}
 
-void RenderPass::resize(const unsigned int width, const unsigned int height)
+void RenderPass::
+resize(const unsigned int width, const unsigned int height)
 {
   m_width = width;
   m_height = height;

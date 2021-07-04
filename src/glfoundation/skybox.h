@@ -1,13 +1,12 @@
 #pragma once
 #include <string>
+
 #include "renderable.h"
- 
 
 class Skybox
 {
 public:
     Skybox();
-    Skybox(const std::string name);
     ~Skybox() = default;
     
     void draw(glm::mat4& VP, GLuint& shaderID, GLMatrices& mat);

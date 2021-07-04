@@ -14,7 +14,7 @@ public:
             const GLfloat *vertex_buffer_data,
             std::vector<std::string>& path_to_texture);
 
-    void render(GLuint& shaderID) override;
+    void render(const Shader& shader) override;
     GLuint texture_buffer;
 private:
     std::vector<std::string> m_texpath;

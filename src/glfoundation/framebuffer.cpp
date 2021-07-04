@@ -81,6 +81,13 @@ disable_color()
 }
 
 void FrameBuffer::
+resize(const unsigned int width, const unsigned int height)
+{
+  glDeleteFramebuffers(1, &m_fbo);
+  create(width, height);
+}
+
+void FrameBuffer::
 reset()
 {
   std::fill(m_color_textures.begin(), m_color_textures.end(), nullptr);

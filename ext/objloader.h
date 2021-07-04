@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include <filesystem>
+#include <experimental/filesystem>
 #include <iostream>
 #include <vector>
 #include <string>
@@ -11,7 +11,7 @@
 
 // Print progress to console while loading (large models)
 #define OBJL_CONSOLE_OUTPUT
-namespace fs = std::filesystem;
+namespace fs = std::experimental::filesystem;
 
 // Namespace: OBJL
 //

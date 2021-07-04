@@ -1,6 +1,6 @@
 #pragma once
 
-#include "framebuffer.h"
+#include "glfoundation/framebuffer.h"
 #include "gbuffer.h"
 #include "pipelinebase.h"
 #include "renderstate.h"

@@ -14,12 +14,16 @@ PipelineBase():
 PipelineBase::
 ~PipelineBase()
 {
+  // PipelineBase is not responsible for cleaning m_cam.
 }
 
-const FrameBuffer* PipelineBase::
-get_current_framebuffer() const noexcept
+void PipelineBase::
+resize(unsigned int width, unsigned int height)
 {
-    return &m_hdr_framebuffer;
+  m_width = width;
+  m_height = height;
+  m_hdr_framebuffer.resize(width, height);
+  m_ldr_framebuffer.resize(width, height);
 }
 
 void PipelineBase::

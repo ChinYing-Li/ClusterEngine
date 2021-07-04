@@ -1,4 +1,4 @@
-GL#pragma once
+#pragma once
 
 #include <memory>
 #include <vector>
@@ -27,11 +27,12 @@ public:
     void enable_color(GLenum mode);
     void disable_color();
 
+    void resize(const unsigned int width, const unsigned int height);
     void reset();
     void create(const unsigned int width, const unsigned int height);
 
     void attach_texture(GLuint attachment, std::shared_ptr<Texture2D> texture, unsigned int mipmap_level = 0);
-    void attach_color_texture(unsigned int index, const TextureFormat format, unsigned int mipmap_level = 0);
+    // void attach_color_texture(unsigned int index, const TextureFormat format, unsigned int mipmap_level = 0);
     void attach_color_texture(unsigned int index, std::shared_ptr<Texture2D> texture, unsigned int mipmap_level = 0);
 
     void attach_depth_texture(std::shared_ptr<Texture2D> texture);
@@ -53,6 +54,7 @@ public:
 private:
     unsigned int m_width;
     unsigned int m_height;
+    Usage m_usage;
     GLuint m_fbo;
 
     std::vector<std::shared_ptr<Texture2D>> m_color_textures;

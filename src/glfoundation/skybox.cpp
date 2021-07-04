@@ -1,12 +1,7 @@
 #include "src/components/skybox.h"
-#include "src/game.h"
+
 Skybox::Skybox()
 {}
-
-Skybox::Skybox(const std::string name)
-{
-    create_vao();
-}
 
 void Skybox::create_vao()
 {

@@ -46,7 +46,7 @@ private:
   unsigned int m_active_texture_binding_point;
   glm::vec4 m_clear_color;
   GL_Capabilities m_settings;
-  static const FrameBuffer* m_current_framebuffer;
+  const static FrameBuffer* m_current_framebuffer;
 };
 
 } // namespace Cluster

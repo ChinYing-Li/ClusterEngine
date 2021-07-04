@@ -1,5 +1,5 @@
 #include "transformation.h"
-#include "src/utilities/mathconst.h"
+#include "utilities/mathconst.h"
 
 namespace Cluster
 {

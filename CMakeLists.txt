@@ -6,8 +6,8 @@ cmake_minimum_required(VERSION 3.13)
 
 project(ClusterEngine
         VERSION 0.0.1
-        CMAKE_PROJECT_DESCRIPTION "OpenGL Rendering Engine implementing Cluster Shading"
-	LANGUAGES CXX C)
+	    LANGUAGES CXX C
+        DESCRIPTION "OpenGL Rendering Engine implementing Cluster Shading")
 
 enable_testing()
 
@@ -51,4 +51,5 @@ find_package(ASSIMP REQUIRED)
 ###############################################################################
 # Progress to other sources
 
+add_subdirectory(ext)
 add_subdirectory(src)

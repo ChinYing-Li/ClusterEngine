@@ -4,14 +4,14 @@
 #include <string>
 
 #include "texture.h"
-#include "src/glfoundation/transformation.h"
-#include "Imanagers.h"
+#include "transformation.h"
 
 namespace Cluster
 {
 class Shader;
+
 /**
- * @brief The base class of all shadable objects
+ * @brief The base abstract class of all shadable objects.
  */
 class Renderable
 {

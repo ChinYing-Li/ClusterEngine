@@ -8,7 +8,7 @@
 #include <glm/gtx/transform.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-#include "debug.h"
+#include "utilities/debug/debug.h"
 
 struct color_t
 {

@@ -10,8 +10,7 @@ float Deferred::m_poly_offset_factor = 3.0;
 
 Deferred::
 Deferred():
-  PipelineBase(),
-  m_framebuffer(800, 600)
+  PipelineBase()
 {
   m_gbuffer = std::make_unique<GBuffer>(800, 600);
   fs::path world_vert = shader_dir / fs::path("position.vert");
@@ -44,8 +43,7 @@ setup(unsigned int width, unsigned int height, Scene& scene)
 void Deferred::
 resize(unsigned int width, unsigned int height)
 {
-  m_width = width;
-  m_height = height;
+  PipelineBase::resize(width, height);
   m_gbuffer = std::make_shared<GBuffer>(m_width, m_height);
   create_backbuffer(width, height);
 
@@ -85,19 +83,19 @@ void Deferred::update_frame(const Scene &scene)
   m_hdr_framebuffer.bind(FrameBuffer::NORMAL);
   for(const std::shared_ptr<RenderPass>& pass: m_hdr_passes)
   {
-    pass->set_render_target(m_hdr_framebuffer.get_color_texture());
+    pass->set_render_target(m_hdr_framebuffer.get_color_texture(0).get());
     pass->render(m_renderstate, scene);
   }
 
   // Tonemapping
-  m_tonemap_pass->set_render_target(0, m_hdr_framebuffer.get_color_texture());
+  m_tonemap_pass->set_render_target(m_hdr_framebuffer.get_color_texture(0).get());
   m_ldr_framebuffer.bind(FrameBuffer::DRAW);
   m_tonemap_pass->render(m_renderstate, scene);
 
   // Low dynamic range rendering
   for(const std::shared_ptr<RenderPass>& pass: m_ldr_passes)
   {
-    pass->set_render_target(m_ldr_framebuffer.get_color_texture());
+    pass->set_render_target(m_ldr_framebuffer.get_color_texture(0).get());
 
   }
   render_framebuffers(m_ldr_framebuffer);

@@ -90,7 +90,7 @@ load_texture()
 }
 
 void Cubemap::
-render(GLuint& shaderID)
+render(const Shader& shader)
 {
     // Enable Vertex Attribute 1 - Color
     glBindVertexArray (m_VAO);

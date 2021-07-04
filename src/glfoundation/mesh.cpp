@@ -1,6 +1,6 @@
 #include "mesh.h"
-#include "src/utilities/material.h"
 #include "objloader.h"
+#include "src/utilities/material.h"
 #include "src/glfoundation/shader.h"
 
 namespace Cluster

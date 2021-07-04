@@ -24,11 +24,10 @@ public:
 
     void virtual setup(unsigned int width, unsigned int height, Scene& scene) = 0;
     void virtual resize(unsigned int width, unsigned int height);
-    void virtual render_scene(const Shader& shader, const Scene& scene);
+    void virtual render_scene(const Shader& shader, const Scene& scene) = 0;
     void virtual render_objects(const Shader& shader, const Scene& scene);
+    void virtual render_skybox(const Shader& shader, const Scene& scene) = 0;
     void virtual update_frame(const Scene& scene);
-
-    const FrameBuffer* get_current_framebuffer() const noexcept;
 
     void set_hdr_pass(const std::shared_ptr<RenderPass> pass, const int index = -1);
     void set_ldr_pass(const std::shared_ptr<RenderPass> pass, const int index = -1);

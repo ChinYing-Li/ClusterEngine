@@ -1,19 +1,22 @@
 #pragma once
 
-#include <filesystem>
+#include <experimental/filesystem>
 #include <string>
 #include <vector>
 
 #include <glm/glm.hpp>
 
-namespace Cluster{
+namespace fs = std::experimental::filesystem;
+
+namespace Cluster
+{
 class Shader
 {
 public:
     Shader() = default;
-    Shader(const std::filesystem::path path_to_vert,
-           const std::filesystem::path path_to_frag,
-           const std::filesystem::path path_to_geo = "");
+    Shader(const fs::path path_to_vert,
+           const fs::path path_to_frag,
+           const fs::path path_to_geo = "");
     ~Shader() = default;
 
     const static unsigned int m_num_usage;
@@ -54,7 +57,7 @@ private:
     GLuint m_geom_ID;
     std::string m_name;
 
-    std::string read_code(const std::filesystem::path& path_to_shader);
+    std::string read_code(const fs::path& path_to_shader);
     void compile(GLuint& shaderID,
                         const std::string& shader_code);
     void check_compilation(GLuint shaderID);

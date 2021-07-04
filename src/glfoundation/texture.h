@@ -1,11 +1,13 @@
 #pragma once
 
-#include <filesystem>
+#include <experimental/filesystem>
 #include <map>
 #include <string>
 #include <vector>
 
 #include "glincludes.h"
+
+namespace fs = std::experimental::filesystem;
 
 #define MAX_NUM_TEXTURE_BINDING_POINTS 8
 
@@ -60,7 +62,7 @@ class Texture2D final : public Texture
 {
 public:
     Texture2D();
-    Texture2D(const std::filesystem::path& path, Texture::Type type);
+    Texture2D(const fs::path& path, Texture::Type type);
     ~Texture2D() = default;
 
     inline void set_vertexattrib() override;
@@ -85,14 +87,14 @@ public:
 private:
     int m_height;
     int m_width;
-    bool init_from_file(const std::filesystem::path& path, Texture::Type type);
+    bool init_from_file(const fs::path& path, Texture::Type type);
 };
 
 class TextureCubemap final : public Texture
 {
 public:
     TextureCubemap();
-    TextureCubemap(const std::vector<std::filesystem::path>& path, Texture::Type type);
+    TextureCubemap(const std::vector<fs::path>& path, Texture::Type type);
     ~TextureCubemap() = default;
 
     inline void set_vertexattrib() override;
@@ -107,7 +109,7 @@ public:
     int get_current_face() const noexcept;
 
 protected:
-    bool init_from_file(const std::vector<std::filesystem::path>& path, Texture::Type type);
+    bool init_from_file(const std::vector<fs::path>& path, Texture::Type type);
 
 private:
     int m_height;

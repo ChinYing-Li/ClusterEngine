@@ -80,24 +80,6 @@ set_clear_color(const glm::vec4 &color)
   m_clear_color = color;
 }
 
-const glm::mat4* RenderState::
-get_project_transform() const
-{
-  return &m_project_transform;
-}
-
-const glm::mat4* RenderState::
-get_view_transform() const
-{
-  return &m_view_transform;
-}
-
-const glm::mat4* RenderState::
-get_model_transform() const
-{
-  return &m_model_transform;
-}
-
 void RenderState::
 set_current_framebuffer(const FrameBuffer* current_framebuffer) noexcept
 {

@@ -15,7 +15,7 @@ namespace Cluster
 {
 class Shader;
 /*
- * A wrapper object of objl::Mesh
+ * A wrapper object of objl::Mesh.
  */
 class Mesh final : public Renderable
 {

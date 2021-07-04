@@ -4,7 +4,7 @@
 #include <string.h>
 #include <memory>
 
-#include "src/ext/objloader.h"
+#include "objloader.h"
 
 namespace fs = std::filesystem;
 

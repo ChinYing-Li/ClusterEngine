@@ -1,20 +1,21 @@
 #include "trivialobject.h"
 
 namespace Cluster{
+
 TrivialObject::
-TrivialObject(): GLObject()
+TrivialObject(): Renderable()
 {}
 
 TrivialObject::
 TrivialObject(GLenum primitive_mode,
-              int numVertices,
+              int num_vertices,
               const GLfloat *vertex_buffer_data,
               const color_t color,
               GLenum fill_mode):
 Renderable()
 {
-    Renderable::init(primitive_mode, numVertices);
-    m_fill_mode      = fill_mode;
+    m_fill_mode = fill_mode;
+    m_num_vertices = num_vertices;
     init(vertex_buffer_data, color);
 }
 
@@ -30,10 +31,9 @@ TrivialObject(GLenum primitive_mode,
               GLenum fill_mode):
 Renderable()
 {
-    Renderable::init(primitive_mode,numVertices);
     m_using_EBO = true;
     m_num_indices = numindices;
-    m_fill_mode      = fill_mode;
+    m_fill_mode = fill_mode;
 
     GLfloat *color_buffer_data = new GLfloat[3 * m_num_vertices];
     for (int i = 0; i < m_num_vertices; i++) {
@@ -57,7 +57,10 @@ init(const GLfloat *vertex_buffer_data,
 
     glBindVertexArray (m_VAO); // Bind the GLObject
     glBindBuffer (GL_ARRAY_BUFFER, m_VBO); // Bind the VBO vertices
-    glBufferData (GL_ARRAY_BUFFER, 3*(m_num_vertices)*sizeof(GLfloat), vertex_buffer_data, GL_STATIC_DRAW); // Copy the vertices into VBO
+    glBufferData (GL_ARRAY_BUFFER,
+                  3 * (m_num_vertices) * sizeof(GLfloat),
+                  vertex_buffer_data,
+                  GL_STATIC_DRAW); // Copy the vertices into VBO
     glVertexAttribPointer(
         0,                            // attribute 0. Vertices
         3,                            // size (x,y,z)
@@ -68,7 +71,10 @@ init(const GLfloat *vertex_buffer_data,
     );
 
     glBindBuffer (GL_ARRAY_BUFFER, m_CBO); // Bind the VBO colors
-    glBufferData (GL_ARRAY_BUFFER, 3 * m_num_vertices * sizeof(GLfloat), color_buffer_data, GL_STATIC_DRAW); // Copy the vertex colors
+    glBufferData (GL_ARRAY_BUFFER,
+                  3 * m_num_vertices * sizeof(GLfloat),
+                  color_buffer_data,
+                  GL_STATIC_DRAW); // Copy the vertex colors
     glVertexAttribPointer(
         1,                            // attribute 1. Color
         3,                            // size (r,g,b)
@@ -90,7 +96,7 @@ init(const GLfloat *vertex_buffer_data,
 
     glGenBuffers(1, &m_EBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint)*m_num_indices, indices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(GLuint) * m_num_indices, indices, GL_STATIC_DRAW);
     glBindVertexArray(0);
     return;
 }
@@ -99,35 +105,29 @@ init(const GLfloat *vertex_buffer_data,
 
 /* Render the VBOs handled by GLObject */
 void TrivialObject::
-render(GLuint& shaderID) {
+render(const Shader& shader) {
     // Change the Fill Mode for this object
     glPolygonMode (GL_FRONT_AND_BACK, m_fill_mode);
 
-    // Bind the GLObject to use
-    glBindVertexArray (m_VAO);
-    // Enable Vertex Attribute 0 - 3d Vertices
-    glEnableVertexAttribArray(0);
-    // Bind the VBO to use
-    glBindBuffer(GL_ARRAY_BUFFER, m_VBO);
+    glBindVertexArray (m_VAO); // Bind the VAO to use
+    glEnableVertexAttribArray(0); // Enable Vertex Attribute 0 - 3d Vertices
+    glBindBuffer(GL_ARRAY_BUFFER, m_VBO); // Bind the VBO to use
 
-    // Enable Vertex Attribute 1 - Color
-    glEnableVertexAttribArray(1);
-    // Bind the VBO to use
-    glBindBuffer(GL_ARRAY_BUFFER, m_CBO);
+    glEnableVertexAttribArray(1); // Enable Vertex Attribute 1 - Color
+    glBindBuffer(GL_ARRAY_BUFFER, m_CBO); // Bind the VBO to use
 
     if(m_using_EBO)
     {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO);
-
     }
-    // Draw the geometry !
 
-    glDrawArrays(m_primitive_mode, 0, m_num_vertices);
-    // Starting from vertex 0; 3 vertices total -> 1 triangle
+    glDrawArrays(m_primitive_mode, 0, m_num_vertices); // Starting from vertex 0; 3 vertices total -> 1 triangle
     glBindVertexArray(0);
 }
 
-/* Generate GLObject, VBOs and return GLObject handle - Common Color for all vertices */
+/*
+ * Generate GLObject, VBOs and return GLObject handle - Common Color for all vertices
+ */
 void TrivialObject::
 init(const GLfloat *vertex_buffer_data,
      const GLfloat red,
