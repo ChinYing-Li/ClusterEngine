@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include <glm/glm.hpp>
+#include "glfoundation/glincludes.h"
 
 namespace fs = std::experimental::filesystem;
 
@@ -38,7 +38,7 @@ public:
     std::string get_name() const noexcept;
 
     void set_uniform1i(const std::string name, const int data) const;
-    void set_uniform1ui(const std::string name, const unsigned int data);
+    void set_uniform1ui(const std::string name, const unsigned int data) const;
     void set_uniform1iv(const std::string name, const int count, const std::vector<int> &data) const;
     void set_uniform2i(const std::string name, const std::vector<int> &data) const;
     void set_uniform2ui(const std::string name, const std::vector<unsigned int> &data) const;

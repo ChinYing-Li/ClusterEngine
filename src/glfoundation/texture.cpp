@@ -20,6 +20,13 @@ m_initialized(false),
     init();
 }
 
+bool Texture::
+is_initialized()
+{
+    return m_initialized;
+}
+
+
 void Texture::
 init()
 {
@@ -51,7 +58,7 @@ bind(const GLuint texture_binding_point)
 void Texture::
 destroy()
 {
-  if (!m_initialized)
+  if (!m_usable)
   {
     return;
   }
@@ -81,7 +88,7 @@ Texture2D():
 }
 
 Texture2D::
-Texture2D(const std::filesystem::path& path, Texture::Type type):
+Texture2D(const fs::path& path, Texture::Type type):
 Texture2D()
 {
     m_vertex_size = 5;
@@ -90,7 +97,7 @@ Texture2D()
 }
 
 bool Texture2D::
-init_from_file(const std::filesystem::path& path, Texture::Type type)
+init_from_file(const fs::path& path, Texture::Type type)
 {
     assert(m_initialized);
     int num_channels;
@@ -178,7 +185,7 @@ Texture()
 }
 
 TextureCubemap::
-TextureCubemap(const std::vector<std::filesystem::path>& paths, Texture::Type type):
+TextureCubemap(const std::vector<fs::path>& paths, Texture::Type type):
 Texture()
 {
     m_target = GL_TEXTURE_CUBE_MAP;

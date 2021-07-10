@@ -2,15 +2,17 @@
 #include <string>
 
 #include "renderable.h"
+#include "texture.h"
 
-class Skybox
+class Skybox: Renderable
 {
 public:
     Skybox();
     ~Skybox() = default;
-    
-    void draw(glm::mat4& VP, GLuint& shaderID, GLMatrices& mat);
+    void render(const Shader& shaderID) override;
+
+    void set_mat(glm::mat4& VP, GLMatrices& mat)
+
 private:
-    VAO_texture vao;
-    void create_vao();
+    TextureCubemap m_cubemap;
 };

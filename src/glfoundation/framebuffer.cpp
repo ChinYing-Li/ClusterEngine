@@ -8,7 +8,7 @@ FrameBuffer::
 FrameBuffer(unsigned int width, unsigned int height):
   m_width(width),
   m_height(height),
-  m_color_textures(MAX_NUM_COLOR_TEXTURE, nullptr)
+  m_color_textures(MAX_NUM_COLOR_TEXTURE, TextureManager::generate_ldr_texture(width, height))
 {
   glGenFramebuffers(1, &m_fbo);
 }
@@ -90,9 +90,10 @@ resize(const unsigned int width, const unsigned int height)
 void FrameBuffer::
 reset()
 {
-  std::fill(m_color_textures.begin(), m_color_textures.end(), nullptr);
-  m_depth_texture = nullptr;
-  m_width = m_height = 0;
+    // m_color_textures.assign(MAX_NUM_COLOR_TEXTURE, TextureManager::generate_ldr_texture(m_width, m_height));
+    std::fill(m_color_textures.begin(), m_color_textures.end(), TextureManager::generate_ldr_texture(m_width, m_height));
+    m_depth_texture = TextureManager::generate_empty_depth_map(m_width, m_height);
+
   glDeleteFramebuffers(1, &m_fbo);
   m_fbo = -1;
 }
@@ -107,15 +108,15 @@ create(const unsigned int width, const unsigned int height)
 
 void FrameBuffer::
 attach_texture(GLuint attachment,
-               std::shared_ptr<Texture2D> texture,
+               Texture2D texture,
                unsigned int mipmap_level)
 {
-    glNamedFramebufferTexture(m_fbo, attachment, texture->get_ID(), mipmap_level);
+    glNamedFramebufferTexture(m_fbo, attachment, texture.get_ID(), mipmap_level);
 }
 
 void FrameBuffer::
 attach_color_texture(unsigned int binding_point,
-                     std::shared_ptr<Texture2D> texture,
+                     Texture2D texture,
                      unsigned int mipmap_level)
 {
   if (binding_point > MAX_NUM_COLOR_TEXTURE)
@@ -130,20 +131,20 @@ attach_color_texture(unsigned int binding_point,
 }
 
 void FrameBuffer::
-attach_depth_texture(std::shared_ptr<Texture2D> texture)
+attach_depth_texture(Texture2D texture)
 {
   attach_texture(GL_DEPTH_ATTACHMENT, texture, 0);
 }
 
 void FrameBuffer::
-attach_depth_stencil_texture(std::shared_ptr<Texture2D> texture)
+attach_depth_stencil_texture(Texture2D texture)
 {
   attach_texture(GL_DEPTH_STENCIL_ATTACHMENT, texture, 0);
 }
 
 void FrameBuffer::
 set_cubemap(GLenum attachment_target,
-            TextureCubemap& texture_cubemap,
+            const TextureCubemap texture_cubemap,
             GLint mipmap_level)
 {
     for (int i = 0; i < 6; ++i)
@@ -156,7 +157,7 @@ set_cubemap(GLenum attachment_target,
     }
 }
 
-std::shared_ptr<Texture2D>& FrameBuffer::
+Texture2D FrameBuffer::
 get_color_texture(unsigned int binding_point)
 {
   return m_color_textures[binding_point];

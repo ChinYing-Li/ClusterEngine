@@ -1,23 +1,13 @@
-#include <boost/program_options.hpp>
 #include <memory>
 
-#include "game.h"
-
-namespace po = boost::program_options;
-
-void create_options()
-{
-    bool use_deferred;
-
-    po::options_description allowed_op_description("Allowed options");
-    allowed_op_description.add_options()
-            ("help", "")
-            ("use_deferred", po::value<bool>(&use_deferred)->default_value(true), "whether to use deferred shading or not. If set to false, then forward shading will be used");
-}
+#include "app.h"
 
 int main(int argc, char **argv)
 {
-    Game game;
-    game.begin();
+    App application;
+    bool init_success = application.begin(argc, argv);
+    if(!init_success) return 1;
+
+    application.loop();
     return 0;
 }

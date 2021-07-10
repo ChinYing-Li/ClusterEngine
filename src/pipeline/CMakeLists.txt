@@ -7,6 +7,11 @@ set(SOURCES
 
 add_library(pipeline STATIC ${SOURCES})
 
+target_link_libraries(pipeline
+        PRIVATE
+        ClusterEngine
+)
+
 target_include_directories(pipeline
-        PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/..
+        PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../
         )

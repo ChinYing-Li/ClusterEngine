@@ -3,13 +3,13 @@
 #include <memory>
 #include <vector>
 
-#include "camera.h"
-#include "framebuffer.h"
-#include "renderable.h"
-#include "Imanagers.h"
-#include "renderpass.h"
-#include "renderstate.h"
-#include "shaderregistry.h"
+#include "glfoundation/camera.h"
+#include "glfoundation/framebuffer.h"
+#include "glfoundation/renderable.h"
+#include "glfoundation/renderstate.h"
+#include "glfoundation/shaderregistry.h"
+#include "renderpass/renderpass.h"
+// Do we really need this?
 #include "tonemappass.h"
 
 namespace Cluster

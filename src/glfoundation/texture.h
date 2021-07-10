@@ -29,9 +29,10 @@ public:
     void set_magmin_filter(GLenum mag_filter, GLenum min_filter);
     void set_mipmap_level(const unsigned int level);
 
-    GLuint get_ID() const { return m_ID; }
+    const GLuint get_ID() const { return m_ID; }
     GLenum get_target() const { return m_target; }
     bool is_bound();
+    bool is_initialized();
 
     void set_vertex_size(unsigned int vertex_size) // TODO:　remove this weird function
     {
@@ -44,6 +45,8 @@ public:
       LDR,
       HDR,
     };
+
+    static const unsigned int ALBEDO = 0;
 
 protected:
     bool m_initialized = false;

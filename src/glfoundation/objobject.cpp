@@ -1,8 +1,10 @@
 #include <iostream>
 #include <cmath>
 
-#include "src/ext/objloader.h"
-#include "shader.h"
+// ext
+#include "objloader.h"
+
+#include "glfoundation/shader.h"
 #include "objobject.h"
 
 namespace Cluster

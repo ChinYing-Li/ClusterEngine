@@ -5,18 +5,19 @@
 #include "light.h"
 #include "skybox.h"
 
+namespace fs = std::experimental::filesystem;
+
 namespace Cluster
 {
-class Forward;
-class Deferred;
-
 /**
  * @brief This class contains static object that are to be rendered.
  */
 class Scene
 {
 public:
-  Scene();
+  Scene() = default;
+  ~Scene();
+  Scene(fs::path& scene_path);
 
   void set_skybox(std::shared_ptr<Skybox> skybox, bool override);
   void add_light(std::shared_ptr<Light> light, int index);

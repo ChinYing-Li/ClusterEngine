@@ -24,7 +24,7 @@ void GBuffer::init()
     setup_texture(m_normal_texture, m_width, m_height, GL_RGBA16, GL_RGBA, GL_UNSIGNED_BYTE);
     setup_texture(m_emission_texture, m_width, m_height, GL_RGBA16F, GL_RGBA, GL_FLOAT);
 
-    m_framebuffer.bind();
+    m_framebuffer.bind(FrameBuffer::Usage::NORMAL);
     m_framebuffer.attach_depth_stencil_texture(m_depth_stencil_texture);
     m_framebuffer.attach_color_texture(0, m_albedo_texture, 0);
     m_framebuffer.attach_color_texture(1, m_position_texture, 0);

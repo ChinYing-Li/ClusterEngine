@@ -2,7 +2,6 @@
 
 #include "renderable.h"
 #include "objloader.h"
-#include "game.h"
 
 namespace Cluster{
 

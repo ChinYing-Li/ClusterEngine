@@ -1,10 +1,39 @@
+#include <boost/log/trivial.hpp>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
+#include <iostream>
+
 #include "scene.h"
-namespace Cluster{
-Scene::Scene():
+
+namespace ptree = boost::property_tree;
+
+namespace Cluster {
+Scene::
+Scene():
   m_skybox(nullptr),
   m_lights(0, nullptr)
 {
 
+}
+
+Scene::
+~Scene()
+{
+
+}
+
+Scene::Scene(fs::path& scene_path)
+{
+  BOOST_TRIVIAL_LOG(info) << "Loading scene from:" << scene_path;
+  ptree::ptree root;
+  try
+  {
+    ptree::read_json(scene_path, root);
+  }
+  catch (const ptree::ptree_error &e)
+  {
+    std::cerr << "Property tree error: " << e.what() << std::endl;
+  }
 }
 
 void Scene::

@@ -1,15 +1,16 @@
-#include <filesystem>
+#include <experimental/filesystem>
 #include <memory>
 
 #include "forward.h"
-#include "src/utilities/debug/debug.h"
-#include "light.h"
-#include "scene.h"
-#include "texturegenerator.h"
+#include "glfoundation/light.h"
+#include "glfoundation/scene.h"
+#include "glfoundation/texturemanager.h"
+#include "utilities/debug/debug.h"
+
+namespace fs = std::experimental::filesystem;
 
 namespace Cluster
 {
-namespace fs = std::filesystem;
 extern fs::path shader_dir;
 const glm::vec4 Forward::m_clear_color = glm::vec4(1.0, 0.0, 1.0, 1.0);
 

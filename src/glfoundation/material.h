@@ -1,12 +1,12 @@
 #pragma once
 
-#include <filesystem>
+#include <experimental/filesystem>
 #include <string.h>
 #include <memory>
 
 #include "objloader.h"
 
-namespace fs = std::filesystem;
+namespace fs = std::experimental::filesystem;
 
 namespace Cluster
 {
@@ -33,6 +33,7 @@ public:
       BUMP,
     };
 
+    void bind(const Shader& shader);
     bool is_texture_in_use(TextureMapType type) const;
     void set_uniform(const Shader& shader) const;
 
@@ -42,7 +43,7 @@ protected:
     objl::Material m_objl_material;
     std::string m_name;
 
-    std::vector<std::shared_ptr<Texture2D>> m_map_ptr;
+    std::vector<Texture2D> m_textures;
 };
 
 }

@@ -1,7 +1,11 @@
 #pragma once
 
+#include <experimental/filesystem>
+
 #include "renderable.h"
-#include "src/utilities/material.h"
+#include "material.h"
+
+namespace fs = std::experimental::filesystem;
 
 // Forward declarations
 namespace objl
@@ -14,6 +18,7 @@ struct Mesh;
 namespace Cluster
 {
 class Shader;
+
 /*
  * A wrapper object of objl::Mesh.
  */

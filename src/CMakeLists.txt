@@ -9,19 +9,19 @@ set(SOURCES
     glfoundation/gbuffer.cpp
     glfoundation/light.cpp
     glfoundation/mesh.cpp
+    glfoundation/material.cpp
+    glfoundation/objobject.cpp
     glfoundation/renderable.cpp
     glfoundation/renderstate.cpp
     glfoundation/shader.cpp
     glfoundation/shaderregistry.cpp
     glfoundation/skybox.cpp
     glfoundation/texture.cpp
-    glfoundation/texturegenerator.cpp
+    glfoundation/texturemanager.cpp
     glfoundation/transformation.cpp
     glfoundation/trivialobject.cpp
     utilities/color.cpp
     utilities/fpscounter.cpp
-    utilities/material.cpp
-    utilities/objobject.cpp
     utilities/debug/debug.cpp
     utilities/managers/windowmanager.cpp
     renderpass/bloompass.cpp
@@ -73,3 +73,12 @@ if(${CLS_PROFILE_MODE})
 endif()
 
 add_subdirectory(pipeline)
+add_subdirectory(app)
+
+add_executable(
+        ClusterEngineDemo
+        main.cpp
+)
+
+target_link_libraries(ClusterEngineDemo
+        app)

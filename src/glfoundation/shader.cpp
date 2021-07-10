@@ -6,15 +6,17 @@
 
 #include "shader.h"
 
+namespace fs = std::experimental::filesystem;
+
 namespace Cluster{
 
 // TODO: Update this in case more shaders are added
 const unsigned int Shader::m_num_usage = 7;
 
 Shader::
-Shader(const std::filesystem::path path_to_vert,
-       const std::filesystem::path path_to_frag,
-       const std::filesystem::path path_to_geo):
+Shader(const fs::path path_to_vert,
+       const fs::path path_to_frag,
+       const fs::path path_to_geo):
 m_name()
 {
   m_vert_ID = glCreateShader(GL_VERTEX_SHADER);
@@ -169,7 +171,7 @@ set_uniformMat4f(const std::string name, const glm::mat4& data) const
 }
 
 std::string Shader::
-read_code(const std::filesystem::path& path_to_shader)
+read_code(const fs::path& path_to_shader)
 {
   std::string  code;
   std::ifstream stream(path_to_shader.c_str(), std::ios::in);

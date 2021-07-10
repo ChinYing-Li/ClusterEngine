@@ -1,10 +1,13 @@
+#include <experimental/filesystem>
+
 #include "deferred.h"
 #include "Irenderpass.h"
 #include "scene.h"
 
+namespace fs = std::experimental::filesystem;
+
 namespace Cluster
 {
-namespace fs = std::filesystem;
 extern fs::path shader_dir;
 float Deferred::m_poly_offset_factor = 3.0;
 

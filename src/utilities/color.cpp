@@ -1,4 +1,5 @@
 #include <cassert>
+
 #include "color.h"
 
 #define INV_256 1.0f/255.0f

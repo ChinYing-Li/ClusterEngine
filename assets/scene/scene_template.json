@@ -1,0 +1,13 @@
+{
+  "skybox": ["dumm1.jpg"],
+  "object": [
+    "obj1": {
+      "path": "",
+      "coord": []
+    },
+    "obj2": {
+      "path": "",
+      "coord": []
+    }
+  ]
+}

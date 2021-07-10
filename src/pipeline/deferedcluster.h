@@ -1,6 +1,6 @@
 #pragma once
 
-#include "src/pipeline/deferred.h"
+#include "deferred.h"
 
 namespace Cluster{
 class DeferredCluster : public Deferred
