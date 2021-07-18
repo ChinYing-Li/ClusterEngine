@@ -11,7 +11,7 @@ Transformation():
 {}
 
 void Transformation::
-translate(const glm::vec4 offset)
+translate(const glm::vec3 offset)
 {
   m_position += offset;
 }

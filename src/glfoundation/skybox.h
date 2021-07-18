@@ -1,18 +1,23 @@
 #pragma once
+#include <experimental/filesystem>
 #include <string>
 
-#include "renderable.h"
-#include "texture.h"
+#include "glfoundation/cubemap.h"
+#include "glfoundation/texture.h"
 
-class Skybox: Renderable
+namespace fs = std::experimental::filesystem;
+
+namespace Cluster
 {
-public:
-    Skybox();
-    ~Skybox() = default;
-    void render(const Shader& shaderID) override;
-
-    void set_mat(glm::mat4& VP, GLMatrices& mat)
-
-private:
-    TextureCubemap m_cubemap;
-};
+    class Skybox: Cubemap
+    {
+    public:
+        Skybox();
+        Skybox();
+        ~Skybox() = default;
+        void bind(const GLuint binding_point);
+        void render(const Shader& shaderID) override;
+    private:
+        TextureCubemap m_cubemap;
+    };
+} // namespace Cluster

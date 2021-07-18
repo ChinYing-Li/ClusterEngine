@@ -1,7 +1,7 @@
 #pragma once
 
+#include "glfoundation/shader.h"
 #include "renderpass.h"
-#include "shader.h"
 
 namespace Cluster
 {

@@ -28,6 +28,5 @@ void BloomPass::render(RenderState &r_state, const Scene &scene)
   m_fbuffer.bind();
 
   r_state.draw_screen_quad();
-
 }
 }

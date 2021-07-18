@@ -43,9 +43,8 @@ protected:
     glm::mat4 m_view_mat;
     glm::mat4 m_model_mat;
     RenderState m_renderstate;
-    Camera* m_camera_ptr; // Camera is controlled by someone else
 
-    std::vector<Renderable*> m_objects;
+    std::vector<Renderable*> m_objects; // Should be within the Scene class
     std::map<Shader::Usage, std::unique_ptr<Shader>> m_shaders;
 
     FrameBuffer m_hdr_framebuffer;

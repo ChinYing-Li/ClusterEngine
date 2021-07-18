@@ -2,9 +2,9 @@
 
 #include <memory>
 
-#include "gbuffer.h"
+#include "glfoundation/gbuffer.h"
+#include "glfoundation/shader.h"
 #include "renderpass.h"
-#include "shader.h"
 
 namespace Cluster
 {

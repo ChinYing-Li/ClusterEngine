@@ -24,16 +24,21 @@ public:
 
     void set_num_instances(const unsigned int num_instances);
     void set_instance_attrib();
+
     void virtual send_instance_matrices(std::vector<glm::mat4>& instance_model_mat){};
 
     void translate(const glm::vec4 translation);
+    bool is_gl_init();
+    void load_model_mat(glm::mat4& model_mat);
+
+    // This should be delegate to m_transform
     void rotate_x(float angle);
     void rotate_y(float angle);
     void rotate_z(float angle);
     void scale_x(float scale);
     void scale_y(float scale);
     void scale_z(float scale);
-    void update_model_mat(glm::mat4& model_mat);
+
 
 protected:
     GLuint m_VAO;
@@ -47,6 +52,7 @@ protected:
     int m_num_vertices;
     int m_num_indices;
     int m_num_instances = 1;
+    bool m_gl_init = false;
     bool m_instanced = false;
     bool m_using_EBO = false;
 

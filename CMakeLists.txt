@@ -43,10 +43,12 @@ if(NOT APPLE)
     find_package(GLEW REQUIRED)
 endif()
 
+SET(Boost_USE_STATIC_LIBS ON)
+find_package(Boost 1.69.0 COMPONENTS log REQUIRED)
 find_package(GLFW3 REQUIRED)
 find_package(GLM REQUIRED)
 find_package(ASSIMP REQUIRED)
-
+find_package(OpenMP REQUIRED)
 
 ###############################################################################
 # Progress to other sources

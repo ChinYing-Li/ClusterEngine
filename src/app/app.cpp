@@ -66,5 +66,12 @@ load_scene(fs::path& scene_path)
 void App::
 create_pipeline()
 {
-
+    if(m_use_deferred)
+    {
+        m_render_pipeline = (m_use_cluster) : std::make_unique<DeferedCluster>() ? std::make_unique<Deferred>();
+    }
+    else
+    {
+        m_render_pipeline = std::make_unique<Forward>(*m_scene_ptr);
+    }
 }

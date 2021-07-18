@@ -1,10 +1,12 @@
 #include <experimental/filesystem>
 #include <memory>
 
-#include "forward.h"
 #include "glfoundation/light.h"
 #include "glfoundation/scene.h"
 #include "glfoundation/texturemanager.h"
+#include "pipeline/forward.h"
+#include "pipeline/deferred.h"
+#include "pipeline/deferedcluster.h"
 #include "utilities/debug/debug.h"
 
 namespace fs = std::experimental::filesystem;
@@ -12,7 +14,7 @@ namespace fs = std::experimental::filesystem;
 namespace Cluster
 {
 extern fs::path shader_dir;
-const glm::vec4 Forward::m_clear_color = glm::vec4(1.0, 0.0, 1.0, 1.0);
+const glm::vec4 Forward::M_CLEAR_COLOR = glm::vec4(1.0, 0.0, 1.0, 1.0);
 
 Forward::
 Forward(const Scene& scene):
@@ -77,7 +79,7 @@ void Forward::resize(unsigned int width, unsigned int height)
       buffer.release();
     }
 
-  m_renderstate.set_clear_color(m_clear_color);
+  m_renderstate.set_clear_color(M_CLEAR_COLOR);
   glViewport(0, 0, width, height);
 }
 
@@ -114,10 +116,10 @@ apply_direct_lighting(const Scene &scene)
   glDepthFunc(GL_LEQUAL);
 
   m_shaders.at(Shader::DIRECT_LIGHTING)->use();
-
+  const std::vector<std::shared_ptr<Light> light_vec = scene.get_light_vec();
   for(int i = 0; i < scene.get_light_vec().size(); ++i)
   {
-    const std::shared_ptr<Light>& light = scene.get_light_vec()[i];
+    const std::shared_ptr<Light>& light = light_vec[i];
     switch (light->get_type()) {
     case Light::POINTLIGHT:
 
@@ -137,8 +139,8 @@ post_processing(const Scene& scene)
 {
   nvtxRangePushA("Post processing");
 
-  std::unique_ptr<Shader>& shader_in_use = m_shaders[Shader::BLOOM];
-  shader_in_use->use();
+  Shader shader_in_use = *m_shaders[Shader::BLOOM];
+  shader_in_use.use();
   shader_in_use->set_uniform1f("u_threshold", 0.0);
   shader_in_use->set_uniform1i("u_texture", 0);
   m_renderstate.draw_screen_quad();
@@ -156,9 +158,14 @@ post_processing(const Scene& scene)
 }
 
 void Forward::
-render_skybox()
+render_skybox(const Scene& scene, Camera& cam)
 {
   nvtxRangePushA("Render skybox");
+
+  Shader shader_in_use = *m_shaders[Usage::SKYBOX];
+  shader_in_use.use();
+  Cubemap skybox = scene.get_skybox_ref();
+  skybox.render(shader_in_use);
 
   nvtxRangePop();
 }

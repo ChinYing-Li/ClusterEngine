@@ -3,8 +3,8 @@
 #include <memory>
 #include <nvToolsExt.h>
 
-#include "glincludes.h"
-#include "renderstate.h"
+#include "glfoundation/glincludes.h"
+#include "glfoundation/renderstate.h"
 
 namespace Cluster
 {

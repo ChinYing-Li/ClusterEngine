@@ -1,28 +1,32 @@
 #pragma once
 
+#include <experimental/filesystem>
+#include <vector>
+
 #include "renderable.h"
+
+namespace fs = std::experimental::filesystem;
 
 namespace Cluster
 {
-
-class Cubemap final : public Renderable
+class Cubemap : public Renderable
 {
 public:
     Cubemap();
     Cubemap(GLenum primitive_mode,
             int numVertices,
-            const GLfloat *vertex_buffer_data,
-            std::vector<std::string>& path_to_texture);
-
+            const GLfloat *vertex_buffer_data);
+    bool initialize_texture(std::vector<fs::path>& path_to_texture);
     void render(const Shader& shader) override;
-    GLuint texture_buffer;
+    bool is_usable();
+
 private:
-    std::vector<std::string> m_texpath;
+    std::unique_ptr<TextureCubemap> m_texture_ptr;
+    std::vector<fs::path> m_texpath;
+
     void init(GLenum primitive_mode,
               int numVertices,
-              const GLfloat *vertex_buffer_data,
-              std::vector<std::string>& path_to_texture);
-    void load_texture();
+              const GLfloat *vertex_buffer_data);
 };
 
 }

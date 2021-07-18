@@ -108,11 +108,8 @@ public:
 
     int get_height() const noexcept;
     int get_weight() const noexcept;
-
     int get_current_face() const noexcept;
-
-protected:
-    bool init_from_file(const std::vector<fs::path>& path, Texture::Type type);
+    bool init_from_file(const std::vector<fs::path>& path);
 
 private:
     int m_height;

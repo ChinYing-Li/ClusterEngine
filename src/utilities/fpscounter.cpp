@@ -1,5 +1,3 @@
-#include <GLFW/glfw3.h>
-
 #include "glfoundation/glincludes.h"
 #include "fpscounter.h"
 

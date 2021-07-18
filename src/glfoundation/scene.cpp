@@ -24,7 +24,7 @@ Scene::
 
 Scene::Scene(fs::path& scene_path)
 {
-  BOOST_TRIVIAL_LOG(info) << "Loading scene from:" << scene_path;
+  // BOOST_TRIVIAL_LOG(info) << "Loading scene from:" << scene_path;
   ptree::ptree root;
   try
   {
@@ -36,15 +36,55 @@ Scene::Scene(fs::path& scene_path)
   }
 }
 
-void Scene::
-set_skybox(std::shared_ptr<Skybox> skybox,
-           bool override)
+bool Scene::
+create_skybox(std::vector<fs::path>& texture_path)
 {
-  if (m_skybox != nullptr && !override)
-  {
-    return;
-  }
-  m_skybox = skybox;
+  GLfloat skybox_vert_buf[] =
+          { -1.0f,  1.0f, -1.0f,
+            -1.0f, -1.0f, -1.0f,
+            1.0f, -1.0f, -1.0f,
+            1.0f, -1.0f, -1.0f,
+            1.0f,  1.0f, -1.0f,
+            -1.0f,  1.0f, -1.0f,
+
+            -1.0f, -1.0f,  1.0f,
+            -1.0f, -1.0f, -1.0f,
+            -1.0f,  1.0f, -1.0f,
+            -1.0f,  1.0f, -1.0f,
+            -1.0f,  1.0f,  1.0f,
+            -1.0f, -1.0f,  1.0f,
+
+            1.0f, -1.0f, -1.0f,
+            1.0f, -1.0f,  1.0f,
+            1.0f,  1.0f,  1.0f,
+            1.0f,  1.0f,  1.0f,
+            1.0f,  1.0f, -1.0f,
+            1.0f, -1.0f, -1.0f,
+
+            -1.0f, -1.0f,  1.0f,
+            -1.0f,  1.0f,  1.0f,
+            1.0f,  1.0f,  1.0f,
+            1.0f,  1.0f,  1.0f,
+            1.0f, -1.0f,  1.0f,
+            -1.0f, -1.0f,  1.0f,
+
+            -1.0f,  1.0f, -1.0f,
+            1.0f,  1.0f, -1.0f,
+            1.0f,  1.0f,  1.0f,
+            1.0f,  1.0f,  1.0f,
+            -1.0f,  1.0f,  1.0f,
+            -1.0f,  1.0f, -1.0f,
+
+            -1.0f, -1.0f, -1.0f,
+            -1.0f, -1.0f,  1.0f,
+            1.0f, -1.0f, -1.0f,
+            1.0f, -1.0f, -1.0f,
+            -1.0f, -1.0f,  1.0f,
+            1.0f, -1.0f,  1.0f
+          };
+
+  m_skybox = std::make_unique<Cubemap>(GL_TRIANGLES, 6 * 6, skybox_vert_buf);
+  bool success = m_skybox->initialize_texture(texture_path);
 }
 
 void Scene::

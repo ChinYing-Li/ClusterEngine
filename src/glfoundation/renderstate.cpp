@@ -1,6 +1,9 @@
-#include "renderstate.h"
+#include "glfoundation/camera.h"
+#include "glfoundation/renderstate.h"
+#include "glfoundation/shader.h"
 
-namespace Cluster{
+namespace Cluster
+{
 RenderState::
 RenderState():
   m_clear_color(glm::vec4(1.0, 0.0, 0.0, 1.0)),
@@ -78,6 +81,17 @@ void RenderState::
 set_clear_color(const glm::vec4 &color)
 {
   m_clear_color = color;
+}
+
+void RenderState::
+set_camera(Shader& shader, Camera& cam)
+{
+  cam.load_proj_mat(m_proj_mat);
+  cam.load_view_mat(m_view_mat);
+  shader.set_uniformMat4f("u_proj_mat", m_proj_mat);
+  shader.set_uniformMat4f("u_view_mat", m_view_mat);
+  glm::vec3 cam_eye = cam.get_eye();
+  shader.set_uniform3f("u_eye_position", cam_eye[0], cam_eye[1], cam_eye[2]);
 }
 
 void RenderState::

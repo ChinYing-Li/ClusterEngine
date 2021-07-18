@@ -3,6 +3,7 @@
 #include <memory>
 #include <experimental/filesystem>
 
+#include "camera.h"
 #include "windowmanager.h"
 #include "fpscounter.h"
 
@@ -11,6 +12,7 @@ namespace po = boost::program_options;
 
 // forward declaration
 class PipelineBase;
+class Scene;
 
 class App
 {
@@ -31,9 +33,10 @@ private:
     bool m_use_deferred;
     bool m_use_cluster;
     fs::path m_scene_path;
-    std::unique_ptr<Scene> m_scene_ptr;
 
+    std::unique_ptr<Scene> m_scene_ptr;
     std::unique_ptr<PipelineBase> m_render_pipeline;
+    Camera m_camera;
 
     const float delta_t = 1.0f / 60.0f;
     Timer m_timer;

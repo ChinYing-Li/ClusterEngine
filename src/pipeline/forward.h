@@ -29,11 +29,11 @@ public:
 
     void apply_direct_lighting(const Scene& scene);
     void post_processing(const Scene& scene);
-    const static glm::vec4 m_clear_color;
+    const static glm::vec4 M_CLEAR_COLOR;
 
 protected:
   void virtual render_framebuffer(const FrameBuffer& framebuffer);
-  void render_skybox();
+  void render_skybox(const Scene& scene, Camera& cam);
 
   FrameBuffer m_framebuffer;
 };

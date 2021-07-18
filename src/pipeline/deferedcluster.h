@@ -7,5 +7,8 @@ class DeferredCluster : public Deferred
 {
 public:
     DeferredCluster();
+    ~DeferredCluster();
+private:
+
 };
-}
+} // namespace Cluster

@@ -15,7 +15,6 @@ set(SOURCES
     glfoundation/renderstate.cpp
     glfoundation/shader.cpp
     glfoundation/shaderregistry.cpp
-    glfoundation/skybox.cpp
     glfoundation/texture.cpp
     glfoundation/texturemanager.cpp
     glfoundation/transformation.cpp
@@ -46,12 +45,16 @@ set_target_properties(ClusterEngine PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 target_include_directories(ClusterEngine
     PRIVATE
+    ${Boost_INCLUDE_DIRS}
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${OPENGL_INCLUDE_DIR}
     ${GLEW_INCLUDE_DIRS}
 )
 
 target_link_libraries(ClusterEngine
+    PUBLIC
+    ${Boost_LOG_LIBRARY}
+    OpenMP::OpenMP_CXX
     PRIVATE
     OpenGL::OpenGL
     OpenGL::GLU

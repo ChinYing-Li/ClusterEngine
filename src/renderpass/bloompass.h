@@ -1,9 +1,10 @@
 #pragma once
 
-#include "framebuffer.h"
-#include "gaussianblurpass.h"
+#include "glfoundation/framebuffer.h"
+#include "glfoundation/shader.h"
+
 #include "renderpass.h"
-#include "shader.h"
+#include "gaussianblurpass.h"
 #include "sumpass.h"
 
 namespace Cluster

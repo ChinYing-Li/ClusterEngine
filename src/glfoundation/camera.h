@@ -16,8 +16,8 @@ public:
     Camera(const float x, const float y, const float z);
     ~Camera() = default;
 
-    void update_project_mat(glm::mat4& mat) const noexcept;
-    void update_view_mat(glm::mat4& mat) const noexcept;
+    void load_proj_mat(glm::mat4& mat) const noexcept;
+    void load_view_mat(glm::mat4& mat) const noexcept;
 
     void set_aspect_ratio(const float aspect_ratio);
     float get_aspect_ratio() const noexcept;
@@ -32,6 +32,7 @@ public:
     void set_far_plane(float far);
 
     void set_eye(const glm::vec3 eye);
+    glm::vec3 get_eye() const;
     void set_direction(const glm::vec3 direction);
     void set_up(const glm::vec3 up);
 

@@ -58,11 +58,11 @@ bind(const GLuint texture_binding_point)
 void Texture::
 destroy()
 {
-  if (!m_usable)
+  if (!m_initialized)
   {
     return;
   }
-
+  // TODO
 }
 
 void Texture::
@@ -195,16 +195,15 @@ Texture()
     std::cout << paths.size() << std::endl;
 }
 
-bool TextureCubemap::init_from_file(const std::vector<std::string>& file_path)
+bool TextureCubemap::init_from_file(const std::vector<fs::path>& file_path)
 {
     assert(m_initialized);
     m_num_faces = 0;
-    this->set_face_texture_param();
 
     int num_channels;
     for(int i = 0; i < file_path.size(); ++i)
     {
-        unsigned char *data = stbi_load(file_path[i].c_str(), &m_width, &m_height, &num_channels, 0);
+        unsigned char *data = stbi_load(file_path[i].c_str(), &m_width, &m_height, &num_channels, STBI_rgb_alpha);
         if (data)
         {
           glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X+i, 0,
@@ -224,6 +223,7 @@ bool TextureCubemap::init_from_file(const std::vector<std::string>& file_path)
           stbi_image_free(data);
           return false;
         }
+        this->set_face_texture_param(i, GL_DEPTH_COMPONENT24, GL_DEPTH_COMPONENT, GL_FLOAT, data);
     }
     return true;
 }
@@ -271,9 +271,9 @@ void TextureCubemap::
 set_wrapping(GLint wrap_s, GLint wrap_t, GLint wrap_r)
 {
   //check whether this texture is binded
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, wrap_s);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, wrap_t);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, wrap_r);
+  glTexParameteri(m_target, GL_TEXTURE_WRAP_S, wrap_s);
+  glTexParameteri(m_target, GL_TEXTURE_WRAP_T, wrap_t);
+  glTexParameteri(m_target, GL_TEXTURE_WRAP_R, wrap_r);
 }
 
 void TextureCubemap::

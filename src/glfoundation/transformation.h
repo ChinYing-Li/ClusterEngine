@@ -1,6 +1,6 @@
 #pragma once
 
-#include <glm/glm.hpp>
+#include "glfoundation/glincludes.h"
 
 namespace Cluster
 {
@@ -10,7 +10,7 @@ class Transformation
 public:
   Transformation();
 
-  void translate(const glm::vec4 offset);
+  void translate(const glm::vec3 offset);
   void rotate_x(const float angle);
   void rotate_y(const float angle);
   void rotate_z(const float angle);

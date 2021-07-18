@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "renderpass.h"
-#include "shader.h"
+#include "glfoundation/shader.h"
 
 namespace Cluster
 {

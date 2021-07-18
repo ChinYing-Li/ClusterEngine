@@ -1,7 +1,7 @@
 #include <iostream>
 
 #include "windowmanager.h"
-#include "glincludes.h"
+#include "glfoundation/glincludes.h"
 
 WindowManager::WindowManager(unsigned int width, unsigned int height)
 {

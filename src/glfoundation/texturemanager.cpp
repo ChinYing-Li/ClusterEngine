@@ -26,13 +26,14 @@ TextureCubemap TextureManager::
 generate_empty_cubemap(const GLuint resolution)
 {
   // TODO: resolution?
-  return TextureCubemap();
+  TextureCubemap tex;
+  return tex;
 }
 
 Texture2D TextureManager::
 generate_shadow_map(const GLuint width, const GLuint height)
 {
-  Texture2D shadow_map();
+  Texture2D shadow_map;
   shadow_map.bind(0);
   shadow_map.set_wrapping(GL_CLAMP_TO_BORDER, GL_CLAMP_TO_BORDER);
   shadow_map.set_magmin_filter(GL_LINEAR, GL_LINEAR);
@@ -52,7 +53,7 @@ generate_shadow_map(const GLuint width, const GLuint height)
 TextureCubemap TextureManager::
 generate_shadow_cubemap(const GLuint resolution)
 {
-  TextureCubemap> shadow_map();
+  TextureCubemap shadow_map;
   shadow_map.bind(0);
   shadow_map.set_resolution(resolution);
   shadow_map.set_wrapping(GL_CLAMP_TO_BORDER, GL_CLAMP_TO_BORDER, GL_CLAMP_TO_BORDER);
@@ -75,7 +76,7 @@ generate_shadow_cubemap(const GLuint resolution)
 Texture2D TextureManager::
 generate_hdr_texture(const unsigned int width, const unsigned int height)
 {
-  Texture2D hdr_texture();
+  Texture2D hdr_texture;
   hdr_texture.set_dimensions(width, height);
 
   hdr_texture.bind(0);
@@ -89,7 +90,7 @@ generate_hdr_texture(const unsigned int width, const unsigned int height)
 Texture2D TextureManager::
 generate_ldr_texture(const unsigned int width, const unsigned int height)
 {
-  Texture2D ldr_texture();
+  Texture2D ldr_texture;
   ldr_texture.set_dimensions(width, height);
 
   ldr_texture.bind(0);

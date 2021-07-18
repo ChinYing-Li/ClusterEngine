@@ -32,11 +32,15 @@ public:
   GLuint get_screen_quad_handle() const;
 
   void set_clear_color(const glm::vec4 &color);
+  void set_camera(Shader& shader, Camera& cam);
 
   static GL_Capabilities get_default_settings();
+
   const glm::mat4* get_project_transform() const;
   const glm::mat4* get_view_transform() const;
   const glm::mat4* get_model_transform() const;
+  void set_project_transform();
+  void set_view_transform();
 
   static void set_current_framebuffer(const FrameBuffer* current_framebuffer) noexcept;
   static const FrameBuffer* get_current_framebuffer();
@@ -44,9 +48,14 @@ public:
 private:
   GLuint m_screen_quad_ID;
   unsigned int m_active_texture_binding_point;
+  const static FrameBuffer* m_current_framebuffer;
+  glm::mat4 m_model_mat;
+  glm::mat4 m_view_mat;
+  glm::mat4 m_proj_mat;
+
   glm::vec4 m_clear_color;
   GL_Capabilities m_settings;
-  const static FrameBuffer* m_current_framebuffer;
+
 };
 
 } // namespace Cluster

@@ -1,5 +1,6 @@
 
-#include "camera.h"
+#include "glfoundation/camera.h"
+#include "glfoundation/shader.h"
 
 namespace Cluster
 {
@@ -18,13 +19,13 @@ m_up(0, 1, 0)
 {}
 
 void Camera::
-update_project_mat(glm::mat4 &mat) const noexcept
+load_proj_mat(glm::mat4 &mat) const noexcept
 {
-  mat = glm::perspective(glm::radians(15.0f), m_aspect_ratio, m_near_plane, m_far_plane);
+  mat = glm::perspective(glm::radians(m_fovy), m_aspect_ratio, m_near_plane, m_far_plane);
 }
 
 void Camera::
-update_view_mat(glm::mat4 &mat) const noexcept
+load_view_mat(glm::mat4 &mat) const noexcept
 {
     mat = glm::lookAt(m_eye, m_eye + m_direction, m_up);
 }
@@ -83,6 +84,12 @@ void Camera::
 set_eye(glm::vec3 eye)
 {
   m_eye = eye;
+}
+
+glm::vec3 Camera::
+get_eye() const
+{
+  return m_eye;
 }
 
 void Camera::

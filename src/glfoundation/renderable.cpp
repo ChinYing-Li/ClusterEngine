@@ -74,7 +74,8 @@ scale_z(float scale)
 
 }
 
-void Renderable::update_model_mat(glm::mat4& model_mat)
+void Renderable::
+load_model_mat(glm::mat4& model_mat)
 {
   model_mat = m_transformation.get_matrix();
 }
