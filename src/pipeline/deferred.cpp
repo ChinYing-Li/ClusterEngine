@@ -10,7 +10,7 @@ namespace fs = std::experimental::filesystem;
 
 namespace Cluster
 {
-extern fs::path shader_dir;
+extern const fs::path shader_dir;
 float Deferred::m_poly_offset_factor = 3.0;
 
 Deferred::
@@ -73,6 +73,12 @@ render_scene(const Shader& shader, const Scene& scene)
 
 void Deferred::
 render_objects(const Shader& shader, const Scene& scene)
+{
+
+}
+
+void Deferred::
+render_skybox(const Shader& shader, const Scene& scene)
 {
 
 }

@@ -16,13 +16,13 @@ class Scene
 {
 public:
   Scene() = default;
-  ~Scene();
+  ~Scene() = default;
   Scene(fs::path& scene_path);
 
   bool create_skybox(std::vector<fs::path>& texture_path);
   void add_light(std::shared_ptr<Light> light, int index);
   void add_object(std::shared_ptr<Renderable> object, int index);
-  Cubemap& get_skybox_ref();
+  Cubemap* get_skybox();
   const std::vector<std::shared_ptr<Light>>& get_light_vec() const;
   const std::vector<std::shared_ptr<Renderable>>& get_object_vec() const;
 

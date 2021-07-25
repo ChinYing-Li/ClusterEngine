@@ -1,3 +1,5 @@
+#include <experimental/filesystem>
+
 #include "lightingpass.h"
 
 namespace Cluster
@@ -9,6 +11,18 @@ LightingPass::LightingPass() :
   m_shader(RenderPass::SHADER_ROOT / "quad.vert", RenderPass::SHADER_ROOT / "deferredlighting.frag")
 {
 }
+
+    void LightingPass::
+    resize(const unsigned int width, const unsigned int height)
+    {
+        RenderPass::resize(width, height);
+    }
+
+    void LightingPass::
+    render(RenderState& r_state, const Scene& scene)
+    {
+
+    }
 
 void LightingPass::set_gbuffer(std::shared_ptr<GBuffer> gbuffer)
 {

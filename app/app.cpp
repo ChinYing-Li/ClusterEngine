@@ -2,7 +2,10 @@
 #include <iostream>
 #include <memory>
 
-#include "app/app.h"
+#include <GL/glew.h>
+#include <GLFW/glfw3.h>
+
+#include "app.h"
 #include "pipeline/forward.h"
 #include "pipeline/deferred.h"
 #include "pipeline/deferedcluster.h"

@@ -100,11 +100,12 @@ add_light(std::shared_ptr<Light> light, int index = -1)
   }
 }
 
-const Skybox* Scene::
+Cubemap* Scene::
 get_skybox() const
 {
   return m_skybox.get();
 }
+
 
 const std::vector<std::shared_ptr<Light>>& Scene::
 get_light_vec() const

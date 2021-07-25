@@ -12,7 +12,7 @@ namespace fs = std::experimental::filesystem;
 
 namespace Cluster
 {
-extern fs::path shader_dir;
+extern const fs::path shader_dir;
 const glm::vec4 Forward::M_CLEAR_COLOR = glm::vec4(1.0, 0.0, 1.0, 1.0);
 
 Forward::
@@ -93,6 +93,12 @@ render_scene(const Shader &shader, const Scene &scene)
   }
 }
 
+    void Forward::
+    render_skybox(const Shader& shader, const Scene& scene)
+    {
+
+    }
+
 void Forward::
 update_frame(Scene &scene)
 {
@@ -169,8 +175,8 @@ render_skybox(Scene& scene)
   nvtxRangePushA("Render skybox");
 
   m_shaders[Shader::SKYBOX]->use();
-  Cubemap& skybox = scene.get_skybox_ref();
-  skybox.render(m_shader_ins[Shader::SKYBOX]);
+  Cubemap* skybox = scene.get_skybox();
+  skybox->render(m_shader_ins[Shader::SKYBOX]);
 
   nvtxRangePop();
 }

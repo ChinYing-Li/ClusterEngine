@@ -20,7 +20,7 @@ class Texture
 {
 public:
     Texture();
-    ~Texture();
+    ~Texture() = default;
 
     void init();
     void bind(const GLuint binding_point);

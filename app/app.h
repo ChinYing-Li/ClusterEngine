@@ -6,6 +6,7 @@
 #include "glfoundation/camera.h"
 #include "glfoundation/scene.h"
 #include "glfoundation/texturemanager.h"
+#include "pipeline/pipelinebase.h"
 #include "utilities/managers/windowmanager.h"
 #include "utilities/fpscounter.h"
 
@@ -15,7 +16,6 @@ namespace po = boost::program_options;
 // forward declaration
 namespace Cluster
 {
-    class PipelineBase;
     class Scene;
 }
 

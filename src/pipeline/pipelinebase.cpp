@@ -3,6 +3,7 @@
 
 namespace Cluster
 {
+
 PipelineBase::
 PipelineBase():
   m_hdr_framebuffer(800, 600),

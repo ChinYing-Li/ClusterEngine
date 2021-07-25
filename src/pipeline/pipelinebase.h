@@ -15,6 +15,7 @@
 namespace Cluster
 {
 class Scene;
+const fs::path shader_dir = fs::path(getenv("SHADER_ROOT"));
 
 class PipelineBase
 {

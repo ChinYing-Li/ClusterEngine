@@ -12,7 +12,8 @@ GaussianBlurPass():
 
 }
 
-void GaussianBlurPass::resize(const unsigned int width, const unsigned int height)
+void GaussianBlurPass::
+resize(const unsigned int width, const unsigned int height)
 {
   RenderPass::resize(width, height);
 
