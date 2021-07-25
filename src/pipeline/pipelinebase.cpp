@@ -51,11 +51,10 @@ print_ldr_pass_info() const noexcept
 }
 
 void PipelineBase::
-set_camera_uniform(Shader& shader)
+set_camera_uniform(const Camera& cam, Shader& shader)
 {
-  if (!m_camera_ptr) return;
-  m_camera_ptr->update_project_mat(m_project_mat);
-  m_camera_ptr->update_view_mat(m_view_mat);
+  cam.load_proj_mat(m_project_mat);
+  cam.load_view_mat(m_view_mat);
   shader.set_uniformMat4f("u_project_mat", m_project_mat);
   shader.set_uniformMat4f("u_view_mat", m_view_mat);
 };

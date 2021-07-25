@@ -21,6 +21,7 @@ public:
     ~Renderable() = default;
 
     void virtual render(const Shader& shader) = 0;
+    void virtual render(const Shader* shader);
 
     void set_num_instances(const unsigned int num_instances);
     void set_instance_attrib();

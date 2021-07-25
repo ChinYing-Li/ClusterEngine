@@ -1,14 +1,32 @@
+#include <cstdlib>
+#include <iostream>
+
 #include "renderpass.h"
 
 namespace Cluster
 {
+const fs::path RenderPass::SHADER_ROOT = fs::path(getenv("SHADER_ROOT"));
+
 RenderPass::
 RenderPass(const std::string& passname) :
   m_width(1),
   m_height(1),
   m_pass_name(passname),
   m_capabilities(RenderState::get_default_settings())
-{}
+{
+}
+
+RenderPass::
+~RenderPass()
+{
+
+}
+
+void RenderPass::
+init()
+{
+  std::cout << SHADER_ROOT << std::endl;
+}
 
 void RenderPass::
 resize(const unsigned int width, const unsigned int height)
@@ -44,6 +62,6 @@ get_pass_name() const noexcept
 void RenderPass::
 set_render_target(Texture2D* target)
 {
-  m_render_target = target;
+  m_render_target_ptr = target;
 }
 }

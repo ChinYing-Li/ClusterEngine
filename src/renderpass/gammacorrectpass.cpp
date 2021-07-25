@@ -18,7 +18,7 @@ render(RenderState& r_state, const Scene& scene)
   // TODO: finish the render function of GammaCorrectPass
   r_state.gl_change_settings(m_capabilities);
   m_shader.use();
-  m_render_target->bind(0);
+  m_render_target_ptr->bind(0);
   m_shader.set_uniform1f("u_gamma", m_gamma);
   r_state.draw_screen_quad();
 }

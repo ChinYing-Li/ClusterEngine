@@ -14,7 +14,7 @@ get_frame_per_second() const
   return m_frame_per_second;
 }
 
-void Timer::
+bool Timer::
 update()
 {
   double cur_time = glfwGetTime();
@@ -26,7 +26,8 @@ update()
       m_frame_per_second = double(m_frames) / time_difference;
       m_frames = 0; // Start counting again.
       m_prev_time = cur_time;
+      return true;
     }
+    return false;
 }
-
-}
+} // namespace Cluster

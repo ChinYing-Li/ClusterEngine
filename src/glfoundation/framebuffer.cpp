@@ -19,7 +19,7 @@ FrameBuffer::~FrameBuffer()
 }
 
 void FrameBuffer::
-bind(const Usage usage) const noexcept
+bind(const Usage usage) noexcept
 {
     glBindFramebuffer(usage, m_fbo);
 
@@ -157,9 +157,9 @@ set_cubemap(GLenum attachment_target,
     }
 }
 
-Texture2D FrameBuffer::
+Texture2D* FrameBuffer::
 get_color_texture(unsigned int binding_point)
 {
-  return m_color_textures[binding_point];
+  return &m_color_textures[binding_point];
 }
 }

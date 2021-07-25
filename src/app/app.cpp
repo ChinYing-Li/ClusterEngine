@@ -3,7 +3,9 @@
 #include <memory>
 
 #include "app/app.h"
-#include "utilities/Imanager.h"
+#include "pipeline/forward.h"
+#include "pipeline/deferred.h"
+#include "pipeline/deferedcluster.h"
 
 namespace fs = std::experimental::filesystem;
 namespace po = boost::program_options;
@@ -17,14 +19,15 @@ m_texture_manager()
 bool App::
 begin(int argc, char **argv)
 {
-    glfwSetErrorCallback(WindowManager::error_callback);
+    glfwSetErrorCallback(Cluster::WindowManager::error_callback);
     if(!glfwInit())
     {
         BOOST_LOG_TRIVIAL(fatal) << "failed to initialize GLFW library";
         return false;
     }
     std::cout << "GLFW library initialized, ready to start the application." << std::endl;
-    get_command(args, argv);
+    get_command(argc, argv);
+    // load scene here as well
     create_pipeline();
     return true;
 }
@@ -35,11 +38,11 @@ loop()
     int count = 0;
     while(!glfwWindowShouldClose(m_window_manager.window_ptr))
     {
-        if (m_timer.processTick())
+        if (m_timer.update())
         {
             std::cout << count << std::endl;
             ++count;
-            glfwSwapBuffers(data->inputmanager_ptr->window_ptr);
+            glfwSwapBuffers(m_window_manager.window_ptr);
             glfwPollEvents();
         }
     }
@@ -54,7 +57,7 @@ get_command(int argc, char **argv)
             ("use_deferred,d", po::bool_switch(&m_use_deferred), "Set this flag to use deferred shading. If set to false, then forward shading will be used")
             ("cluster,c", po::bool_switch(&m_use_cluster), "Set this flag to use cluster rendering.")
             ("scene,s", "The absolute path to the scene file.");
-    po::command_line_parser(args, argv).options(allowed_op_description).run();
+    po::command_line_parser(argc, argv).options(allowed_op_description).run();
 }
 
 void App::
@@ -68,10 +71,17 @@ create_pipeline()
 {
     if(m_use_deferred)
     {
-        m_render_pipeline = (m_use_cluster) : std::make_unique<DeferedCluster>() ? std::make_unique<Deferred>();
+        if(m_use_cluster)
+        {
+            m_render_pipeline = std::make_unique<Cluster::DeferredCluster>();
+        }
+        else
+        {
+            m_render_pipeline = std::make_unique<Cluster::Deferred>();
+        }
     }
     else
     {
-        m_render_pipeline = std::make_unique<Forward>(*m_scene_ptr);
+        m_render_pipeline = std::make_unique<Cluster::Forward>(m_scene);
     }
 }

@@ -18,6 +18,7 @@ public:
             const GLfloat *vertex_buffer_data);
     bool initialize_texture(std::vector<fs::path>& path_to_texture);
     void render(const Shader& shader) override;
+    void render(const Shader* shader) override;
     bool is_usable();
 
 private:

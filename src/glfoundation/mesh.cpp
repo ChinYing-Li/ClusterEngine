@@ -136,7 +136,7 @@ draw_textures(const Shader& shader)
 }
 
 void Mesh::
-set_material_uniform(const Shader& shader)
+set_material_uniform(const Shader& shader) const
 {
     shader.use();
     m_material_ptr->set_uniform(shader);

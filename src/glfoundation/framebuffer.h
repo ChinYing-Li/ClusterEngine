@@ -21,7 +21,7 @@ public:
       READ   = GL_READ_FRAMEBUFFER,
     };
 
-    void bind(const Usage usage) const noexcept;
+    void bind(const Usage usage) noexcept;
     void release() const noexcept;
     void check_status() const noexcept;
     void enable_color(GLenum mode);
@@ -42,8 +42,8 @@ public:
     void set_parameter(GLenum binding_target, GLenum param_name, GLint param_val);
 
     //TODO: add drawbuffer and read buffer??
-    Texture2D get_color_texture(unsigned int binding_point);
-    Texture2D get_color_texture_in_use() const;
+    Texture2D* get_color_texture(unsigned int binding_point);
+    Texture2D* get_color_texture_in_use();
 
     unsigned int get_current_draw_buffer() const;
     void set_current_draw_buffer(unsigned int color_attachment);

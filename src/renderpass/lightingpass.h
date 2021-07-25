@@ -19,7 +19,7 @@ public:
     void set_gbuffer(std::shared_ptr<GBuffer> gbuffer_ptr);
 
 private:
-    static std::string m_pass_name;
+    static const std::string m_pass_name;
 
     std::shared_ptr<GBuffer> m_gbuffer_ptr;
     Shader m_shader;

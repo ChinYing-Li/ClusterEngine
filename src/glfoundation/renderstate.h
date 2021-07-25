@@ -42,20 +42,19 @@ public:
   void set_project_transform();
   void set_view_transform();
 
-  static void set_current_framebuffer(const FrameBuffer* current_framebuffer) noexcept;
-  static const FrameBuffer* get_current_framebuffer();
+  static void set_current_framebuffer(FrameBuffer* current_framebuffer) noexcept;
+  static FrameBuffer* get_current_framebuffer();
 
 private:
   GLuint m_screen_quad_ID;
   unsigned int m_active_texture_binding_point;
-  const static FrameBuffer* m_current_framebuffer;
+  static FrameBuffer* m_current_framebuffer;
   glm::mat4 m_model_mat;
   glm::mat4 m_view_mat;
   glm::mat4 m_proj_mat;
 
   glm::vec4 m_clear_color;
   GL_Capabilities m_settings;
-
 };
 
 } // namespace Cluster

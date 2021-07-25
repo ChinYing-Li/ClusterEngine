@@ -25,6 +25,7 @@ class Shader;
 class Mesh final : public Renderable
 {
 public:
+    Mesh() = delete;
     Mesh(objl::Mesh& mesh, fs::path obj_root_dir);
     ~Mesh();
 
@@ -38,7 +39,7 @@ protected:
 private:
     void init(objl::Mesh& mesh);
     void draw_textures(const Shader& shader);
-    void set_material_uniform(const Shader& shader);
+    void set_material_uniform(const Shader& shader) const;
 
     Material* m_material_ptr = nullptr;
 };

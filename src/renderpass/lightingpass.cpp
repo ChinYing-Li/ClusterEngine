@@ -2,12 +2,12 @@
 
 namespace Cluster
 {
-std::string LightingPass::m_pass_name = "";
+const std::string LightingPass::m_pass_name = "lighting";
 
 LightingPass::LightingPass() :
-  RenderPass(m_pass_name)
+  RenderPass(m_pass_name),
+  m_shader(RenderPass::SHADER_ROOT / "quad.vert", RenderPass::SHADER_ROOT / "deferredlighting.frag")
 {
-    m_shader = Shader("shader/quad.vert", "shader/deferredlighting.frag", "", "directlight");
 }
 
 void LightingPass::set_gbuffer(std::shared_ptr<GBuffer> gbuffer)

@@ -10,7 +10,7 @@
 #include "glfoundation/shaderregistry.h"
 #include "renderpass/renderpass.h"
 // Do we really need this?
-#include "tonemappass.h"
+#include "renderpass/tonemappass.h"
 
 namespace Cluster
 {
@@ -46,6 +46,7 @@ protected:
 
     std::vector<Renderable*> m_objects; // Should be within the Scene class
     std::map<Shader::Usage, std::unique_ptr<Shader>> m_shaders;
+    std::map<Shader::Usage, Shader> m_shader_ins;
 
     FrameBuffer m_hdr_framebuffer;
     FrameBuffer m_ldr_framebuffer;
@@ -56,7 +57,7 @@ protected:
     std::shared_ptr<TonemapPass> m_tonemap_pass;
 
     void set_pass(const std::shared_ptr<RenderPass> pass, std::vector<std::shared_ptr<RenderPass>>& passes, const int index = -1);
-    void set_camera_uniform(Shader& shader);
+    void set_camera_uniform(const Camera& cam, Shader& shader);
     void print_info(const std::vector<std::shared_ptr<RenderPass>>& passes) const noexcept; // TODO: What's the point of this?
     void reset_backbuffer(std::vector<FrameBuffer*>& back_buffer);
     bool shaders_init_success();

@@ -1,3 +1,5 @@
+#include <memory>
+
 #include "tonemappass.h"
 
 namespace Cluster
@@ -6,7 +8,8 @@ const std::string TonemapPass::m_pass_name = "tonemap";
 
 TonemapPass::
 TonemapPass() :
-  RenderPass(m_pass_name)
+  RenderPass(m_pass_name),
+  m_shader(RenderPass::SHADER_ROOT / "quad.vert", RenderPass::SHADER_ROOT / "tonemap.frag")
 {
   m_capabilities[STENCIL_TEST] = false;
   m_capabilities[DEPTH_TEST] = false;
@@ -19,7 +22,7 @@ render(RenderState& r_state, const Scene& scene)
   nvtxRangePushA(get_pass_name().c_str());
 
   m_shader.use();
-  m_render_target->bind(0);
+  m_render_target_ptr->bind(0);
   m_shader.set_uniform1i("u_input", 0);
   m_shader.set_uniform1i("u_curve", m_curve);
   m_shader.set_uniform1f("u_exposure", m_exposure);
@@ -41,5 +44,4 @@ set_exposure(const float exposure)
 {
   m_exposure = exposure;
 }
-}
-
+} // namespace Cluster

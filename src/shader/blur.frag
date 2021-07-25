@@ -19,10 +19,10 @@ void main(void)
     float kernel_radius = u_kernel_size / 2.0;
     vec2 blur_direction = (u_horizontal) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
 
-    // Incremental Gaussian Coefficent Calculation
+    // Incremental Gaussian Coefficent Calculation (reference: GPU Gems 3 pp. 877 - 889)
     vec3 incremental_gaussian;
-    incremental_gaussian.x = 1.0 / sqrt(2 * PI) / u_sigma;
-    incremental_gaussian.y = exp();
+    incremental_gaussian.x = 1.0 / (sqrt(2 * PI) * u_sigma);
+    incremental_gaussian.y = exp(-0.5 / (u_sigma * u_sigma);
     incremental_gaussian.z = incremental_gaussian.y * incremental_gaussian.y;
 
     vec4 average = vec4(0.0);
@@ -34,7 +34,7 @@ void main(void)
     incremental_gaussian.xy *= incremental_gaussian.yz;
 
     // Second, sample
-    for (float i = 1.0; i <= kernel_radius; i += 1.0)
+    for (float i = 1.0; i <= u_kernel_size; i += 1.0)
     {
         average += texture2D(u_texture, i_tex_coords - i * u_tex_dim_inv * blur_direction) * incremental_gaussian.x;
         average += texture2D(u_texture, i_tex_coords + i * u_tex_dim_inv * blur_direction) * incremental_gaussian.x;

@@ -5,8 +5,7 @@
 #include "glfoundation/scene.h"
 #include "glfoundation/texturemanager.h"
 #include "pipeline/forward.h"
-#include "pipeline/deferred.h"
-#include "pipeline/deferedcluster.h"
+
 #include "utilities/debug/debug.h"
 
 namespace fs = std::experimental::filesystem;
@@ -56,8 +55,8 @@ void Forward::resize(unsigned int width, unsigned int height)
     m_framebuffer.reset();
     m_framebuffer.create(width, height);
     m_framebuffer.bind(FrameBuffer::NORMAL);
-    m_framebuffer.attach_color_texture(0, generate_hdr_texture(width, height));
-    m_framebuffer.attach_depth_texture(generate_empty_depth_map(width, height));
+    m_framebuffer.attach_color_texture(0, TextureManager::generate_hdr_texture(width, height));
+    m_framebuffer.attach_depth_texture(TextureManager::generate_empty_depth_map(width, height));
     m_framebuffer.check_status();
     m_framebuffer.release();
 
@@ -65,7 +64,7 @@ void Forward::resize(unsigned int width, unsigned int height)
     {
       buffer.reset();
       buffer.create(width, height);
-      buffer.attach_color_texture(0, generate_hdr_texture(width, height));
+      buffer.attach_color_texture(0, TextureManager::generate_hdr_texture(width, height));
       buffer.check_status();
       buffer.release();
     }
@@ -74,7 +73,7 @@ void Forward::resize(unsigned int width, unsigned int height)
     {
       buffer.reset();
       buffer.create(width, height);
-      buffer.attach_color_texture(0, generate_ldr_texture(width, height));
+      buffer.attach_color_texture(0, TextureManager::generate_ldr_texture(width, height));
       buffer.check_status();
       buffer.release();
     }
@@ -95,12 +94,12 @@ render_scene(const Shader &shader, const Scene &scene)
 }
 
 void Forward::
-update_frame(const Scene &scene)
+update_frame(Scene &scene)
 {
   gl_debug();
   m_hdr_framebuffer.bind(FrameBuffer::NORMAL);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  render_skybox();
+  render_skybox(scene);
   post_processing(scene);
 
   m_framebuffer.release();
@@ -116,7 +115,7 @@ apply_direct_lighting(const Scene &scene)
   glDepthFunc(GL_LEQUAL);
 
   m_shaders.at(Shader::DIRECT_LIGHTING)->use();
-  const std::vector<std::shared_ptr<Light> light_vec = scene.get_light_vec();
+  const std::vector<std::shared_ptr<Light>> light_vec = scene.get_light_vec();
   for(int i = 0; i < scene.get_light_vec().size(); ++i)
   {
     const std::shared_ptr<Light>& light = light_vec[i];
@@ -139,17 +138,24 @@ post_processing(const Scene& scene)
 {
   nvtxRangePushA("Post processing");
 
-  Shader shader_in_use = *m_shaders[Shader::BLOOM];
-  shader_in_use.use();
-  shader_in_use->set_uniform1f("u_threshold", 0.0);
-  shader_in_use->set_uniform1i("u_texture", 0);
+  m_shaders[Shader::BLOOM]->use();
+  m_shaders[Shader::BLOOM]->set_uniform1f("u_threshold", 0.0);
+  m_shaders[Shader::BLOOM]->set_uniform1i("u_texture", 0);
   m_renderstate.draw_screen_quad();
+
+  FrameBuffer* current_framebuffer_ptr = m_renderstate.get_current_framebuffer();
 
   for(int i = 1; i < 3; ++i)
   {
     for(int j = 0; j < 2; ++j)
     {
-      auto texture = m_renderstate.get_current_framebuffer()->get_color_texture(0);
+      auto texture = current_framebuffer_ptr->get_color_texture(0);
+      texture->bind(0);
+      glGenerateMipmap(GL_TEXTURE_2D);
+      m_shaders[Shader::BLUR]->use();
+      m_shaders[Shader::BLUR]->set_uniform1i("u_texture", 0);
+      // TODO: Complete tbe implementation
+      // m_shaders[Shader::BLUR]->set_uniform2f("u_horizontal", )
       m_renderstate.draw_screen_quad();
     }
   }
@@ -158,22 +164,22 @@ post_processing(const Scene& scene)
 }
 
 void Forward::
-render_skybox(const Scene& scene, Camera& cam)
+render_skybox(Scene& scene)
 {
   nvtxRangePushA("Render skybox");
 
-  Shader shader_in_use = *m_shaders[Usage::SKYBOX];
-  shader_in_use.use();
-  Cubemap skybox = scene.get_skybox_ref();
-  skybox.render(shader_in_use);
+  m_shaders[Shader::SKYBOX]->use();
+  Cubemap& skybox = scene.get_skybox_ref();
+  skybox.render(m_shader_ins[Shader::SKYBOX]);
 
   nvtxRangePop();
 }
 
 void Forward::
-render_framebuffer(const FrameBuffer& framebuffer)
+render_framebuffer(FrameBuffer& framebuffer)
 {
-    framebuffer.get_color_texture(0)->bind(0);
+    auto tex = framebuffer.get_color_texture(0);
+    tex->bind(0);
     m_renderstate.draw_screen_quad();
 }
 }

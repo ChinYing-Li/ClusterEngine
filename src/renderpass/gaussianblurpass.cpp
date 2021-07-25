@@ -27,7 +27,7 @@ render(RenderState &r_state, const Scene &scene)
 
   const FrameBuffer* framebuffer = r_state.get_current_framebuffer();
   m_shader.use();
-  m_render_target->bind(0);
+  m_render_target_ptr->bind(0);
   glGenerateMipmap(GL_TEXTURE_2D);
 
   m_shader.set_uniform1i("u_texture", 0);

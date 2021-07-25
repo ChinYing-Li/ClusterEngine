@@ -130,7 +130,6 @@ init_from_file(const fs::path& path, Texture::Type type)
         stbi_image_free(&data);
         return false;
     }
-
     return true;
 }
 

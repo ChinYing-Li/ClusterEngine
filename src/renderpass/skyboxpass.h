@@ -15,8 +15,6 @@ public:
     void render(RenderState& r_state, const Scene& scene) override;
 
 private:
-    void setup();
-
     static std::string m_pass_name;
     Shader m_sky_shader;
     Shader m_skybox_shader;

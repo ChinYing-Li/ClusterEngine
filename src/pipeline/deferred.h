@@ -2,11 +2,12 @@
 
 #include <memory>
 
-#include "framebuffer.h"
-#include "gbuffer.h"
+#include "glfoundation/framebuffer.h"
+#include "glfoundation/gbuffer.h"
+#include "glfoundation/renderstate.h"
+#include "glfoundation/shader.h"
+
 #include "pipelinebase.h"
-#include "renderstate.h"
-#include "shader.h"
 
 namespace Cluster
 {
@@ -17,11 +18,13 @@ class Deferred : public PipelineBase
 {
 public:
   Deferred();
+  ~Deferred() = default;
 
   void virtual setup(unsigned int width, unsigned int height, Scene& scene) override;
   void virtual resize(unsigned int width, unsigned int height) override;
   void virtual render_scene(const Shader& shader, const Scene& scene) override;
   void virtual render_objects(const Shader& shader, const Scene& scene) override;
+  void virtual render_skybox(const Shader& shader, const Scene& scene) override;
   void virtual update_frame(const Scene& scene) override;
 
 protected:
@@ -31,8 +34,8 @@ protected:
   void virtual create_backbuffer(unsigned int width, unsigned int height);
   void virtual create_shadowmaps(Scene& scene);
 
-  void virtual render_gbuffer();
-  void virtual render_framebuffers(const FrameBuffer& framebuffe);
+  void virtual render_gbuffer(const Scene& scene);
+  void virtual render_framebuffers(FrameBuffer& framebuffer);
   void virtual render_depth_map(const Scene& scene);
   void virtual render_shadow_maps(const Scene& scene);
 
@@ -43,4 +46,4 @@ protected:
   Shader m_shadow_shader;
 };
 
-}
+} // namespace Cluster

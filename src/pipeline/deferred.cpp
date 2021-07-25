@@ -1,8 +1,10 @@
 #include <experimental/filesystem>
 
+#include "renderpass/Irenderpass.h"
+#include "glfoundation/scene.h"
+#include "glfoundation/texturemanager.h"
+
 #include "deferred.h"
-#include "Irenderpass.h"
-#include "scene.h"
 
 namespace fs = std::experimental::filesystem;
 
@@ -80,25 +82,25 @@ void Deferred::update_frame(const Scene &scene)
   gl_debug();
   m_renderstate.set_clear_color(glm::vec4(1.0, 0.0, 1.0, 0.4));
   render_shadow_maps(scene);
-  render_gbuffer();
+  render_gbuffer(scene);
 
   // High dynamic range rendering
   m_hdr_framebuffer.bind(FrameBuffer::NORMAL);
   for(const std::shared_ptr<RenderPass>& pass: m_hdr_passes)
   {
-    pass->set_render_target(m_hdr_framebuffer.get_color_texture(0).get());
+    pass->set_render_target(m_hdr_framebuffer.get_color_texture(0));
     pass->render(m_renderstate, scene);
   }
 
   // Tonemapping
-  m_tonemap_pass->set_render_target(m_hdr_framebuffer.get_color_texture(0).get());
+  m_tonemap_pass->set_render_target(m_hdr_framebuffer.get_color_texture(0));
   m_ldr_framebuffer.bind(FrameBuffer::DRAW);
   m_tonemap_pass->render(m_renderstate, scene);
 
   // Low dynamic range rendering
   for(const std::shared_ptr<RenderPass>& pass: m_ldr_passes)
   {
-    pass->set_render_target(m_ldr_framebuffer.get_color_texture(0).get());
+    pass->set_render_target(m_ldr_framebuffer.get_color_texture(0));
 
   }
   render_framebuffers(m_ldr_framebuffer);
@@ -114,8 +116,8 @@ create_backbuffer(unsigned int width, unsigned int height)
 
   for(int i = 0; i < 2; ++i)
   {
-    m_ldr_framebuffer.attach_color_texture(i, generate_ldr_texture(width, height));
-    m_hdr_framebuffer.attach_color_texture(i, generate_hdr_texture(width, height));
+    m_ldr_framebuffer.attach_color_texture(i, TextureManager::generate_ldr_texture(width, height));
+    m_hdr_framebuffer.attach_color_texture(i, TextureManager::generate_hdr_texture(width, height));
   }
 
   m_ldr_framebuffer.check_status();
@@ -144,7 +146,7 @@ create_shadowmaps(Scene& scene)
 }
 
 void Deferred::
-render_gbuffer()
+render_gbuffer(const Scene& scene)
 {
   nvtxRangePushA("Render GBuffer");
 
@@ -161,14 +163,14 @@ render_gbuffer()
   glStencilOp(GL_KEEP, GL_REPLACE, GL_REPLACE);
   glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  render_scene();
+  render_scene(m_gbuffer_shader, scene);
   glStencilMask(0x00);
 
   nvtxRangePop();
 }
 
 void Deferred::
-render_framebuffers(const FrameBuffer& framebuffer)
+render_framebuffers(FrameBuffer& framebuffer)
 {
   nvtxRangePushA("Render FrameBuffer");
 
@@ -178,7 +180,7 @@ render_framebuffers(const FrameBuffer& framebuffer)
   glClearColor(1.0, 0.5, 0.2, 1.0);
 
   m_texture_shader.use();
-  m_framebuffer.get_color_texture_in_use().bind(0);
+  framebuffer.get_color_texture_in_use()->bind(0);
   m_texture_shader.set_uniform1i("u_texture", 0);
   m_renderstate.draw_screen_quad();
 
@@ -195,7 +197,7 @@ render_depth_map(const Scene& scene)
 
   glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
   glClear(GL_DEPTH_BUFFER_BIT);
-  render_scene(scene, m_shadow_shader);
+  render_scene(m_shadow_shader, scene);
   glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 
   nvtxRangePop();
