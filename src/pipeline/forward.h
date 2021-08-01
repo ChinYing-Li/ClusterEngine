@@ -21,14 +21,14 @@ class Forward : public PipelineBase
 public:
     Forward() = delete ;
     Forward(const Scene& scene);
-    ~Forward();
+    ~Forward() = default;
 
     void virtual setup(unsigned int width, unsigned int height, Scene& scene) override;
     void virtual resize(unsigned int width, unsigned int height) override;
     void virtual render_scene(const Shader& shader, const Scene& scene) override;
     void virtual render_objects(const Shader& shader, const Scene& scene) override;
     void virtual render_skybox(const Shader& shader, const Scene& scene) override;
-    void virtual update_frame(Scene& scene);
+    void virtual update_frame(Scene& scene) override;
 
     void apply_direct_lighting(const Scene& scene);
     void post_processing(const Scene& scene);

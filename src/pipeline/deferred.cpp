@@ -83,7 +83,7 @@ render_skybox(const Shader& shader, const Scene& scene)
 
 }
 
-void Deferred::update_frame(const Scene &scene)
+void Deferred::update_frame(Scene &scene)
 {
   gl_debug();
   m_renderstate.set_clear_color(glm::vec4(1.0, 0.0, 1.0, 0.4));
@@ -217,7 +217,7 @@ render_shadow_maps(const Scene& scene)
   m_renderstate.gl_enable(DEPTH_TEST);
   m_renderstate.gl_enable(POLYGON_OFFSET_FILL);
 
-  glPolygonOffset(m_poly_offset_factor, m_poly_offset_units);
+  glPolygonOffset(Deferred::m_poly_offset_factor, Deferred::m_poly_offset_units);
   glDepthMask(GL_TRUE);
 
   for(auto light_ptr: scene.get_light_vec())
@@ -225,4 +225,4 @@ render_shadow_maps(const Scene& scene)
 
   }
 }
-}
+} // namespace Cluster

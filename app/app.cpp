@@ -1,4 +1,6 @@
 #include <boost/log/trivial.hpp>
+#include <boost/program_options/options_description.hpp>
+#include <boost/program_options/option.hpp>
 #include <iostream>
 #include <memory>
 

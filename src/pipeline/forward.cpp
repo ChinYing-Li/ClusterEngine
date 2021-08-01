@@ -46,9 +46,6 @@ Forward(const Scene& scene):
 
 }
 
-Forward::
-~Forward()
-{}
 
 void Forward::resize(unsigned int width, unsigned int height)
 {

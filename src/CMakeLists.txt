@@ -54,6 +54,7 @@ target_include_directories(ClusterEngine
 
 target_link_libraries(ClusterEngine
     PUBLIC
+    stdc++fs
     ${Boost_LOG_LIBRARY}
     OpenMP::OpenMP_CXX
     PRIVATE

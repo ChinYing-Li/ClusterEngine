@@ -17,7 +17,7 @@ class Light
 {
 public:
     Light();
-    ~Light() = default;
+    virtual ~Light() = default;
 
     bool is_enabled();
 

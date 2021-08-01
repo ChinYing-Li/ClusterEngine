@@ -64,4 +64,4 @@ set_render_target(Texture2D* target)
 {
   m_render_target_ptr = target;
 }
-}
+} // namespace Cluster

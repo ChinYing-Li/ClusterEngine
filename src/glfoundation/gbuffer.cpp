@@ -46,5 +46,9 @@ setup_texture(Texture2D& texture,
   texture.set_magmin_filter(GL_NEAREST, GL_NEAREST);
 }
 
+void GBuffer::
+bind()
+{}
+
 }
 

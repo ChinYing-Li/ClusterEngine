@@ -25,7 +25,7 @@ public:
   void virtual render_scene(const Shader& shader, const Scene& scene) override;
   void virtual render_objects(const Shader& shader, const Scene& scene) override;
   void virtual render_skybox(const Shader& shader, const Scene& scene) override;
-  void virtual update_frame(const Scene& scene) override;
+  void virtual update_frame(Scene& scene) override;
 
 protected:
   static float m_poly_offset_factor;

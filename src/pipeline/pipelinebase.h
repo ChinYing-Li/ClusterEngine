@@ -21,14 +21,14 @@ class PipelineBase
 {
 public:
     PipelineBase();
-    ~PipelineBase();
+    virtual ~PipelineBase() = default;
 
     void virtual setup(unsigned int width, unsigned int height, Scene& scene) = 0;
     void virtual resize(unsigned int width, unsigned int height);
     void virtual render_scene(const Shader& shader, const Scene& scene) = 0;
-    void virtual render_objects(const Shader& shader, const Scene& scene);
+    void virtual render_objects(const Shader& shader, const Scene& scene) = 0;
     void virtual render_skybox(const Shader& shader, const Scene& scene) = 0;
-    void virtual update_frame(const Scene& scene);
+    void virtual update_frame(Scene& scene) = 0;
 
     void set_hdr_pass(const std::shared_ptr<RenderPass> pass, const int index = -1);
     void set_ldr_pass(const std::shared_ptr<RenderPass> pass, const int index = -1);
@@ -38,7 +38,7 @@ public:
     void print_ldr_pass_info() const noexcept;
 
 protected:
-    void virtual setup_backbuffers();
+    // void virtual setup_backbuffers();
     unsigned int m_width, m_height;
     glm::mat4 m_project_mat;
     glm::mat4 m_view_mat;

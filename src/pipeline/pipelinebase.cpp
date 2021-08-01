@@ -12,12 +12,6 @@ PipelineBase():
 
 }
 
-PipelineBase::
-~PipelineBase()
-{
-  // PipelineBase is not responsible for cleaning m_cam.
-}
-
 void PipelineBase::
 resize(unsigned int width, unsigned int height)
 {

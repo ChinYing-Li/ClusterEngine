@@ -162,4 +162,10 @@ get_color_texture(unsigned int binding_point)
 {
   return &m_color_textures[binding_point];
 }
+
+    Texture2D* FrameBuffer::
+    get_color_texture_in_use()
+    {
+
+    }
 }

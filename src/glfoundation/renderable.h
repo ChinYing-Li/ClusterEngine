@@ -18,7 +18,7 @@ class Renderable
 public:
     Renderable() = default;
     Renderable(int n_vertices);
-    ~Renderable() = default;
+    virtual ~Renderable() = default;
 
     void virtual render(const Shader& shader) = 0;
     void virtual render(const Shader* shader);

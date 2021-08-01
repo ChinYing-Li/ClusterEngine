@@ -97,13 +97,13 @@ set_camera(Shader& shader, Camera& cam)
 void RenderState::
 set_current_framebuffer(FrameBuffer* current_framebuffer) noexcept
 {
-  m_current_framebuffer = current_framebuffer;
+  RenderState::m_current_framebuffer = current_framebuffer;
 }
 
 FrameBuffer* RenderState::
 get_current_framebuffer()
 {
-  return m_current_framebuffer;
+  return RenderState::m_current_framebuffer;
 }
 
 } // namespace Cluster

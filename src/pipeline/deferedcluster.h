@@ -3,7 +3,8 @@
 #include "deferred.h"
 #include "glfoundation/texturemanager.h"
 
-namespace Cluster{
+namespace Cluster
+{
 class DeferredCluster : public Deferred
 {
 public:
