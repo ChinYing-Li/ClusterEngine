@@ -65,6 +65,7 @@ get_command(int argc, char **argv)
     po::command_line_parser(argc, argv).options(allowed_op_description).run();
 }
 
+
 void App::
 load_scene(fs::path& scene_path)
 {

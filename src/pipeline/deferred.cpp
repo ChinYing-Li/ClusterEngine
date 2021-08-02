@@ -12,6 +12,7 @@ namespace Cluster
 {
 extern const fs::path shader_dir;
 float Deferred::m_poly_offset_factor = 3.0;
+float Deferred::m_poly_offset_units = 10.0f;
 
 Deferred::
 Deferred():
@@ -66,7 +67,7 @@ resize(unsigned int width, unsigned int height)
 
 
 void Deferred::
-render_scene(const Shader& shader, const Scene& scene)
+render_scene(const Shader& shader, Scene& scene)
 {
 
 }
@@ -78,9 +79,9 @@ render_objects(const Shader& shader, const Scene& scene)
 }
 
 void Deferred::
-render_skybox(const Shader& shader, const Scene& scene)
+render_skybox(Scene& scene)
 {
-
+  // https://gamedev.stackexchange.com/questions/61453/skybox-with-deferred-shading
 }
 
 void Deferred::update_frame(Scene &scene)
@@ -135,24 +136,31 @@ create_backbuffer(unsigned int width, unsigned int height)
 void Deferred::
 create_shadowmaps(Scene& scene)
 {
-  for (auto light : scene.get_light_vec())
+  for (int i = 0; i < scene.light_count(); ++i)
   {
+      std::shared_ptr<Light> light = scene.get_light(i);
     light->setup_shadowbuffer(m_width, m_height);
-    TextureCubemap& shadowmap = light->get_shadowmap();
+
+    std::vector<int> shadow_map_dimension;
     switch (light->get_type())
     {
     case Light::DIRECTIONAL:
-      // TODO: Light classes have their own shadowbuffer !>
+      shadow_map_dimension = { 4096, 4096 };
+        // std::shared_ptr<Texture2D> shadowmap_2D = dynamic_cast<shared_ptr<Texture2D>>(shadowmap);
+        // shadowmap_2D->setup_shadowmap(4096, 4096);
       break;
     case Light::POINTLIGHT:
+      shadow_map_dimension = { 512 };
+        // std::shared_ptr<TextureCubemap> shadowmap_cube = dynamic_cast<shared_ptr<TextureCubemap>>(shadowmap);
+        // shadowmap_cube->reset(new TextureManager::generate_shadow_cubemap(512));
       break;
-
     }
+    light->setup_shadow_map(shadow_map_dimension);
   }
 }
 
 void Deferred::
-render_gbuffer(const Scene& scene)
+render_gbuffer(Scene& scene)
 {
   nvtxRangePushA("Render GBuffer");
 
@@ -194,7 +202,7 @@ render_framebuffers(FrameBuffer& framebuffer)
 }
 
 void Deferred::
-render_depth_map(const Scene& scene)
+render_depth_map(Scene& scene)
 {
   nvtxRangePushA("DEPTH");
 
@@ -210,7 +218,7 @@ render_depth_map(const Scene& scene)
 }
 
 void Deferred::
-render_shadow_maps(const Scene& scene)
+render_shadow_maps(Scene& scene)
 {
   nvtxRangePushA("Render Shadow maps");
 
@@ -220,9 +228,9 @@ render_shadow_maps(const Scene& scene)
   glPolygonOffset(Deferred::m_poly_offset_factor, Deferred::m_poly_offset_units);
   glDepthMask(GL_TRUE);
 
-  for(auto light_ptr: scene.get_light_vec())
+  for(int i = 0; i < scene.light_count(); ++i)
   {
-
+      std::shared_ptr<Light> light = scene.get_light(i);
   }
 }
 } // namespace Cluster

@@ -13,6 +13,7 @@ set(SOURCES
     glfoundation/objobject.cpp
     glfoundation/renderable.cpp
     glfoundation/renderstate.cpp
+        glfoundation/scene.cpp
     glfoundation/shader.cpp
     glfoundation/shaderregistry.cpp
     glfoundation/texture.cpp

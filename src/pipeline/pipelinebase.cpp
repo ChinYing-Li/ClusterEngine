@@ -12,6 +12,10 @@ PipelineBase():
 
 }
 
+PipelineBase::
+~PipelineBase()
+{}
+
 void PipelineBase::
 resize(unsigned int width, unsigned int height)
 {

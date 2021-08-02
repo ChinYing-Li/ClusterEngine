@@ -45,10 +45,12 @@ public:
   static void set_current_framebuffer(FrameBuffer* current_framebuffer) noexcept;
   static FrameBuffer* get_current_framebuffer();
 
+protected:
+    static FrameBuffer* m_current_framebuffer;
+
 private:
   GLuint m_screen_quad_ID;
   unsigned int m_active_texture_binding_point;
-  static FrameBuffer* m_current_framebuffer;
   glm::mat4 m_model_mat;
   glm::mat4 m_view_mat;
   glm::mat4 m_proj_mat;

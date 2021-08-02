@@ -16,9 +16,9 @@ public:
     Cubemap(GLenum primitive_mode,
             int numVertices,
             const GLfloat *vertex_buffer_data);
+    ~Cubemap() = default;
     bool initialize_texture(std::vector<fs::path>& path_to_texture);
     void render(const Shader& shader) override;
-    void render(const Shader* shader) override;
     bool is_usable();
 
 private:

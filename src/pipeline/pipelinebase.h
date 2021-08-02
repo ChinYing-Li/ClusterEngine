@@ -21,13 +21,13 @@ class PipelineBase
 {
 public:
     PipelineBase();
-    virtual ~PipelineBase() = default;
+    virtual ~PipelineBase();
 
     void virtual setup(unsigned int width, unsigned int height, Scene& scene) = 0;
     void virtual resize(unsigned int width, unsigned int height);
-    void virtual render_scene(const Shader& shader, const Scene& scene) = 0;
+    void virtual render_scene(const Shader& shader, Scene& scene) = 0;
     void virtual render_objects(const Shader& shader, const Scene& scene) = 0;
-    void virtual render_skybox(const Shader& shader, const Scene& scene) = 0;
+    void virtual render_skybox(Scene& scene) = 0;
     void virtual update_frame(Scene& scene) = 0;
 
     void set_hdr_pass(const std::shared_ptr<RenderPass> pass, const int index = -1);

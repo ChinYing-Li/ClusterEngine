@@ -16,6 +16,10 @@ void Renderable::set_num_instances(const unsigned int num_instances)
   m_num_instances = num_instances;
 }
 
+    void Renderable::
+    send_instance_matrices(std::vector<glm::mat4>& instance_model_mat)
+    {}
+
 void Renderable::set_instance_attrib()
 {
     glBindVertexArray(m_VAO);

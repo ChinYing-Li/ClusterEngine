@@ -12,14 +12,12 @@ Scene::
 Scene():
   m_skybox(nullptr),
   m_lights(0, nullptr)
-{
-
-}
+{}
 
 Scene::
 ~Scene()
 {
-
+  delete m_skybox;
 }
 
 Scene::Scene(fs::path& scene_path)
@@ -83,7 +81,7 @@ create_skybox(std::vector<fs::path>& texture_path)
             1.0f, -1.0f,  1.0f
           };
 
-  m_skybox = std::make_unique<Cubemap>(GL_TRIANGLES, 6 * 6, skybox_vert_buf);
+  m_skybox = new Cubemap(GL_TRIANGLES, 6 * 6, skybox_vert_buf);
   bool success = m_skybox->initialize_texture(texture_path);
 }
 
@@ -101,23 +99,36 @@ add_light(std::shared_ptr<Light> light, int index = -1)
 }
 
 Cubemap* Scene::
-get_skybox() const
+get_skybox()
 {
-  return m_skybox.get();
+  return m_skybox;
 }
 
-
-const std::vector<std::shared_ptr<Light>>& Scene::
-get_light_vec() const
+unsigned int Scene::
+light_count() const
 {
-  return m_lights;
+  return m_lights.size();
 }
 
-const std::vector<std::shared_ptr<Renderable>>& Scene::
-get_object_vec() const
+unsigned int Scene::
+object_count() const
 {
-  return m_objects;
+  return m_objects.size();
 }
+
+std::shared_ptr<Light> Scene::
+get_light(const unsigned int index)
+{
+  // Light* light_ptr = &(m_lights[index]);
+  return m_lights[index];
+}
+
+    std::shared_ptr<Renderable> Scene::
+    get_object(const unsigned int index)
+    {
+      // Light* light_ptr = &(m_lights[index]);
+      return m_objects[index];
+    }
 
 } // namespace Cluster
 

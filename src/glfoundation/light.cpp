@@ -1,6 +1,8 @@
+#include <assert.h>
 #include <iostream>
 
 #include "light.h"
+#include "glfoundation/texturemanager.h"
 
 namespace Cluster{
 Light::Light():
@@ -27,12 +29,6 @@ turn_off()
 {
     m_on_state = false;
     return;
-}
-
-TextureCubemap& Light::
-get_shadowmap()
-{
-  return m_shadowmap;
 }
 
 void Light::
@@ -164,6 +160,19 @@ set_shader(int index,
     glUniform3fv(glGetUniformLocation(shaderID, "lights[0].position"), 1, &m_position[0]);
 }
 
+void PointLight::
+setup_shadow_map(const std::vector<int>& dimension)
+{
+    assert (dimension.size() >= 1);
+    m_shadow_cubemap = std::make_shared<TextureCubemap>(TextureManager::generate_shadow_cubemap(dimension[0]));
+}
+
+std::shared_ptr<Texture> PointLight::
+get_shadowmap()
+{
+    return m_shadow_cubemap;
+}
+
 /*
  *
  */
@@ -181,9 +190,23 @@ set_shader(int index,
     glUniform3fv(glGetUniformLocation(shaderID, "lights[0].direction"), 1, &m_direction[0]);
 }
 
-void DirectionalLight::set_direction(const glm::vec3 direction)
+void DirectionalLight::
+set_direction(const glm::vec3 direction)
 {
     m_direction = direction;
+}
+
+void DirectionalLight::
+setup_shadow_map(const std::vector<int>& dimension)
+{
+    assert (dimension.size() >= 2);
+    m_shadow_map = std::make_shared<Texture2D>(TextureManager::generate_shadow_map(dimension[0], dimension[1]));
+}
+
+std::shared_ptr<Texture> DirectionalLight::
+get_shadowmap()
+{
+    return m_shadow_map;
 }
 
 } // namespace Cluster

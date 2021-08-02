@@ -22,9 +22,9 @@ public:
 
   void virtual setup(unsigned int width, unsigned int height, Scene& scene) override;
   void virtual resize(unsigned int width, unsigned int height) override;
-  void virtual render_scene(const Shader& shader, const Scene& scene) override;
+  void virtual render_scene(const Shader& shader, Scene& scene) override;
   void virtual render_objects(const Shader& shader, const Scene& scene) override;
-  void virtual render_skybox(const Shader& shader, const Scene& scene) override;
+  void virtual render_skybox(Scene& scene) override;
   void virtual update_frame(Scene& scene) override;
 
 protected:
@@ -34,10 +34,10 @@ protected:
   void virtual create_backbuffer(unsigned int width, unsigned int height);
   void virtual create_shadowmaps(Scene& scene);
 
-  void virtual render_gbuffer(const Scene& scene);
+  void virtual render_gbuffer(Scene& scene);
   void virtual render_framebuffers(FrameBuffer& framebuffer);
-  void virtual render_depth_map(const Scene& scene);
-  void virtual render_shadow_maps(const Scene& scene);
+  void virtual render_depth_map(Scene& scene);
+  void virtual render_shadow_maps(Scene& scene);
 
   std::shared_ptr<GBuffer> m_gbuffer;
 

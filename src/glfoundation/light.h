@@ -6,10 +6,6 @@
 
 namespace Cluster{
 
-class Deferred;
-class Forward;
-class DeferredCluster;
-class ForwardCluster;
 /*
  *
  */
@@ -32,9 +28,9 @@ public:
     void turn_on();
 
     Type get_type() const;
-    TextureCubemap& get_shadowmap(); // TODO: Seriously, I don't think this
+    virtual std::shared_ptr<Texture> get_shadowmap() = 0;
     void setup_shadowbuffer(unsigned int width, unsigned int height);
-    void setup_shadowmap();
+    virtual void setup_shadow_map(const std::vector<int>& dimensions) = 0;
 
     void set_color(const glm::vec3 new_color);
     void set_const_attenuation(const float const_atten);
@@ -45,12 +41,6 @@ public:
     void virtual set_shader(int index, GLuint& shaderID);
 
 protected:
-    // TODO: friend classes? Doesn't make sense to me.
-    class Deferred;
-    class Forward;
-    class DeferredCluster;
-    class ForwardCluster;
-
     bool m_on_state = true;
     bool m_is_spotlight = false; // TODO: remove this redundant variable
     bool m_is_local = false;
@@ -62,7 +52,6 @@ protected:
     glm::vec3 m_ambient_strength;
     glm::vec3 m_color;
 
-    TextureCubemap m_shadowmap;
     FrameBuffer m_shadowbuffer;
     const Type m_type = Type::SPOTLIGHT;
 };
@@ -78,6 +67,7 @@ public:
     ~SpotLight() = default;
 
     void set_shader(int index, GLuint& shaderID) override;
+    virtual void setup_shadow_map(const std::vector<int>& dimensions) override {};
 
 protected:
     class Deferred;
@@ -103,13 +93,11 @@ public:
     ~PointLight() = default;
 
     void set_shader(int index, GLuint& shaderID) override;
+    virtual void setup_shadow_map(const std::vector<int>& dimensions) override;
+    std::shared_ptr<Texture> get_shadowmap() override;
 
 protected:
-    class Deferred;
-    class Forward;
-    class DeferredCluster;
-    class ForwardCluster;
-
+    std::shared_ptr<TextureCubemap> m_shadow_cubemap;
     glm::vec3 m_position;
     const Type m_type = Type::POINTLIGHT;
 };
@@ -126,13 +114,11 @@ public:
 
     void set_shader(int index, GLuint& shaderID) override;
     void set_direction(const glm::vec3 halfvec);
+    virtual void setup_shadow_map(const std::vector<int>& dimensions) override;
+    std::shared_ptr<Texture> get_shadowmap() override;
 
 protected:
-    class Deferred;
-    class Forward;
-    class DeferredCluster;
-    class ForwardCluster;
-
+    std::shared_ptr<Texture2D> m_shadow_map;
     glm::vec3 m_direction;
     glm::mat4 m_shadowspace;
     const Type m_type = Type::DIRECTIONAL;

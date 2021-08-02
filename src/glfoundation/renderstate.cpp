@@ -4,6 +4,8 @@
 
 namespace Cluster
 {
+FrameBuffer* RenderState::m_current_framebuffer = nullptr;
+
 RenderState::
 RenderState():
   m_clear_color(glm::vec4(1.0, 0.0, 0.0, 1.0)),

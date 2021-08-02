@@ -1,10 +1,10 @@
 #include <experimental/filesystem>
 #include <memory>
 
+#include "pipeline/forward.h"
 #include "glfoundation/light.h"
 #include "glfoundation/scene.h"
 #include "glfoundation/texturemanager.h"
-#include "pipeline/forward.h"
 
 #include "utilities/debug/debug.h"
 
@@ -42,12 +42,11 @@ Forward(const Scene& scene):
     // TODO:
     throw;
   }
-
-
 }
 
 
-void Forward::resize(unsigned int width, unsigned int height)
+void Forward::
+resize(unsigned int width, unsigned int height)
 {
     m_framebuffer.reset();
     m_framebuffer.create(width, height);
@@ -80,18 +79,18 @@ void Forward::resize(unsigned int width, unsigned int height)
 }
 
 void Forward::
-render_scene(const Shader &shader, const Scene &scene)
+render_scene(const Shader &shader, Scene &scene)
 {
   // TODO: set the lights
-
-  for(auto object_ptr: scene.get_object_vec())
+  for(int i = 0; i < scene.object_count(); ++i)
   {
-    object_ptr->render(shader);
+    std::shared_ptr<Renderable> object = scene.get_object(i);
+    object->render(shader);
   }
 }
 
     void Forward::
-    render_skybox(const Shader& shader, const Scene& scene)
+    render_objects(const Shader& shader, const Scene& scene)
     {
 
     }
@@ -111,17 +110,16 @@ update_frame(Scene &scene)
 }
 
 void Forward::
-apply_direct_lighting(const Scene &scene)
+apply_direct_lighting(Scene &scene)
 {
   glEnable(GL_BLEND);
   glBlendFuncSeparate(GL_ONE, GL_ONE, GL_ONE, GL_ZERO);
   glDepthFunc(GL_LEQUAL);
 
   m_shaders.at(Shader::DIRECT_LIGHTING)->use();
-  const std::vector<std::shared_ptr<Light>> light_vec = scene.get_light_vec();
-  for(int i = 0; i < scene.get_light_vec().size(); ++i)
+  for(int i = 0; i < scene.light_count(); ++i)
   {
-    const std::shared_ptr<Light>& light = light_vec[i];
+      std::shared_ptr<Light> light = scene.get_light(i);
     switch (light->get_type()) {
     case Light::POINTLIGHT:
 
@@ -171,7 +169,7 @@ render_skybox(Scene& scene)
 {
   nvtxRangePushA("Render skybox");
 
-  m_shaders[Shader::SKYBOX]->use();
+  m_shader_ins[Shader::SKYBOX].use();
   Cubemap* skybox = scene.get_skybox();
   skybox->render(m_shader_ins[Shader::SKYBOX]);
 

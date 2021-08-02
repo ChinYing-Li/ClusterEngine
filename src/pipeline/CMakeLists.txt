@@ -13,5 +13,7 @@ target_link_libraries(pipeline
 )
 
 target_include_directories(pipeline
-        PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../
+        PUBLIC
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/../
         )

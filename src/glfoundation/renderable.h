@@ -21,12 +21,12 @@ public:
     virtual ~Renderable() = default;
 
     void virtual render(const Shader& shader) = 0;
-    void virtual render(const Shader* shader);
+    // void virtual render(const Shader* shader);
 
     void set_num_instances(const unsigned int num_instances);
     void set_instance_attrib();
 
-    void virtual send_instance_matrices(std::vector<glm::mat4>& instance_model_mat){};
+    void virtual send_instance_matrices(std::vector<glm::mat4>& instance_model_mat);
 
     void translate(const glm::vec4 translation);
     bool is_gl_init();
