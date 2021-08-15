@@ -14,9 +14,10 @@ class Shader
 {
 public:
     Shader() = default;
-    Shader(const fs::path path_to_vert,
-           const fs::path path_to_frag,
-           const fs::path path_to_geo = "");
+    Shader(const fs::path path_to_vert = "",
+           const fs::path path_to_frag = "",
+           const fs::path path_to_geo = "",
+           const fs::path path_to_compute = "");
     ~Shader() = default;
 
     const static unsigned int m_num_usage;
@@ -24,6 +25,7 @@ public:
     {
       BLOOM,
       BLUR,
+      COMPUTE,
       DIRECT_LIGHTING,
       GAMMA_CORRECT,
       GBUFFER,
@@ -35,7 +37,7 @@ public:
 
     void use() const;
     GLuint get_ID() const noexcept;
-    std::string get_name() const noexcept;
+    const static int INVALID_SHADER_ID;
 
     void set_uniform1i(const std::string name, const int data) const;
     void set_uniform1ui(const std::string name, const unsigned int data) const;
@@ -55,9 +57,10 @@ private:
     GLuint m_vert_ID;
     GLuint m_frag_ID;
     GLuint m_geom_ID;
-    std::string m_name;
+    GLuint m_comp_ID;
 
     std::string read_code(const fs::path& path_to_shader);
+    void create_shader(fs::path& path_to_shader, GLuint& shader_ID, GLenum GL_shader_type);
     void compile(GLuint& shaderID,
                         const std::string& shader_code);
     void check_compilation(GLuint shaderID);

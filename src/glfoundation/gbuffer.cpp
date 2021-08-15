@@ -1,4 +1,5 @@
 #include "gbuffer.h"
+#include "glfoundation/texture.h"
 
 namespace Cluster{
 
@@ -47,8 +48,21 @@ setup_texture(Texture2D& texture,
 }
 
 void GBuffer::
-bind()
-{}
+bind(Texture2D::Usage usage, Shader& shader)
+{
+    switch(usage)
+    {
+        case Texture2D::ALBEDO:
+            m_albedo_texture.bind(usage);
+            shader.set_uniform1i("u_albedo_map", usage);
+            break;
+        case Texture2D::NORMAL:
+            m_normal_texture.bind(usage);
+            shader.set_uniform1i("");
+            break;
+        case
+    }
+}
 
 }
 

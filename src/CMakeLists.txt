@@ -27,12 +27,16 @@ set(SOURCES
     renderpass/bloompass.cpp
     renderpass/gammacorrectpass.cpp
     renderpass/gaussianblurpass.cpp
-    renderpass/lightingpass.cpp
     renderpass/renderpass.cpp
     renderpass/skyboxpass.cpp
     renderpass/sumpass.cpp
     renderpass/tonemappass.cpp
-    renderpass/lightmanage/clusterpass.cpp
+    renderpass/lightmanage/forward/directpass.cpp
+    renderpass/lightmanage/deferred/directpass.cpp
+    renderpass/lightmanage/deferred/indirectpass.cpp
+    renderpass/lightmanage/cluster/clusterpass.cpp
+    renderpass/lightmanage/cluster/keycomputepass.cpp
+    renderpass/lightmanage/cluster/keysortpass.cpp
     )
 
 set(SHADER_ROOT "${CMAKE_CURRENT_DIR}/shader")

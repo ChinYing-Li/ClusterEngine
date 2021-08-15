@@ -11,48 +11,24 @@ namespace fs = std::experimental::filesystem;
 namespace Cluster{
 
 // TODO: Update this in case more shaders are added
-const unsigned int Shader::m_num_usage = 7;
+const unsigned int Shader::m_num_usage = 8;
+const int Shader::INVALID_SHADER_ID = -1;
 
 Shader::
 Shader(const fs::path path_to_vert,
        const fs::path path_to_frag,
-       const fs::path path_to_geo):
-m_name()
+       const fs::path path_to_geom,
+       const fs::path path_to_comp):
+m_program_ID(glCreateProgram()),
+m_vert_ID(INVALID_SHADER_ID),
+m_frag_ID(INVALID_SHADER_ID),
+m_geom_ID(INVALID_SHADER_ID),
+m_comp_ID(INVALID_SHADER_ID)
 {
-  m_vert_ID = glCreateShader(GL_VERTEX_SHADER);
-  m_frag_ID = glCreateShader(GL_FRAGMENT_SHADER);
-
-  std::string vert_code = read_code(path_to_vert);
-  std::string frag_code = read_code(path_to_frag);
-  compile(m_vert_ID, vert_code);
-  compile(m_frag_ID, frag_code);
-
-  if(!path_to_geo.empty())
-  {
-        std::string geo_code = read_code(path_to_geo);
-        compile(m_geom_ID, path_to_geo);
-  }
-
-  try
-  {
-    check_compilation(m_vert_ID);
-    check_compilation(m_frag_ID);
-    if(!path_to_geo.empty())
-    {
-      check_compilation(m_geom_ID);
-    }
-  }
-  catch (std::exception& exc)
-  {
-    // TODO: create a Log class, I suppose...
-  }
-
-  // shader Program
-  m_program_ID = glCreateProgram();
-
-  glAttachShader(m_program_ID, m_vert_ID);
-  glAttachShader(m_program_ID, m_frag_ID);
-  if (!path_to_geo.empty()) { glAttachShader(m_program_ID, m_geom_ID); }
+  create_shader(path_to_vert, m_vert_ID, GL_VERTEX_SHADER);
+  create_shader(path_to_frag, m_frag_ID, GL_FRAGMENT_SHADER);
+  create_shader(path_to_geom, m_geom_ID, GL_GEOMETRY_SHADER);
+  create_shader(path_to_comp, m_comp_ID, GL_COMPUTE_SHADER);
 
   glLinkProgram(m_program_ID);
   try
@@ -65,15 +41,25 @@ m_name()
     throw excp;
   }
 
-  glDeleteShader(m_vert_ID);
-  glDeleteShader(m_frag_ID);
-
-  if (!path_to_geo.empty())
+  if(m_vert_ID != INVALID_SHADER_ID)
   {
-      glDeleteShader(m_geom_ID);
+    glDeleteShader(m_vert_ID);
   }
 
-  // TODO: print something to say that we've compiled successfully
+  if(m_frag_ID != INVALID_SHADER_ID)
+  {
+    glDeleteShader(m_frag_ID);
+  }
+
+  if(m_geom_ID != INVALID_SHADER_ID)
+  {
+    glDeleteShader(m_geom_ID);
+  }
+
+  if(m_comp_ID != INVALID_SHADER_ID)
+  {
+    glDeleteShader(m_comp_ID);
+  }
 }
 
 void Shader::use() const
@@ -85,12 +71,6 @@ GLuint Shader::
 get_ID() const noexcept
 {
     return m_program_ID;
-}
-
-std::string Shader::
-get_name() const noexcept
-{
-    return m_name;
 }
 
 void Shader::
@@ -189,6 +169,28 @@ read_code(const fs::path& path_to_shader)
   return code;
 }
 
+void Shader::
+create_shader(fs::path& path_to_shader, GLuint& shader_ID, GLenum GL_shader_type)
+{
+  if(path_to_shader.empty())
+  {
+    return;
+  }
+
+  shader_ID = glCreateShader(GL_shader_type);
+  std::string shader_code = read_code(path_to_shader);
+  compile(shader_ID, shader_code);
+
+  try
+  {
+    check_compilation(shader_ID);
+  }
+  catch (std::exception& exc)
+  {
+    // TODO: Do some logging...
+  }
+  glAttachShader(m_program_ID, shader_ID);
+}
 
 void Shader::
 compile(GLuint& shader_ID, const std::string& shader_code)

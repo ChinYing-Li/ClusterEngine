@@ -17,7 +17,7 @@ const glm::vec4 Forward::M_CLEAR_COLOR = glm::vec4(1.0, 0.0, 1.0, 1.0);
 
 Forward::
 Forward(const Scene& scene):
-  PipelineBase(),
+  PipelineBase::PipelineBase(),
   m_framebuffer(800, 600)
 {
   m_renderstate.gl_enable(DEPTH_TEST);

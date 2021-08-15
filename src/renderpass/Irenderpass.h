@@ -1,5 +1,5 @@
 #pragma once
 
-#include "lightingpass.h"
+#include "renderpass/lightmanage/forward/directpass.h"
 #include "renderpass.h"
 #include "skyboxpass.h"

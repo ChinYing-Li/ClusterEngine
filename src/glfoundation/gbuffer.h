@@ -7,6 +7,8 @@
 #include "texture.h"
 
 namespace Cluster{
+
+    class Shader;
 class GBuffer
 {
 public:
@@ -14,7 +16,7 @@ public:
     GBuffer(unsigned int width, unsigned int height);
     ~GBuffer();
 
-    void bind();
+    void bind(Texture2D::Usage usage, Shader& shader);
 
 private:
     unsigned int m_width;

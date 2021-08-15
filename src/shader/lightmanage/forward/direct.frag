@@ -16,7 +16,7 @@ in vec2 i_texcoord;
 
 out vec4 frag_color;
 
-// The material to be shadedS
+// The material to be shaded.
 struct Material
 {
     vec3 ambient_color;
@@ -65,8 +65,8 @@ struct Light
     float quadratic_atten;
 };
 
-uniform int num_light;
-uniform vec3 eye_position;
+uniform int u_num_light;
+uniform vec3 u_eye_position;
 
 uniform Material u_material;
 uniform Light u_lights[MAX_LIGHT];
@@ -77,8 +77,8 @@ vec4 sample_tiled(sampler2D tex2D, vec2 tex_coords)
 }
 
 vec3 calc_frag_normal(vec2 normalmap_texcoord,
-                      vec3 normal,
-                      vec3 tangent)
+vec3 normal,
+vec3 tangent)
 {
     vec3 bitangent = cross(normal, tangent);
     vec3 sampled_normal = sample_tiled(u_material.map_normal, normalmap_texcoord).rgb * 2.0 - 1.0;
@@ -168,12 +168,12 @@ float Smith()
  *  Cook-Torrance shading model
  */
 vec3 Cook_Torrance_Shading(vec3 normal,
-                           vec3 half_vector,
-                           vec3 view_dir,
-                           vec3 light_dir,
-                           vec3 color,
-                           float specular,
-                           float roughness)
+vec3 half_vector,
+vec3 view_dir,
+vec3 light_dir,
+vec3 color,
+float specular,
+float roughness)
 {
     float norm_dot_half = max(0.0, dot(normal, half_vector));
 }
@@ -182,9 +182,9 @@ void main()
 {
     vec3 scattered = vec3(0.0);
     vec3 reflected = vec3(0.0);
-    vec3 viewdirection = normalize(eye_position - i_position);
+    vec3 viewdirection = normalize(u_eye_position - i_position);
 
-    for(int i = 0; i < num_light; ++i)
+    for(int i = 0; i < u_num_light; ++i)
     {
         if (!lights[i].is_enabled) return;
 
@@ -246,5 +246,3 @@ void main()
     frag_color = vec4(rgb, 1.0);
     return;
 }
-
-

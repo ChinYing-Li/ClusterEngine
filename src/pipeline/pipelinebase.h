@@ -61,8 +61,8 @@ protected:
     void set_camera_uniform(const Camera& cam, Shader& shader);
     void print_info(const std::vector<std::shared_ptr<RenderPass>>& passes) const noexcept; // TODO: What's the point of this?
     void reset_backbuffer(std::vector<FrameBuffer*>& back_buffer);
-    bool shaders_init_success();
-    void render_object(Shader& shader, Renderable& object);
+    // bool shaders_init_success();
+    // void render_object(Shader& shader, Renderable& object);
 
 private:
 

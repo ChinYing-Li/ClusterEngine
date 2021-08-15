@@ -88,6 +88,6 @@ create_pipeline()
     }
     else
     {
-        m_render_pipeline = std::make_unique<Cluster::Forward>(m_scene);
+        m_render_pipeline = static_cast<std::unique_ptr<Cluster::PipelineBase>>(std::make_unique<Cluster::Forward>(m_scene));
     }
 }
